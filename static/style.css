@@ -1,0 +1,253 @@
+/* Basic reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header and Navigation */
+header {
+    background-color: #f4f4f4;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+h1 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.search-container {
+    margin: 15px 0;
+}
+
+.search-container input {
+    padding: 8px 15px;
+    width: 250px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.search-container button {
+    padding: 8px 15px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.search-container button:hover {
+    background-color: #2980b9;
+}
+
+/* Product Container */
+.product-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #3498db;
+    font-size: 24px;
+    border-bottom: 2px solid #f4f4f4;
+    padding-bottom: 10px;
+}
+
+h3 {
+    margin: 15px 0 10px;
+    color: #2c3e50;
+}
+
+h4 {
+    margin: 10px 0;
+    color: #7f8c8d;
+}
+
+/* Product Grid Layout */
+.product-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+@media (max-width: 768px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.product-image {
+    text-align: center;
+}
+
+.product-image img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Color and Size Selection */
+.color-options, .size-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 10px 0 20px;
+}
+
+.color-btn, .size-btn {
+    padding: 8px 15px;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.color-btn:hover, .size-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.color-btn.selected, .size-btn.selected {
+    background-color: #3498db;
+    color: white;
+    border-color: #2980b9;
+}
+
+/* Pricing Information */
+.pricing-info {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    border-left: 4px solid #3498db;
+}
+
+.sale-price {
+    color: #e74c3c;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.program-price {
+    color: #27ae60;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.case-info {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: #7f8c8d;
+}
+
+/* Inventory Section */
+.inventory-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #f4f4f4;
+}
+
+.inventory-total {
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+/* Warehouse Table */
+#warehouse-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+#warehouse-table th, #warehouse-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+#warehouse-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+#warehouse-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Search Section */
+.search-section {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.search-section p {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #555;
+}
+
+.example-styles {
+    margin-top: 30px;
+    text-align: left;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.example-styles ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.example-styles li {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.example-styles li:hover {
+    background-color: #e9e9e9;
+}
+
+.example-styles a {
+    color: #3498db;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.example-styles a:hover {
+    text-decoration: underline;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-top: 1px solid #ddd;
+    font-size: 0.9em;
+    color: #7f8c8d;
+}

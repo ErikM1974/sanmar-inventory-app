@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SanMar Inventory App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .example-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            transition: background-color 0.3s;
+        }
+        .example-item:hover {
+            background-color: #e9ecef;
+        }
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <header class="text-center mb-4">
+            <h1 class="display-4">SanMar Inventory App</h1>
+        </header>
+        <main>
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Search for a Product</h2>
+                    <div class="text-center mb-4">
+                        <p class="lead">Enter a SanMar style number to view product details, inventory, and pricing information.</p>
+                        <div class="search-container">
+                            <form action="/product/" method="GET" id="search-form" class="form-inline justify-content-center">
+                                <div class="input-group mb-2 mr-sm-2">
+                                    <input type="text" class="form-control" id="style-search" placeholder="Enter style number (e.g., PC61)" required>
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-primary">Search</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="mt-5">
+                        <h3 class="mb-3">Example Style Numbers:</h3>
+                        <div class="list-group">
+                            <a href="/product/PC61" class="list-group-item list-group-item-action example-item">
+                                <strong>PC61</strong> - Port & Company Essential T-Shirt
+                            </a>
+                            <a href="/product/5000" class="list-group-item list-group-item-action example-item">
+                                <strong>5000</strong> - Gildan Heavy Cotton T-Shirt
+                            </a>
+                            <a href="/product/DT6000" class="list-group-item list-group-item-action example-item">
+                                <strong>DT6000</strong> - District Very Important Tee
+                            </a>
+                            <a href="/product/ST850" class="list-group-item list-group-item-action example-item">
+                                <strong>ST850</strong> - Sport-Tek PosiCharge Competitor Tee
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="text-center mt-4 text-muted">
+            <p>&copy; 2025 Northwest Custom Apparel</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Search form handling
+        const searchForm = document.getElementById('search-form');
+        const styleSearch = document.getElementById('style-search');
+        
+        searchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const style = styleSearch.value.trim();
+            if (style) {
+                window.location.href = `/product/${style}`;
+            }
+        });
+    </script>
+</body>
+</html>
