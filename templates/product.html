@@ -6,145 +6,118 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
         .swatch { width: 40px; height: 40px; display: inline-block; margin: 5px; cursor: pointer; border: 1px solid #ccc; }
-        .swatch img { width: 100%; height: 100%; }
-        .selected { border: 2px solid #007bff; }
-        .on-sale { color: red; }
+        .swatch.selected { border: 3px solid #007bff; }
         .main-image img { max-width: 100%; height: auto; }
+        
+        /* Inventory level styling */
+        .qty-high { background-color: #d4edda; color: #155724; }
+        .qty-medium { background-color: #fff3cd; color: #856404; }
+        .qty-low { background-color: #f8d7da; color: #721c24; }
+        .qty-zero { background-color: #f5f5f5; color: #6c757d; }
+        
+        /* Responsive table */
+        .inventory-table { overflow-x: auto; }
+        .timestamp { font-size: 0.8rem; color: #6c757d; margin-top: 10px; }
     </style>
 </head>
 <body>
     <div class="container mt-4">
+        <a href="/" class="btn btn-sm btn-outline-secondary mb-3">← Back to Search</a>
+        
         <div class="row">
-            <!-- Product Image and Swatches -->
-            <div class="col-12 col-lg-3 product-details">
-                <div class="row">
-                    <div class="col-4 col-lg-12">
-                        <div class="main-image" id="main-image">
-                            <img src="{{ images[colors[0]] }}" alt="Main image" class="img-responsive">
-                        </div>
-                    </div>
-                    <div class="col-12 mt-3">
-                        <h3>Colors</h3>
-                        <div id="swatches" class="color-swatches-inventory">
-                            {% for color in colors %}
-                            <div class="swatch {% if loop.first %}selected{% endif %}" onclick="selectColor('{{ color }}', this)">
-                                <img src="{{ images[color] }}" alt="{{ color }}">
-                                <span class="swatch-name">{{ color }}</span>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
+            <div class="col-12 col-md-3">
+                <div class="main-image mb-3">
+                    <img src="{{ images[selected_color] }}" alt="{{ style }} - {{ selected_color }}" 
+                         class="img-fluid" 
+                         onerror="this.src='https://via.placeholder.com/300x300?text=No+Image+Available';">
+                </div>
+                
+                <h5>Style: {{ style }}</h5>
+                <h5>Colors:</h5>
+                <div class="color-swatches mb-3">
+                    {% for color in colors %}
+                    <a href="/product/{{ style }}?color={{ color }}" 
+                       class="swatch {% if color == selected_color %}selected{% endif %}" 
+                       title="{{ color }}"
+                       style="background-color: {{ color_hex_codes.get(color.lower(), '#ccc') }};">
+                        {% if color.lower() in ['white', 'natural', 'athletic heather', 'sport grey', 'ash', 'light grey'] %}
+                        <span style="color: #333; font-size: 8px; display: flex; align-items: center; justify-content: center; height: 100%;">{{ color[0] }}</span>
+                        {% endif %}
+                        <img src="{{ swatch_images[color] }}" alt="{{ color }}" 
+                             style="width: 100%; height: 100%; object-fit: cover;">
+                    </a>
+                    {% endfor %}
+                </div>
+                
+                <script>
+                    // Handle swatch image loading errors
+                    document.querySelectorAll('.color-swatches img').forEach(img => {
+                        img.addEventListener('error', function() {
+                            this.style.display = 'none';
+                        });
+                    });
+                </script>
+                
+                <div class="timestamp">
+                    Data last updated: {{ timestamp }}
+                    <a href="/clear-cache" class="btn btn-sm btn-link">Refresh</a>
                 </div>
             </div>
-
-            <!-- Inventory Table -->
-            <div class="col-12 col-lg-9">
-                <h1>{{ style }} - <span id="selected-color">{{ colors[0] }}</span></h1>
-                <table class="table table-striped" id="inventory-table">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            {% for size in sizes %}
-                            <th>{{ size }}</th>
+            
+            <div class="col-12 col-md-9">
+                <h2>{{ style }} - {{ selected_color }}</h2>
+                
+                <div class="inventory-table table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Warehouse</th>
+                                {% for size in sizes %}
+                                <th>{{ size }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for warehouse_id, warehouse_name in warehouses.items() %}
+                            <tr>
+                                <td>{{ warehouse_name }}</td>
+                                {% for size in sizes %}
+                                    {% set qty = inventory_data.get(selected_color, {}).get(size, {}).get('warehouses', {}).get(warehouse_id, 0) %}
+                                    <td class="
+                                        {% if qty == 0 %}qty-zero
+                                        {% elif qty < 10 %}qty-low
+                                        {% elif qty < 50 %}qty-medium
+                                        {% else %}qty-high{% endif %}
+                                    ">{{ qty }}</td>
+                                {% endfor %}
+                            </tr>
                             {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="original-price">
-                            <td>Original Price: $</td>
-                            {% for size in sizes %}
-                            <td data-size="{{ size }}"></td>
-                            {% endfor %}
-                        </tr>
-                        <tr class="sale-price">
-                            <td>Sale Price: $</td>
-                            {% for size in sizes %}
-                            <td data-size="{{ size }}" class="on-sale"></td>
-                            {% endfor %}
-                        </tr>
-                        <tr class="program-price">
-                            <td>Program Price: $</td>
-                            {% for size in sizes %}
-                            <td data-size="{{ size }}"></td>
-                            {% endfor %}
-                        </tr>
-                        <tr class="case-size">
-                            <td>Case Size</td>
-                            {% for size in sizes %}
-                            <td data-size="{{ size }}"></td>
-                            {% endfor %}
-                        </tr>
-                        {% for whse_code, whse_name in warehouses.items() %}
-                        <tr class="warehouse-{{ whse_code }}">
-                            <td>{{ whse_name }}</td>
-                            {% for size in sizes %}
-                            <td data-size="{{ size }}" data-warehouse="{{ whse_code }}">0</td>
-                            {% endfor %}
-                        </tr>
-                        {% endfor %}
-                        <tr class="total-row">
-                            <td><strong>Total Inventory</strong></td>
-                            {% for size in sizes %}
-                            <td data-size="{{ size }}">0</td>
-                            {% endfor %}
-                        </tr>
-                    </tbody>
-                </table>
+                            
+                            <!-- Total row -->
+                            <tr class="font-weight-bold">
+                                <td>Total</td>
+                                {% for size in sizes %}
+                                    {% set total = inventory_data.get(selected_color, {}).get(size, {}).get('total', 0) %}
+                                    <td class="
+                                        {% if total == 0 %}qty-zero
+                                        {% elif total < 10 %}qty-low
+                                        {% elif total < 50 %}qty-medium
+                                        {% else %}qty-high{% endif %}
+                                    ">{{ total }}</td>
+                                {% endfor %}
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="legend mt-3">
+                    <span class="badge qty-high">High (50+)</span>
+                    <span class="badge qty-medium">Medium (10-49)</span>
+                    <span class="badge qty-low">Low (1-9)</span>
+                    <span class="badge qty-zero">None (0)</span>
+                </div>
             </div>
         </div>
     </div>
-
-    <script>
-        // Parse JSON data from Flask
-        const inventoryData = JSON.parse('{{ inventory_json | safe }}');
-        const pricingData = JSON.parse('{{ pricing_json | safe }}');
-        const partIdMap = JSON.parse('{{ part_id_map_json | safe }}');
-        const images = JSON.parse('{{ images|tojson }}');
-        const sizes = JSON.parse('{{ sizes|tojson }}');
-        const warehousesData = JSON.parse('{{ warehouses|tojson }}');
-        
-        let selectedColor = "{{ colors[0] }}";
-
-        function updateTable(color) {
-            selectedColor = color;
-            const partIds = partIdMap[color];
-
-            // Update pricing
-            sizes.forEach(size => {
-                const partId = partIds[size];
-                const pricing = pricingData[partId] || {};
-                document.querySelector(`.original-price td[data-size="${size}"]`).textContent = pricing.original || 'N/A';
-                const saleCell = document.querySelector(`.sale-price td[data-size="${size}"]`);
-                saleCell.textContent = pricing.sale || '';
-                saleCell.classList.toggle('on-sale', !!pricing.sale);
-                document.querySelector(`.program-price td[data-size="${size}"]`).textContent = pricing.program || '';
-                document.querySelector(`.case-size td[data-size="${size}"]`).textContent = pricing.case_size || 'N/A';
-            });
-
-            // Update inventory
-            sizes.forEach(size => {
-                const partId = partIds[size];
-                const inventory = inventoryData[partId] || { total: 0, warehouses: {} };
-                Object.keys(warehousesData).forEach(whse => {
-                    const cell = document.querySelector(`.warehouse-${whse} td[data-size="${size}"]`);
-                    cell.textContent = inventory.warehouses[whse] || 0;
-                });
-                document.querySelector(`.total-row td[data-size="${size}"]`).textContent = inventory.total || 0;
-            });
-
-            // Update main image
-            document.getElementById('main-image').innerHTML = `<img src="${images[color]}" alt="${color}" class="img-responsive">`;
-            document.getElementById('selected-color').textContent = color;
-        }
-
-        function selectColor(color, element) {
-            updateTable(color);
-            document.querySelectorAll('.swatch').forEach(s => s.classList.remove('selected'));
-            element.classList.add('selected');
-        }
-
-        // Initial load
-        updateTable(selectedColor);
-    </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SanMar Inventory App</title>
+    <title>SanMar Inventory Checker</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <style>
@@ -53,17 +53,14 @@
 <body>
     <div class="container mt-4">
         <header class="text-center mb-4">
-            <h1 class="display-4">SanMar Inventory App</h1>
-            <div>
-                <a href="/health" class="btn btn-sm btn-outline-info">API Health Check</a>
-            </div>
+            <h1 class="display-4">SanMar Inventory Checker</h1>
         </header>
         <main>
             <div class="card">
                 <div class="card-body">
-                    <h2 class="card-title text-center mb-4">Search for a Product</h2>
+                    <h2 class="card-title text-center mb-4">Find Available Inventory</h2>
                     <div class="text-center mb-4">
-                        <p class="lead">Enter a SanMar style number to view product details, inventory, and pricing information.</p>
+                        <p class="lead">Enter a SanMar style number to view inventory levels across all warehouses.</p>
                         <div class="search-container">
                             <form action="/product/" method="GET" id="search-form" class="form-inline justify-content-center">
                                 <div class="input-group mb-2 mr-sm-2 position-relative">
@@ -72,7 +69,7 @@
                                         <span class="spinner-border spinner-border-sm text-primary" role="status"></span>
                                     </div>
                                     <div class="input-group-append">
-                                        <button type="submit" class="btn btn-primary">Search</button>
+                                        <button type="submit" class="btn btn-primary">Check Inventory</button>
                                     </div>
                                 </div>
                                 <!-- Autocomplete status -->
@@ -89,8 +86,8 @@
                             <a href="/product/5000" class="list-group-item list-group-item-action example-item">
                                 <strong>5000</strong> - Gildan Heavy Cotton T-Shirt
                             </a>
-                            <a href="/product/DT6000" class="list-group-item list-group-item-action example-item">
-                                <strong>DT6000</strong> - District Very Important Tee
+                            <a href="/product/K420" class="list-group-item list-group-item-action example-item">
+                                <strong>K420</strong> - Port Authority Pique Knit Polo
                             </a>
                             <a href="/product/ST850" class="list-group-item list-group-item-action example-item">
                                 <strong>ST850</strong> - Sport-Tek PosiCharge Competitor Tee
