@@ -133,8 +133,8 @@
         <div class="row mb-4">
             <div class="col-md-4">
                 <div class="product-image mb-3">
-                    {% if colors|length > 0 and colors[0] in images %}
-                        <img src="{{ images[colors[0]] }}"
+                    {% if catalog_colors|length > 0 and catalog_colors[0] in images %}
+                        <img src="{{ images[catalog_colors[0]] }}"
                              id="product-image" class="img-fluid" alt="{{ product_name }}">
                     {% else %}
                         <img src="https://www.sanmar.com/products/catalog/2022/f1/port__company/fullsize/PC90H_Orange_Model_Front_2022.jpg"
@@ -153,16 +153,16 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="d-flex flex-wrap">
-                                {% for color in colors %}
+                                {% for catalog_color in catalog_colors %}
                                 <div class="color-swatch"
-                                     data-color="{{ color }}"
-                                     data-image="{{ images.get(color, '') }}"
-                                     onclick="selectColor('{{ color }}')">
-                                    <!-- Debug: {{ swatch_images }} -->
-                                    {% if color in swatch_images and swatch_images[color] %}
-                                        <img src="{{ swatch_images[color] }}" alt="{{ color }}" style="width: 100%; height: 100%;">
+                                     data-catalog-color="{{ catalog_color }}"
+                                     data-display-color="{{ display_colors.get(catalog_color, catalog_color) }}"
+                                     data-image="{{ images.get(catalog_color, '') }}"
+                                     onclick="selectColor('{{ catalog_color }}')">
+                                    {% if catalog_color in swatch_images and swatch_images[catalog_color] %}
+                                        <img src="{{ swatch_images[catalog_color] }}" alt="{{ display_colors.get(catalog_color, catalog_color) }}" style="width: 100%; height: 100%;">
                                     {% else %}
-                                        {{ color }}
+                                        {{ display_colors.get(catalog_color, catalog_color) }}
                                     {% endif %}
                                 </div>
                                 {% endfor %}
@@ -172,13 +172,13 @@
                 </div>
             </div>
         </div>
-        
         <!-- Pricing and Inventory Tables -->
         <div class="row mt-4">
             <div class="col-md-12">
-                {% for color in colors %}
-                <div class="inventory-tables" id="inventory-{{ color }}" style="display: none;">
-                    <h4 class="mb-3">Inventory for {{ color }}</h4>
+                {% for catalog_color in catalog_colors %}
+                {% set display_color = display_colors.get(catalog_color, catalog_color) %}
+                <div class="inventory-tables" id="inventory-{{ catalog_color }}" data-display-color="{{ display_color }}" style="display: none;">
+                    <h4 class="mb-3">Inventory for {{ display_color }}</h4>
                     
                     <!-- Pricing Table -->
                     <div class="table-responsive mb-4">
@@ -234,12 +234,29 @@
                             <tbody>
                                 {% for whse_id, whse_name in warehouses.items() %}
                                 <tr>
-                                    <td>{{ whse_name }}</td>
+                                    <td>{{ whse_name if whse_name is string else whse_name.get('name', whse_id) }}</td>
                                     {% for size in sizes %}
-                                    {% if color in inventory and size in inventory[color] and 'warehouses' in inventory[color][size] and whse_id in inventory[color][size]['warehouses'] %}
-                                        <td class="{{ 'in-stock' if inventory[color][size]['warehouses'][whse_id] > 10 else 'low-stock' if inventory[color][size]['warehouses'][whse_id] > 0 else 'no-stock' }}">
-                                            {{ inventory[color][size]['warehouses'][whse_id] }}
+                                    {% set display_color = display_colors.get(catalog_color, catalog_color) %}
+                                    
+                                    <!-- First check the display color -->
+                                    {% if display_color in inventory and size in inventory[display_color] and 'warehouses' in inventory[display_color][size] and whse_id in inventory[display_color][size]['warehouses'] %}
+                                        <td class="{{ 'in-stock' if inventory[display_color][size]['warehouses'][whse_id] > 10 else 'low-stock' if inventory[display_color][size]['warehouses'][whse_id] > 0 else 'no-stock' }}">
+                                            {{ inventory[display_color][size]['warehouses'][whse_id] }}
                                         </td>
+                                    
+                                    <!-- Then check the catalog color -->
+                                    {% elif catalog_color in inventory and size in inventory[catalog_color] and 'warehouses' in inventory[catalog_color][size] and whse_id in inventory[catalog_color][size]['warehouses'] %}
+                                        <td class="{{ 'in-stock' if inventory[catalog_color][size]['warehouses'][whse_id] > 10 else 'low-stock' if inventory[catalog_color][size]['warehouses'][whse_id] > 0 else 'no-stock' }}">
+                                            {{ inventory[catalog_color][size]['warehouses'][whse_id] }}
+                                        </td>
+                                    
+                                    <!-- Special case for Smoke Grey/ Chrome -->
+                                    {% elif display_color == 'Smoke Grey/ Chrome' and 'Smk Gry/Chrome' in inventory and size in inventory['Smk Gry/Chrome'] and 'warehouses' in inventory['Smk Gry/Chrome'][size] and whse_id in inventory['Smk Gry/Chrome'][size]['warehouses'] %}
+                                        <td class="{{ 'in-stock' if inventory['Smk Gry/Chrome'][size]['warehouses'][whse_id] > 10 else 'low-stock' if inventory['Smk Gry/Chrome'][size]['warehouses'][whse_id] > 0 else 'no-stock' }}">
+                                            {{ inventory['Smk Gry/Chrome'][size]['warehouses'][whse_id] }}
+                                        </td>
+                                    
+                                    <!-- No inventory found -->
                                     {% else %}
                                         <td class="no-stock">0</td>
                                     {% endif %}
@@ -249,10 +266,27 @@
                                 <tr class="total-inventory">
                                     <td><strong>Total Inventory</strong></td>
                                     {% for size in sizes %}
-                                    {% if color in inventory and size in inventory[color] and 'total' in inventory[color][size] %}
-                                        <td class="{{ 'in-stock' if inventory[color][size]['total'] > 10 else 'low-stock' if inventory[color][size]['total'] > 0 else 'no-stock' }}">
-                                            <strong>{{ inventory[color][size]['total'] }}</strong>
+                                    {% set display_color = display_colors.get(catalog_color, catalog_color) %}
+                                    
+                                    <!-- First check the display color -->
+                                    {% if display_color in inventory and size in inventory[display_color] and 'total' in inventory[display_color][size] %}
+                                        <td class="{{ 'in-stock' if inventory[display_color][size]['total'] > 10 else 'low-stock' if inventory[display_color][size]['total'] > 0 else 'no-stock' }}">
+                                            <strong>{{ inventory[display_color][size]['total'] }}</strong>
                                         </td>
+                                    
+                                    <!-- Then check the catalog color -->
+                                    {% elif catalog_color in inventory and size in inventory[catalog_color] and 'total' in inventory[catalog_color][size] %}
+                                        <td class="{{ 'in-stock' if inventory[catalog_color][size]['total'] > 10 else 'low-stock' if inventory[catalog_color][size]['total'] > 0 else 'no-stock' }}">
+                                            <strong>{{ inventory[catalog_color][size]['total'] }}</strong>
+                                        </td>
+                                    
+                                    <!-- Special case for Smoke Grey/ Chrome -->
+                                    {% elif display_color == 'Smoke Grey/ Chrome' and 'Smk Gry/Chrome' in inventory and size in inventory['Smk Gry/Chrome'] and 'total' in inventory['Smk Gry/Chrome'][size] %}
+                                        <td class="{{ 'in-stock' if inventory['Smk Gry/Chrome'][size]['total'] > 10 else 'low-stock' if inventory['Smk Gry/Chrome'][size]['total'] > 0 else 'no-stock' }}">
+                                            <strong>{{ inventory['Smk Gry/Chrome'][size]['total'] }}</strong>
+                                        </td>
+                                    
+                                    <!-- No inventory found -->
                                     {% else %}
                                         <td class="no-stock"><strong>0</strong></td>
                                     {% endif %}
@@ -269,9 +303,19 @@
     
     <script>
         // Function to handle color swatch clicks
-        function selectColor(colorName) {
-            // Update active color
-            document.getElementById('selected-color').textContent = colorName;
+        function selectColor(catalogColor) {
+            // Find the selected swatch
+            const selectedSwatch = document.querySelector(`.color-swatch[data-catalog-color="${catalogColor}"]`);
+            if (!selectedSwatch) {
+                console.error(`No swatch found for catalog color: ${catalogColor}`);
+                return;
+            }
+            
+            // Get the display color from the data attribute
+            const displayColor = selectedSwatch.getAttribute('data-display-color');
+            
+            // Update active color display
+            document.getElementById('selected-color').textContent = displayColor;
             
             // Remove active class from all swatches
             const swatches = document.querySelectorAll('.color-swatch');
@@ -280,10 +324,7 @@
             });
             
             // Add active class to selected swatch
-            const selectedSwatch = document.querySelector(`.color-swatch[data-color="${colorName}"]`);
-            if (selectedSwatch) {
-                selectedSwatch.classList.add('active');
-            }
+            selectedSwatch.classList.add('active');
             
             // Hide all inventory tables
             const tables = document.querySelectorAll('.inventory-tables');
@@ -292,19 +333,30 @@
             });
             
             // Show selected inventory table
-            const selectedTable = document.getElementById(`inventory-${colorName}`);
+            const selectedTable = document.getElementById(`inventory-${catalogColor}`);
             if (selectedTable) {
                 selectedTable.style.display = 'block';
+                console.log(`Found inventory table for catalog color: ${catalogColor}`);
+            } else {
+                console.error(`No inventory table found for catalog color: ${catalogColor}`);
+                // Try to find by display color as fallback
+                const altTable = document.getElementById(`inventory-${displayColor}`);
+                if (altTable) {
+                    altTable.style.display = 'block';
+                    console.log(`Found inventory table using display color fallback: ${displayColor}`);
+                } else {
+                    console.error(`No inventory table found by catalog color or display color: ${catalogColor}/${displayColor}`);
+                }
             }
             
             // Update product image (if available)
             const productImage = document.getElementById('product-image');
             if (productImage) {
                 // Get the image URL from the data attribute
-                const imageUrl = document.querySelector(`.color-swatch[data-color="${colorName}"]`).getAttribute('data-image');
+                const imageUrl = selectedSwatch.getAttribute('data-image');
                 if (imageUrl) {
                     productImage.src = imageUrl;
-                    productImage.alt = `${colorName} ${productImage.alt.split(' ').slice(1).join(' ')}`;
+                    productImage.alt = `${displayColor} ${productImage.alt.split(' ').slice(1).join(' ')}`;
                 }
             }
         }
@@ -313,8 +365,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             const firstSwatch = document.querySelector('.color-swatch');
             if (firstSwatch) {
-                const firstColor = firstSwatch.getAttribute('data-color');
-                selectColor(firstColor);
+                const firstCatalogColor = firstSwatch.getAttribute('data-catalog-color');
+                selectColor(firstCatalogColor);
             }
         });
     </script>
