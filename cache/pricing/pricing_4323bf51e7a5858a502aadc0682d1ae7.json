@@ -1,0 +1,1 @@
+{"original_price": {"S": 5.64}, "sale_price": {"S": 5.64}, "program_price": {"S": 5.08}, "case_size": {"S": 72}, "customer_price": {"S": 5.08}, "incentive_price": {"S": 5.64}, "meta": {"has_sale": false, "message": "Mock pricing data for PC61", "sale_start_date": null, "sale_end_date": null, "timestamp": "2025-03-24T16:44:24.421596"}, "error": false, "is_mock_data": true}

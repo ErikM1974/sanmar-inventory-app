@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SanMar API Health Check</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .status-ok {
+            color: #28a745;
+        }
+        .status-error {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h2>SanMar API Health Check</h2>
+                    </div>
+                    <div class="card-body">
+                        <!-- API Credentials Status -->
+                        <h3>API Credentials</h3>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Credential</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for credential, exists in credential_status.items() %}
+                                <tr>
+                                    <td>{{ credential }}</td>
+                                    <td class="{% if exists %}status-ok{% else %}status-error{% endif %}">
+                                        {% if exists %}
+                                            <i class="fas fa-check-circle"></i> Configured
+                                        {% else %}
+                                            <i class="fas fa-times-circle"></i> Missing
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <!-- API Connectivity Status -->
+                        <h3 class="mt-4">Direct API Connectivity</h3>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>API Endpoint</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for api, status in api_status.items() %}
+                                <tr>
+                                    <td>{{ api }}</td>
+                                    <td class="{% if status == 'Connected' %}status-ok{% else %}status-error{% endif %}">
+                                        {% if status == 'Connected' %}
+                                            <i class="fas fa-check-circle"></i> {{ status }}
+                                        {% else %}
+                                            <i class="fas fa-times-circle"></i> {{ status }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <!-- Middleware Status -->
+                        <h3 class="mt-4">Middleware Connectivity</h3>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Middleware</th>
+                                    <th>Status</th>
+                                    <th>Latency</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>SanMar API Middleware</td>
+                                    <td class="{% if middleware_status.status == 'Connected' %}status-ok{% else %}status-error{% endif %}">
+                                        {% if middleware_status.status == 'Connected' %}
+                                            <i class="fas fa-check-circle"></i> Connected
+                                        {% else %}
+                                            <i class="fas fa-times-circle"></i> Error: {{ middleware_status.error }}
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ middleware_status.latency }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="text-muted small mt-2">
+                            Last updated: {{ last_updated }}
+                        </div>
+
+                        <!-- Additional Information -->
+                        <div class="alert alert-info mt-4">
+                            <h5>Troubleshooting Information:</h5>
+                            <p>If you're experiencing issues with the SanMar API:</p>
+                            <ul>
+                                <li>Ensure all environment variables are correctly set</li>
+                                <li>Verify your SanMar API credentials are valid</li>
+                                <li>Check your network connectivity to SanMar's API servers</li>
+                                <li>Review application logs for more detailed error information</li>
+                            </ul>
+                        </div>
+
+                        <div class="mt-4">
+                            <a href="/" class="btn btn-primary">Return to Home</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>

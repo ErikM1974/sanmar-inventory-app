@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SanMar Inventory Checker</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+        .example-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            transition: background-color 0.3s;
+        }
+        .example-item:hover {
+            background-color: #e9ecef;
+        }
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        /* Autocomplete styling */
+        .ui-autocomplete {
+            max-height: 300px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            z-index: 9999 !important;
+        }
+        .ui-menu-item {
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+        .ui-state-active,
+        .ui-widget-content .ui-state-active {
+            background-color: #007bff !important;
+            border-color: #007bff !important;
+            color: white !important;
+        }
+        .ui-helper-hidden-accessible {
+            display: none;
+        }
+        /* Loading indicator */
+        .search-loading {
+            position: absolute;
+            right: 50px;
+            top: 8px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <header class="text-center mb-4">
+            <h1 class="display-4">SanMar Inventory Checker</h1>
+        </header>
+        <main>
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Find Available Inventory</h2>
+                    <div class="text-center mb-4">
+                        <p class="lead">Enter a SanMar style number to view inventory levels across all warehouses.</p>
+                        <div class="search-container">
+                            <form action="/product/" method="GET" id="search-form" class="form-inline justify-content-center">
+                                <div class="input-group mb-2 mr-sm-2 position-relative">
+                                    <input type="text" class="form-control" id="style-search" placeholder="Enter style number (e.g., PC61)" autocomplete="off" required>
+                                    <div class="search-loading">
+                                        <span class="spinner-border spinner-border-sm text-primary" role="status"></span>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-primary">Check Inventory</button>
+                                    </div>
+                                </div>
+                                <!-- Autocomplete status -->
+                                <div class="text-muted small autocomplete-status"></div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="mt-5">
+                        <h3 class="mb-3">Example Style Numbers:</h3>
+                        <div class="list-group">
+                            <a href="/product/PC61" class="list-group-item list-group-item-action example-item">
+                                <strong>PC61</strong> - Port & Company Essential T-Shirt
+                            </a>
+                            <a href="/product/5000" class="list-group-item list-group-item-action example-item">
+                                <strong>5000</strong> - Gildan Heavy Cotton T-Shirt
+                            </a>
+                            <a href="/product/K420" class="list-group-item list-group-item-action example-item">
+                                <strong>K420</strong> - Port Authority Pique Knit Polo
+                            </a>
+                            <a href="/product/ST850" class="list-group-item list-group-item-action example-item">
+                                <strong>ST850</strong> - Sport-Tek PosiCharge Competitor Tee
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="text-center mt-4 text-muted">
+            <p>&copy; 2025 Northwest Custom Apparel</p>
+        </footer>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const searchForm = $('#search-form');
+            const styleSearch = $('#style-search');
+            const loadingIndicator = $('.search-loading');
+            const statusDiv = $('.autocomplete-status');
+            
+            // Initialize autocomplete
+            styleSearch.autocomplete({
+                source: function(request, response) {
+                    // Show loading indicator
+                    loadingIndicator.show();
+                    statusDiv.text("Loading suggestions...");
+                    
+                    // Make API request for autocomplete suggestions
+                    $.ajax({
+                        url: '/api/autocomplete',
+                        data: { q: request.term },
+                        success: function(data) {
+                            if (data.length > 0) {
+                                response(data);
+                                statusDiv.text(`Found ${data.length} suggestion(s)`);
+                            } else {
+                                response([]);
+                                statusDiv.text("No matches found. Try typing a valid style number.");
+                            }
+                            loadingIndicator.hide();
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Autocomplete error:", error);
+                            response([]);
+                            statusDiv.text("Error fetching suggestions. Try again.");
+                            loadingIndicator.hide();
+                        }
+                    });
+                },
+                minLength: 2,  // Start suggesting after 2 characters
+                select: function(event, ui) {
+                    styleSearch.val(ui.item.value);
+                    searchForm.submit();
+                    return false;
+                },
+                open: function() {
+                    // Ensure the menu isn't hidden under other elements
+                    $(this).autocomplete("widget").css({
+                        "z-index": 9999,
+                        "max-height": "300px",
+                        "overflow-y": "auto"
+                    });
+                }
+            });
+            
+            // Form submission handling
+            searchForm.on('submit', function(e) {
+                e.preventDefault();
+                const style = styleSearch.val().trim();
+                if (style) {
+                    loadingIndicator.show();
+                    statusDiv.text(`Searching for ${style}...`);
+                    window.location.href = `/product/${style}`;
+                }
+            });
+            
+            // Convert style input to uppercase as user types
+            styleSearch.on('input', function() {
+                $(this).val($(this).val().toUpperCase());
+                if ($(this).val().length < 2) {
+                    statusDiv.text("Type at least 2 characters for suggestions");
+                }
+            });
+            
+            // Initial status message
+            statusDiv.text("Type at least 2 characters for suggestions");
+        });
+    </script>
+</body>
+</html>

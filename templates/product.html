@@ -96,6 +96,74 @@
         .inventory-tables {
             margin-bottom: 30px;
         }
+        /* Loading indicator styles */
+        .price-loading {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.7);
+            z-index: 10;
+            text-align: center;
+            padding-top: 50px;
+        }
+        .table-container {
+            position: relative;
+        }
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #0d6efd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .price-error {
+            display: none;
+            color: #dc3545;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f8d7da;
+            border-radius: 4px;
+        }
+        .on-sale {
+            position: relative;
+        }
+        .on-sale::after {
+            content: "SALE";
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #dc3545;
+            color: white;
+            font-size: 10px;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        .sale-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #dc3545;
+            color: white;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 3px;
+            z-index: 5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transform: rotate(10deg);
+            font-size: 14px;
+        }
+        .product-image {
+            position: relative;
+        }
     </style>
 </head>
 <body class="bg-light">
@@ -181,7 +249,18 @@
                     <h4 class="mb-3">Inventory for {{ display_color }}</h4>
                     
                     <!-- Pricing Table -->
-                    <div class="table-responsive mb-4">
+                    <div class="table-responsive mb-4 table-container">
+                        <!-- Loading indicator -->
+                        <div class="price-loading" id="loading-{{ catalog_color }}">
+                            <div class="loading-spinner"></div>
+                            <p class="mt-2">Fetching latest pricing data...</p>
+                        </div>
+                        
+                        <!-- Error message -->
+                        <div class="price-error" id="error-{{ catalog_color }}">
+                            <p>Unable to fetch current pricing. Showing cached data.</p>
+                        </div>
+                        
                         <table class="table table-bordered pricing-table">
                             <thead class="table-secondary">
                                 <tr>
@@ -195,25 +274,41 @@
                                 <tr>
                                     <td>Original Price: $</td>
                                     {% for size in sizes %}
-                                    <td>{{ pricing.original_price.get(size, 15.06) }}</td>
+                                    {% if color_pricing and catalog_color in color_pricing and color_pricing[catalog_color].original_price %}
+                                        <td>{{ color_pricing[catalog_color].original_price.get(size, 0) }}</td>
+                                    {% else %}
+                                        <td>{{ pricing.original_price.get(size, 0) }}</td>
+                                    {% endif %}
                                     {% endfor %}
                                 </tr>
                                 <tr class="sale-price">
                                     <td>Sale Price: $</td>
                                     {% for size in sizes %}
-                                    <td>{{ pricing.sale_price.get(size, 14.29) }}</td>
+                                    {% if color_pricing and catalog_color in color_pricing and color_pricing[catalog_color].sale_price %}
+                                        <td>{{ color_pricing[catalog_color].sale_price.get(size, 0) }}</td>
+                                    {% else %}
+                                        <td>{{ pricing.sale_price.get(size, 0) }}</td>
+                                    {% endif %}
                                     {% endfor %}
                                 </tr>
                                 <tr class="program-price">
                                     <td>Program Price: $</td>
                                     {% for size in sizes %}
-                                    <td>{{ pricing.program_price.get(size, 11.03) }}</td>
+                                    {% if color_pricing and catalog_color in color_pricing and color_pricing[catalog_color].program_price %}
+                                        <td>{{ color_pricing[catalog_color].program_price.get(size, 0) }}</td>
+                                    {% else %}
+                                        <td>{{ pricing.program_price.get(size, 0) }}</td>
+                                    {% endif %}
                                     {% endfor %}
                                 </tr>
                                 <tr>
                                     <td>Case Size</td>
                                     {% for size in sizes %}
-                                    <td>{{ pricing.case_size.get(size, 24) }}</td>
+                                    {% if color_pricing and catalog_color in color_pricing and color_pricing[catalog_color].case_size %}
+                                        <td>{{ color_pricing[catalog_color].case_size.get(size, 0) }}</td>
+                                    {% else %}
+                                        <td>{{ pricing.case_size.get(size, 0) }}</td>
+                                    {% endif %}
                                     {% endfor %}
                                 </tr>
                             </tbody>
@@ -302,9 +397,176 @@
     </div>
     
     <script>
+        // Function to fetch color-specific pricing via AJAX
+        function fetchColorPricing(style, color) {
+            return new Promise((resolve, reject) => {
+                console.log(`Fetching pricing data for style: ${style}, color: ${color}`);
+                
+                // Show loading indicator
+                const loadingElementId = `loading-${color.replace(/\//g, '-')}`;
+                const loadingElement = document.getElementById(loadingElementId);
+                if (loadingElement) {
+                    loadingElement.style.display = 'block';
+                }
+                
+                // Hide error message if visible
+                const errorElementId = `error-${color.replace(/\//g, '-')}`;
+                const errorElement = document.getElementById(errorElementId);
+                if (errorElement) {
+                    errorElement.style.display = 'none';
+                }
+                
+                // Create a URL object
+                const url = new URL(`${window.location.origin}/api/pricing`);
+                url.searchParams.append('style', style);
+                url.searchParams.append('color', color);
+                
+                // Make the AJAX request
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(`Received pricing data:`, data);
+                        
+                        // Hide loading indicator
+                        if (loadingElement) {
+                            loadingElement.style.display = 'none';
+                        }
+                        
+                        // Check if data contains error flag
+                        if (data.error) {
+                            console.error(`API error: ${data.message || 'Unknown error'}`);
+                            if (errorElement) {
+                                errorElement.style.display = 'block';
+                                errorElement.querySelector('p').textContent = `Pricing error: ${data.message || 'Unknown error'}`;
+                            }
+                        }
+                        
+                        // Mark items on sale with visual indicator
+                        if (data.meta && data.meta.has_sale) {
+                            const tableId = `inventory-${color.replace(/\//g, '-')}`;
+                            const table = document.getElementById(tableId);
+                            if (table) {
+                                const salePriceRow = table.querySelector('.sale-price');
+                                if (salePriceRow) {
+                                    const saleCells = salePriceRow.querySelectorAll('td:not(:first-child)');
+                                    const originalPriceRow = salePriceRow.previousElementSibling;
+                                    if (originalPriceRow) {
+                                        const originalCells = originalPriceRow.querySelectorAll('td:not(:first-child)');
+                                        
+                                        saleCells.forEach((cell, index) => {
+                                            const salePrice = parseFloat(cell.textContent);
+                                            const originalPrice = parseFloat(originalCells[index].textContent);
+                                            
+                                            if (salePrice < originalPrice) {
+                                                cell.classList.add('on-sale');
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                        
+                        resolve(data);
+                    })
+                    .catch(error => {
+                        console.error(`Error fetching pricing: ${error.message}`);
+                        
+                        // Hide loading indicator
+                        if (loadingElement) {
+                            loadingElement.style.display = 'none';
+                        }
+                        
+                        // Show error message
+                        if (errorElement) {
+                            errorElement.style.display = 'block';
+                            errorElement.querySelector('p').textContent = `Unable to fetch pricing data: ${error.message}`;
+                        }
+                        
+                        reject(error);
+                    });
+            });
+        }
+        
+        // Function to update pricing tables with new data
+        function updatePricingDisplay(pricingData, tableId) {
+            const table = document.getElementById(tableId);
+            if (!table) {
+                console.error(`Table with ID ${tableId} not found`);
+                return;
+            }
+            
+            const pricingTable = table.querySelector('.pricing-table');
+            if (!pricingTable) {
+                console.error(`Pricing table not found in ${tableId}`);
+                return;
+            }
+            
+            // Get the sizes from the table headers in the correct display order
+            const sizeHeaders = pricingTable.querySelectorAll('thead th:not(:first-child)');
+            const displayedSizes = Array.from(sizeHeaders).map(header => header.textContent.trim());
+            
+            console.log("Displayed sizes in table order:", displayedSizes);
+            
+            // Update original price row
+            const originalPriceRow = pricingTable.querySelector('tr:nth-child(1)');
+            if (originalPriceRow && pricingData.original_price) {
+                const cells = originalPriceRow.querySelectorAll('td:not(:first-child)');
+                cells.forEach((cell, index) => {
+                    const size = displayedSizes[index];
+                    if (size && pricingData.original_price[size]) {
+                        cell.textContent = pricingData.original_price[size].toFixed(2);
+                    }
+                });
+            }
+            
+            // Update sale price row
+            const salePriceRow = pricingTable.querySelector('tr:nth-child(2)');
+            if (salePriceRow && pricingData.sale_price) {
+                const cells = salePriceRow.querySelectorAll('td:not(:first-child)');
+                cells.forEach((cell, index) => {
+                    const size = displayedSizes[index];
+                    if (size && pricingData.sale_price[size]) {
+                        cell.textContent = pricingData.sale_price[size].toFixed(2);
+                    }
+                });
+            }
+            
+            // Update program price row
+            const programPriceRow = pricingTable.querySelector('tr:nth-child(3)');
+            if (programPriceRow && pricingData.program_price) {
+                const cells = programPriceRow.querySelectorAll('td:not(:first-child)');
+                cells.forEach((cell, index) => {
+                    const size = displayedSizes[index];
+                    if (size && pricingData.program_price[size]) {
+                        cell.textContent = pricingData.program_price[size].toFixed(2);
+                    }
+                });
+            }
+            
+            // Update case size row
+            const caseSizeRow = pricingTable.querySelector('tr:nth-child(4)');
+            if (caseSizeRow && pricingData.case_size) {
+                const cells = caseSizeRow.querySelectorAll('td:not(:first-child)');
+                cells.forEach((cell, index) => {
+                    const size = displayedSizes[index];
+                    if (size && pricingData.case_size[size]) {
+                        cell.textContent = pricingData.case_size[size];
+                    }
+                });
+            }
+            
+            console.log('Pricing display updated successfully');
+        }
+
         // Function to handle color swatch clicks
         function selectColor(catalogColor) {
             // Find the selected swatch
+            console.log(`Selecting color: ${catalogColor}`);
             const selectedSwatch = document.querySelector(`.color-swatch[data-catalog-color="${catalogColor}"]`);
             if (!selectedSwatch) {
                 console.error(`No swatch found for catalog color: ${catalogColor}`);
@@ -313,6 +575,7 @@
             
             // Get the display color from the data attribute
             const displayColor = selectedSwatch.getAttribute('data-display-color');
+            console.log(`Display color for ${catalogColor}: ${displayColor}`);
             
             // Update active color display
             document.getElementById('selected-color').textContent = displayColor;
@@ -332,18 +595,118 @@
                 table.style.display = 'none';
             });
             
+            // List all inventory tables for debugging
+            console.log("All available inventory tables:");
+            document.querySelectorAll('.inventory-tables').forEach(t => {
+                console.log(`- Table ID: ${t.id}, Display color: ${t.getAttribute('data-display-color')}`);
+            });
+            
             // Show selected inventory table
-            const selectedTable = document.getElementById(`inventory-${catalogColor}`);
+            const selectedTableId = `inventory-${catalogColor}`;
+            console.log(`Looking for inventory table with ID: ${selectedTableId}`);
+            const selectedTable = document.getElementById(selectedTableId);
             if (selectedTable) {
                 selectedTable.style.display = 'block';
                 console.log(`Found inventory table for catalog color: ${catalogColor}`);
+                
+                // Debug color-specific pricing
+                const pricingRows = selectedTable.querySelectorAll('.pricing-table tr');
+                console.log(`Pricing table rows found: ${pricingRows.length}`);
+                if (pricingRows.length > 0) {
+                    const priceValues = [];
+                    pricingRows.forEach((row, i) => {
+                        const cells = row.querySelectorAll('td');
+                        if (cells.length > 1) {
+                            priceValues.push(`Row ${i}: ${cells[0].textContent} ${cells[1].textContent}`);
+                        }
+                    });
+                    console.log("Price values:", priceValues);
+                    
+                    // Enhanced debugging to show all prices
+                    console.log(`Table ID: ${selectedTable.id}`);
+                    console.log(`Data color: ${selectedTable.getAttribute('data-display-color')}`);
+                    // Fetch updated pricing data for this color
+                    const style = window.location.pathname.split('/').pop(); // Get style from URL
+                    
+                    // Reset any previous error indicators
+                    selectedTable.querySelectorAll('.on-sale').forEach(el => el.classList.remove('on-sale'));
+                    
+                    // Fetch data with loading and error element references
+                    fetchColorPricing(style, catalogColor)
+                        .then(data => {
+                            console.log('Fetched new pricing data:', data);
+                            // Update pricing display with new data
+                            updatePricingDisplay(data, selectedTableId);
+                            
+                            // Add sale badge to product image if on sale
+                            if (data.meta && data.meta.has_sale) {
+                                // Remove any existing sale badge first
+                                const existingBadge = document.querySelector('.sale-badge');
+                                if (existingBadge) {
+                                    existingBadge.remove();
+                                }
+                                
+                                const badge = document.createElement('div');
+                                badge.className = 'sale-badge';
+                                badge.textContent = 'SALE';
+                                document.querySelector('.product-image').appendChild(badge);
+                            } else {
+                                // Remove sale badge if not on sale
+                                const existingBadge = document.querySelector('.sale-badge');
+                                if (existingBadge) {
+                                    existingBadge.remove();
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Failed to update pricing:', error);
+                        });
+                }
             } else {
                 console.error(`No inventory table found for catalog color: ${catalogColor}`);
                 // Try to find by display color as fallback
-                const altTable = document.getElementById(`inventory-${displayColor}`);
+                const altTableId = `inventory-${displayColor}`;
+                console.log(`Trying fallback inventory table with ID: ${altTableId}`);
+                const altTable = document.getElementById(altTableId);
                 if (altTable) {
                     altTable.style.display = 'block';
                     console.log(`Found inventory table using display color fallback: ${displayColor}`);
+                    
+                    // Fetch updated pricing data for this color
+                    const style = window.location.pathname.split('/').pop(); // Get style from URL
+                    
+                    // Reset any previous error indicators
+                    altTable.querySelectorAll('.on-sale').forEach(el => el.classList.remove('on-sale'));
+                    
+                    fetchColorPricing(style, displayColor)
+                        .then(data => {
+                            console.log('Fetched new pricing data for display color:', data);
+                            // Update pricing display with new data
+                            updatePricingDisplay(data, altTableId);
+                            
+                            // Add sale badge to product image if on sale
+                            if (data.meta && data.meta.has_sale) {
+                                // Remove any existing sale badge first
+                                const existingBadge = document.querySelector('.sale-badge');
+                                if (existingBadge) {
+                                    existingBadge.remove();
+                                }
+                                
+                                const badge = document.createElement('div');
+                                badge.className = 'sale-badge';
+                                badge.textContent = 'SALE';
+                                document.querySelector('.product-image').appendChild(badge);
+                            } else {
+                                // Remove sale badge if not on sale
+                                const existingBadge = document.querySelector('.sale-badge');
+                                if (existingBadge) {
+                                    existingBadge.remove();
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Failed to update pricing for display color:', error);
+                        });
                 } else {
                     console.error(`No inventory table found by catalog color or display color: ${catalogColor}/${displayColor}`);
                 }

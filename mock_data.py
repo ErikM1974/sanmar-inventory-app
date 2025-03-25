@@ -508,8 +508,49 @@ def get_mock_inventory(style):
             "sizes": sizes,
             "inventory": inventory
         }
+    elif style == "J790":
+        # Port Authority Glacier Soft Shell Jacket mock data
+        colors = ["Black/Chrome", "AtlBlue/Chrome", "Smk Gry/Chrome"]
+        sizes = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"]
+        
+        # Create inventory data structure
+        inventory = {}
+        for color in colors:
+            inventory[color] = {}
+            for size in sizes:
+                inventory[color][size] = {
+                    "warehouses": {
+                        "1": max(0, 15 - (1 * sizes.index(size))),  # Seattle
+                        "4": max(0, 30 - (2 * sizes.index(size))),  # Reno
+                        "7": max(0, 25 - (1 * sizes.index(size))),  # Minneapolis
+                        "12": max(0, 20 - (1 * sizes.index(size))), # Phoenix
+                        "3": max(0, 20 - (1 * sizes.index(size))),  # Dallas
+                        "2": max(0, 15 - (1 * sizes.index(size))),  # Cincinnati
+                        "31": max(0, 10 - (1 * sizes.index(size))), # Richmond
+                        "5": max(0, 10 - (1 * sizes.index(size))),  # Robbinsville
+                        "6": max(0, 15 - (1 * sizes.index(size)))   # Jacksonville
+                    },
+                    "total": 0  # Will calculate below
+                }
+                
+                # Calculate total inventory across warehouses
+                total = sum(inventory[color][size]["warehouses"].values())
+                inventory[color][size]["total"] = total
+        
+        return {
+            "colors": colors,
+            "sizes": sizes,
+            "inventory": inventory,
+            "pricing": {
+                "originalPrice": 30.59,
+                "salePrice": 30.59,
+                "programPrice": 30.59,
+                "caseSize": 24
+            }
+        }
     
     else:
+        # Generic mock data for any other style
         # Generic mock data for any other style
         colors = ["Black", "Navy", "White", "Red"]
         sizes = ["S", "M", "L", "XL", "2XL"]

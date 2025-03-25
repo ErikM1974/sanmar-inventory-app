@@ -1,0 +1,1 @@
+{"original_price": {"S": 6.49}, "sale_price": {"S": 6.49}, "program_price": {"S": 5.84}, "case_size": {"S": 72}, "customer_price": {"S": 5.84}, "incentive_price": {"S": 6.49}, "meta": {"has_sale": false, "message": "Mock pricing data for J790", "sale_start_date": null, "sale_end_date": null, "timestamp": "2025-03-24T16:44:25.370014"}, "error": false, "is_mock_data": true}
