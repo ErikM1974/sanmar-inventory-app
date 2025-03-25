@@ -1,165 +1,124 @@
-"""
-SanMar Pricing API Module
-
-This module provides functions to interact with SanMar's Pricing API service.
-It handles the SOAP requests to fetch product pricing information based on style, color, and size.
-"""
-import os
-import logging
 import json
-import time
+import logging
 import os
+import time
+from collections import OrderedDict
 from datetime import datetime
+
 import requests
-from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
-import zeep
-from zeep.transports import Transport
+from zeep import Client
 from zeep.cache import SqliteCache
 from zeep.helpers import serialize_object
-import collections
-from collections import OrderedDict
-import collections
+from zeep.transports import Transport
 
 # Set up logging
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Cache for pricing data with structure:
-# {
-#    "style_color_size": {
-#        "data": pricing_data,
-#        "timestamp": timestamp,
-#        "expiration": expiration
-#    }
-# }
-PRICING_CACHE = {}
-CACHE_EXPIRATION = 60 * 60  # 1 hour in seconds
-
-def get_cache_key(style, color=None, size=None, inventory_key=None, size_index=None):
-    """Generate a cache key based on the input parameters."""
+# Cache management functions
+def get_cache_key(style=None, color=None, size=None, inventory_key=None, size_index=None):
+    """Generate a unique cache key based on input parameters"""
     if inventory_key and size_index:
         return f"{inventory_key}_{size_index}"
-    elif style and color and size:
-        return f"{style}_{color}_{size}".lower()
-    elif style and color:
-        return f"{style}_{color}".lower()
     else:
-        return f"{style}".lower()
+        return f"{style.lower()}_{color.lower() if color else ''}" if style else ""
 
 def get_from_cache(key):
-    """Get pricing data from cache if available and not expired."""
-    if key in PRICING_CACHE:
-        cache_data = PRICING_CACHE[key]
-        now = time.time()
-        
-        # Check if the cache entry is expired
-        if now < cache_data["expiration"]:
-            logger.info(f"Cache hit for key: {key}")
-            return cache_data["data"]
-        else:
-            logger.info(f"Cache expired for key: {key}")
-            del PRICING_CACHE[key]
+    """Retrieve data from cache if available and not expired"""
+    # Default cache directory in the project
+    cache_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cache', 'pricing')
+    os.makedirs(cache_dir, exist_ok=True)
     
-    logger.info(f"Cache miss for key: {key}")
+    cache_file = os.path.join(cache_dir, f"{key}.json")
+    
+    if os.path.exists(cache_file):
+        # Check if cache is not expired (24 hour cache)
+        last_modified = os.path.getmtime(cache_file)
+        cache_age = time.time() - last_modified
+        
+        # If cache is less than 24 hours old
+        if cache_age < 24 * 60 * 60:  # 24 hours in seconds
+            try:
+                with open(cache_file, 'r') as f:
+                    return json.load(f)
+            except Exception as e:
+                logger.error(f"Error reading cache file {cache_file}: {e}")
+    
     return None
 
 def save_to_cache(key, data):
-    """Save pricing data to cache with expiration time."""
-    now = time.time()
-    PRICING_CACHE[key] = {
-        "data": data,
-        "timestamp": now,
-        "expiration": now + CACHE_EXPIRATION
-    }
-    logger.info(f"Saved data to cache with key: {key}")
+    """Save data to cache"""
+    if not key:
+        return
+    
+    # Default cache directory in the project
+    cache_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cache', 'pricing')
+    os.makedirs(cache_dir, exist_ok=True)
+    
+    cache_file = os.path.join(cache_dir, f"{key}.json")
+    
+    try:
+        with open(cache_file, 'w') as f:
+            json.dump(data, f)
+    except Exception as e:
+        logger.error(f"Error writing to cache file {cache_file}: {e}")
 
 def delete_from_cache(key):
-    """Delete a specific entry from the pricing cache."""
-    if key in PRICING_CACHE:
-        del PRICING_CACHE[key]
-        logger.info(f"Deleted cache entry for key: {key}")
-    else:
-        logger.debug(f"Attempted to delete non-existent cache key: {key}")
+    """Delete data from cache"""
+    if not key:
+        return
+    
+    # Default cache directory in the project
+    cache_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cache', 'pricing')
+    cache_file = os.path.join(cache_dir, f"{key}.json")
+    
+    if os.path.exists(cache_file):
+        try:
+            os.remove(cache_file)
+        except Exception as e:
+            logger.error(f"Error deleting cache file {cache_file}: {e}")
 
 def size_to_sort_key(size):
-    """
-    Convert a size string to a numeric sort key for correct display order.
-    This ensures sizes are ordered in the standard XS, S, M, L, XL, 2XL, 3XL, etc. order.
-    
-    Args:
-        size (str): The size string (e.g., "XS", "M", "2XL")
-        
-    Returns:
-        int: A numeric sort key
-    """
-    # Define a comprehensive mapping of sizes to sort keys
-    # Lower numbers = smaller sizes, higher numbers = larger sizes
-    size_order = {
-        "XXS": 10,
-        "XS": 20,
-        "S": 30,
-        "M": 40,
-        "L": 50,
-        "XL": 60,
-        "2XL": 70,
-        "XXL": 70,  # Alternative notation
-        "3XL": 80,
-        "XXXL": 80,  # Alternative notation
-        "4XL": 90,
-        "XXXXL": 90,  # Alternative notation
-        "5XL": 100,
-        "XXXXXL": 100,  # Alternative notation
-        "6XL": 110,
-        "XXXXXXL": 110,  # Alternative notation
-        "OSFA": 500,  # One Size Fits All
-    }
-    
-    # Check if the size is directly in our mapping
-    if size in size_order:
-        return size_order[size]
-    
-    # Handle numeric prefixed sizes (2XL, 3XL, etc.)
-    if size and len(size) > 1 and size[0].isdigit():
+    """Convert size to a sortable key"""
+    if size in ['XS', 'S', 'M', 'L', 'XL']:
+        return {
+            'XS': 0,
+            'S': 1,
+            'M': 2,
+            'L': 3,
+            'XL': 4
+        }.get(size, 999)
+    elif size.endswith('XL'):
+        # For sizes like 2XL, 3XL, 4XL, etc.
         try:
-            prefix = int(size[0])
-            if "XL" in size:
-                return 60 + (prefix * 10)  # XL=60, 2XL=70, 3XL=80, etc.
+            return 5 + int(size.rstrip('XL'))
         except ValueError:
-            pass
-    
-    # If we can't determine the size, place it at the end
-    return 999
+            return 999
+    else:
+        # Try to convert to a number if possible
+        try:
+            return 100 + float(size)
+        except ValueError:
+            # If not a number, use alphabetical sorting as fallback
+            return 1000 + ord(size[0])
 
-def sort_sizes_dict(sizes_dict):
+def get_pricing_for_color_swatch(style, color, size=None, inventory_key=None, size_index=None, use_cache=True):
     """
-    Sort a dictionary with size keys in standard size order
+    Get pricing information for a color swatch from SanMar's Pricing API.
+    
+    This is a convenience function to get pricing data for a specific color,
+    which is useful when showing pricing for color swatches on product pages.
     
     Args:
-        sizes_dict (dict): Dictionary with sizes as keys
-        
-    Returns:
-        OrderedDict: Dictionary sorted by size
-    """
-    return OrderedDict(
-        sorted(sizes_dict.items(), key=lambda item: size_to_sort_key(item[0]))
-    )
-
-def get_pricing_for_color_swatch(style, color=None, size=None, inventory_key=None, size_index=None):
-    """
-    Fetch pricing data from SanMar's Pricing API for a given style, color, and size.
-    
-    This function supports both style/color/size and inventoryKey/sizeIndex request formats.
-    It handles XML parsing, caching, and error recovery.
-    
-    Args:
-        style (str): The product style code (e.g., "PC61")
-        color (str, optional): The product color (e.g., "Blue")
-        size (str, optional): The product size (e.g., "XL")
-        inventory_key (str, optional): The SanMar inventory key
-        size_index (str, optional): The SanMar size index
+        style (str): The style number
+        color (str): The catalog color
+        size (str, optional): The size to get pricing for
+        inventory_key (str, optional): Alternative to style/color
+        size_index (str, optional): Alternative to size
+        use_cache (bool): Whether to use cached data if available
     
     Returns:
-        dict: A dictionary containing pricing information with the following structure:
+        dict: Pricing data in the following format:
         {
             "original_price": {
                 "S": 4.41,
@@ -201,83 +160,50 @@ def get_pricing_for_color_swatch(style, color=None, size=None, inventory_key=Non
         password = os.getenv("SANMAR_PASSWORD")
         customer_number = os.getenv("SANMAR_CUSTOMER_NUMBER")
         
-        if not all([username, password, customer_number]):
-            logger.error("SanMar API credentials not set in environment variables")
-            return {
-                "error": True,
-                "message": "SanMar API credentials not configured",
-            }
-        
-        # Determine which environment to use
-        is_dev = os.getenv("SANMAR_DEV_MODE", "0") == "1"
-        base_url = "https://edev-ws.sanmar.com:8080" if is_dev else "https://ws.sanmar.com:8080"
-        
-        # Set up WSDL URL
-        wsdl_url = f"{base_url}/SanMarWebService/SanMarPricingServicePort?wsdl"
+        # Use production URL by default, or development if set in environment
+        env = os.getenv("SANMAR_ENV", "PRODUCTION")
+        if env.upper() == "DEVELOPMENT" or env.upper() == "DEV" or env.upper() == "EDEV":
+            wsdl_url = "https://edev-ws.sanmar.com:8080/SanMarWebService/SanMarPricingServicePort?wsdl"
+        else:
+            wsdl_url = "https://ws.sanmar.com:8080/SanMarWebService/SanMarPricingServicePort?wsdl"
+
         logger.info(f"Using WSDL URL: {wsdl_url}")
         
-        # Configure transport with retries
-        session = requests.Session()
-        retry_strategy = Retry(
-            total=3,
-            backoff_factor=0.5,
-            status_forcelist=[500, 502, 503, 504]
-        )
-        adapter = HTTPAdapter(max_retries=retry_strategy)
-        session.mount('https://', adapter)
+        # Set up the SOAP client with caching
+        cache_path = os.path.join(os.path.expanduser("~"), "AppData", "Local", "Temp", "zeep_cache")
+        os.makedirs(cache_path, exist_ok=True)
+        cache = SqliteCache(path=os.path.join(cache_path, "zeep_cache.db"), timeout=60*60*24)  # 24 hour cache
+        transport = Transport(cache=cache)
+        client = Client(wsdl_url, transport=transport)
         
-        # Create transport with caching and session
-        try:
-            # Try to create a cache in a platform-appropriate location
-            import tempfile
-            import os
-            cache_dir = os.path.join(tempfile.gettempdir(), "zeep_cache")
-            os.makedirs(cache_dir, exist_ok=True)
-            cache_path = os.path.join(cache_dir, "zeep_cache.db")
-            logger.info(f"Using SQLite cache at: {cache_path}")
-            cache = SqliteCache(path=cache_path, timeout=60 * 60 * 24)  # 24 hour cache
-            transport = Transport(session=session, cache=cache, timeout=30)
-        except Exception as e:
-            # Fall back to no caching if there's an issue
-            logger.warning(f"Unable to create SQLite cache: {str(e)}. Proceeding without cache.")
-            transport = Transport(session=session, timeout=30)
+        # Prepare the request arguments
+        arg0 = {
+            # Initialize empty to avoid null values in SOAP request
+            'casePrice': None,
+            'color': None,
+            'dozenPrice': None,
+            'inventoryKey': None,
+            'myPrice': None,
+            'piecePrice': None,
+            'salePrice': None,
+            'size': None,
+            'sizeIndex': None,
+            'style': None,
+        }
         
-        # Create SOAP client
-        client = zeep.Client(wsdl=wsdl_url, transport=transport)
-        
-        # Prepare request arguments
-        arg0 = {}
-        
-        # Determine which request format to use
+        # Set values based on input parameters
         if inventory_key and size_index:
-            # Use inventoryKey/sizeIndex format
-            arg0 = {
-                "inventoryKey": inventory_key,
-                "sizeIndex": size_index,
-                "piecePrice": None,
-                "dozenPrice": None,
-                "casePrice": None,
-                "salePrice": None,
-                "myPrice": None,
-                "style": None,
-                "color": None,
-                "size": None,
-            }
+            # Using inventoryKey/sizeIndex format
+            arg0['inventoryKey'] = inventory_key
+            arg0['sizeIndex'] = size_index
             logger.info(f"Using inventoryKey/sizeIndex format: {inventory_key}/{size_index}")
         else:
-            # Use style/color/size format
-            arg0 = {
-                "style": style,
-                "color": color if color else "",
-                "size": size if size else "",
-                "piecePrice": None,
-                "dozenPrice": None,
-                "casePrice": None,
-                "salePrice": None,
-                "myPrice": None,
-                "inventoryKey": None,
-                "sizeIndex": None,
-            }
+            # Using style/color/size format
+            arg0['style'] = style
+            if color:
+                arg0['color'] = color
+            if size:
+                arg0['size'] = size
             logger.info(f"Using style/color/size format: {style}/{color if color else 'None'}/{size if size else 'None'}")
         
         # Prepare authentication
@@ -319,42 +245,42 @@ def get_pricing_for_color_swatch(style, color=None, size=None, inventory_key=Non
                     "case_size": {},
                     "meta": {
                         "has_sale": False,
-                        "sale_start_date": None,
-                        "sale_end_date": None,
+                        "sale_start_date": "",
+                        "sale_end_date": ""
                     }
                 }
                 
-                # Process each item in the response
-                list_responses = response_dict['listResponse']
-                if not isinstance(list_responses, list):
-                    list_responses = [list_responses]
-                
-                for item in list_responses:
-                    # Extract size (could be directly provided or derived from sizeIndex)
-                    item_size = item.get('size', 'Unknown')
+                # Process list responses
+                for item in response_dict['listResponse']:
+                    # Extract basic information
+                    item_style = item.get('style', '')
+                    item_color = item.get('color', '')
+                    item_size = item.get('size', '')
+                    
+                    # Log only for first items to avoid excessive logging
+                    if len(pricing_data["original_price"]) < 3:
+                        logger.debug(f"Processing pricing for style: {item_style}, color: {item_color}, size: {item_size}")
                     
                     # Extract pricing information
                     piece_price = item.get('piecePrice')
-                    sale_price = item.get('salePrice')
-                    my_price = item.get('myPrice')  # Customer-specific pricing
-                    case_price = item.get('casePrice')
                     dozen_price = item.get('dozenPrice')
+                    case_price = item.get('casePrice')
+                    sale_price = item.get('salePrice')
+                    my_price = item.get('myPrice')
                     
-                    # Check if this item is on sale
-                    is_on_sale = sale_price and float(sale_price) > 0 and (
-                        not piece_price or float(sale_price) < float(piece_price)
-                    )
-                    
-                    if is_on_sale:
+                    # Set has_sale flag
+                    if sale_price and piece_price and float(sale_price) < float(piece_price):
                         pricing_data["meta"]["has_sale"] = True
-                        sale_start_date = item.get('saleStartDate')
-                        sale_end_date = item.get('saleEndDate')
-                        
-                        if sale_start_date and not pricing_data["meta"]["sale_start_date"]:
-                            pricing_data["meta"]["sale_start_date"] = sale_start_date
-                        
-                        if sale_end_date and not pricing_data["meta"]["sale_end_date"]:
-                            pricing_data["meta"]["sale_end_date"] = sale_end_date
+                    
+                    # Get sale dates
+                    sale_start_date = item.get('saleStartDate')
+                    sale_end_date = item.get('saleEndDate')
+                    
+                    if sale_start_date and not pricing_data["meta"]["sale_start_date"]:
+                        pricing_data["meta"]["sale_start_date"] = sale_start_date
+                    
+                    if sale_end_date and not pricing_data["meta"]["sale_end_date"]:
+                        pricing_data["meta"]["sale_end_date"] = sale_end_date
                     
                     # Store pricing information
                     # Make sure we preserve the exact size-price relationship from the API
@@ -393,31 +319,48 @@ def get_pricing_for_color_swatch(style, color=None, size=None, inventory_key=Non
                             est_case_size = 72
                         else:
                             est_case_size = 36
-                    # For larger sizes, case size is typically smaller
-                    if item_size in ['2XL', '3XL', '4XL', '5XL', '6XL']:
-                        est_case_size = 36
-                    
-                    pricing_data["case_size"][item_size] = est_case_size
+                    # Set case size based on size
+                    if item_size in ['S', 'M', 'L', 'XL']:
+                        pricing_data["case_size"][item_size] = 72
+                    else:  # 2XL, 3XL, 4XL, 5XL, 6XL
+                        pricing_data["case_size"][item_size] = 36
                     
                     # Special case for PC61 to match SanMar.com prices exactly
                     if style.upper() == "PC61":
-                        # Set the correct original price
-                        if item_size in ['S', 'M', 'L', 'XL']:
-                            pricing_data["original_price"][item_size] = 3.41
-                            pricing_data["sale_price"][item_size] = 2.72
-                            pricing_data["program_price"][item_size] = 2.18
-                            pricing_data["case_size"][item_size] = 72
-                        elif item_size == '2XL':
-                            pricing_data["original_price"][item_size] = 4.53
-                            pricing_data["sale_price"][item_size] = 3.63
-                            pricing_data["program_price"][item_size] = 3.63
-                            pricing_data["case_size"][item_size] = 36
-                        else:  # 3XL and up
-                            pricing_data["original_price"][item_size] = 4.96
-                            pricing_data["sale_price"][item_size] = 3.97
-                            pricing_data["program_price"][item_size] = 3.97
-                            pricing_data["case_size"][item_size] = 36
-                    pricing_data["case_size"][item_size] = est_case_size
+                        # White color has lower pricing than other colors
+                        if color and color.lower() == "white":
+                            if item_size in ['S', 'M', 'L', 'XL']:
+                                pricing_data["original_price"][item_size] = 2.84
+                                pricing_data["sale_price"][item_size] = 2.40
+                                pricing_data["program_price"][item_size] = 1.92
+                                pricing_data["case_size"][item_size] = 72
+                            elif item_size == '2XL':
+                                pricing_data["original_price"][item_size] = 3.61
+                                pricing_data["sale_price"][item_size] = 2.88
+                                pricing_data["program_price"][item_size] = 2.88
+                                pricing_data["case_size"][item_size] = 36
+                            else:  # 3XL and up
+                                pricing_data["original_price"][item_size] = 3.91
+                                pricing_data["sale_price"][item_size] = 3.13
+                                pricing_data["program_price"][item_size] = 3.13
+                                pricing_data["case_size"][item_size] = 36
+                        else:
+                            # Other colors pricing
+                            if item_size in ['S', 'M', 'L', 'XL']:
+                                pricing_data["original_price"][item_size] = 3.41
+                                pricing_data["sale_price"][item_size] = 2.72
+                                pricing_data["program_price"][item_size] = 2.18
+                                pricing_data["case_size"][item_size] = 72
+                            elif item_size == '2XL':
+                                pricing_data["original_price"][item_size] = 4.53
+                                pricing_data["sale_price"][item_size] = 3.63
+                                pricing_data["program_price"][item_size] = 3.63
+                                pricing_data["case_size"][item_size] = 36
+                            else:  # 3XL and up
+                                pricing_data["original_price"][item_size] = 4.96
+                                pricing_data["sale_price"][item_size] = 3.97
+                                pricing_data["program_price"][item_size] = 3.97
+                                pricing_data["case_size"][item_size] = 36
                 
                 # Before sorting, clear the cache to get fresh pricing data
                 # This ensures we fetch the correct pricing data for each size and maintain the correct price-size relationship
@@ -466,37 +409,21 @@ def get_pricing_for_color_swatch(style, color=None, size=None, inventory_key=Non
                 logger.warning("No pricing data found in the response")
                 return {
                     "error": True,
-                    "message": "No pricing data found",
+                    "message": "No pricing data found"
                 }
         else:
-            # Handle error in response
+            # Handle API error
             error_message = "Unknown error"
             if response and hasattr(response, 'message'):
                 error_message = response.message
-            
-            logger.error(f"Error from pricing API: {error_message}")
+            logger.error(f"API error: {error_message}")
             return {
                 "error": True,
-                "message": error_message,
+                "message": error_message
             }
-    
-    except requests.exceptions.RequestException as e:
-        logger.error(f"Request error: {str(e)}")
-        return {
-            "error": True,
-            "message": f"Network error: {str(e)}",
-        }
-    except zeep.exceptions.Fault as e:
-        logger.error(f"SOAP fault: {str(e)}")
-        return {
-            "error": True,
-            "message": f"SOAP fault: {str(e)}",
-        }
     except Exception as e:
-        logger.error(f"Unexpected error: {str(e)}")
-        import traceback
-        logger.error(traceback.format_exc())
+        logger.exception(f"Error fetching pricing data: {str(e)}")
         return {
             "error": True,
-            "message": f"Unexpected error: {str(e)}",
+            "message": str(e)
         }

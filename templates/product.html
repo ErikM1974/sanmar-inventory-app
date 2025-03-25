@@ -86,6 +86,9 @@
         .sale-price {
             color: #dc3545;
         }
+        .sale-price td {
+            color: #dc3545;
+        }
         .program-price {
             background-color: #d4edda;
         }
@@ -275,9 +278,9 @@
                                     <td>Original Price: $</td>
                                     {% for size in sizes %}
                                     {% if color_pricing and catalog_color in color_pricing and color_pricing[catalog_color].original_price %}
-                                        <td>{{ color_pricing[catalog_color].original_price.get(size, 0) }}</td>
+                                        <td>{{ "%.2f"|format(color_pricing[catalog_color].original_price.get(size, 0)) }}</td>
                                     {% else %}
-                                        <td>{{ pricing.original_price.get(size, 0) }}</td>
+                                        <td>{{ "%.2f"|format(pricing.original_price.get(size, 0)) }}</td>
                                     {% endif %}
                                     {% endfor %}
                                 </tr>
@@ -285,9 +288,9 @@
                                     <td>Sale Price: $</td>
                                     {% for size in sizes %}
                                     {% if color_pricing and catalog_color in color_pricing and color_pricing[catalog_color].sale_price %}
-                                        <td>{{ color_pricing[catalog_color].sale_price.get(size, 0) }}</td>
+                                        <td>{{ "%.2f"|format(color_pricing[catalog_color].sale_price.get(size, 0)) }}</td>
                                     {% else %}
-                                        <td>{{ pricing.sale_price.get(size, 0) }}</td>
+                                        <td>{{ "%.2f"|format(pricing.sale_price.get(size, 0)) }}</td>
                                     {% endif %}
                                     {% endfor %}
                                 </tr>
@@ -295,9 +298,9 @@
                                     <td>Program Price: $</td>
                                     {% for size in sizes %}
                                     {% if color_pricing and catalog_color in color_pricing and color_pricing[catalog_color].program_price %}
-                                        <td>{{ color_pricing[catalog_color].program_price.get(size, 0) }}</td>
+                                        <td>{{ "%.2f"|format(color_pricing[catalog_color].program_price.get(size, 0)) }}</td>
                                     {% else %}
-                                        <td>{{ pricing.program_price.get(size, 0) }}</td>
+                                        <td>{{ "%.2f"|format(pricing.program_price.get(size, 0)) }}</td>
                                     {% endif %}
                                     {% endfor %}
                                 </tr>
@@ -446,30 +449,8 @@
                             }
                         }
                         
-                        // Mark items on sale with visual indicator
-                        if (data.meta && data.meta.has_sale) {
-                            const tableId = `inventory-${color.replace(/\//g, '-')}`;
-                            const table = document.getElementById(tableId);
-                            if (table) {
-                                const salePriceRow = table.querySelector('.sale-price');
-                                if (salePriceRow) {
-                                    const saleCells = salePriceRow.querySelectorAll('td:not(:first-child)');
-                                    const originalPriceRow = salePriceRow.previousElementSibling;
-                                    if (originalPriceRow) {
-                                        const originalCells = originalPriceRow.querySelectorAll('td:not(:first-child)');
-                                        
-                                        saleCells.forEach((cell, index) => {
-                                            const salePrice = parseFloat(cell.textContent);
-                                            const originalPrice = parseFloat(originalCells[index].textContent);
-                                            
-                                            if (salePrice < originalPrice) {
-                                                cell.classList.add('on-sale');
-                                            }
-                                        });
-                                    }
-                                }
-                            }
-                        }
+                        // Client requested to not show sale indicators
+                        // No visual indication of sale prices needed
                         
                         resolve(data);
                     })
@@ -512,9 +493,32 @@
             
             console.log("Displayed sizes in table order:", displayedSizes);
             
+            // Check if the product has sale prices
+            // If original price and sale price are the same for all sizes, we don't have a sale
+            let hasSale = false;
+            if (pricingData.original_price && pricingData.sale_price) {
+                for (const size of displayedSizes) {
+                    if (size && pricingData.original_price[size] && pricingData.sale_price[size] &&
+                        pricingData.original_price[size] !== pricingData.sale_price[size]) {
+                        hasSale = true;
+                        break;
+                    }
+                }
+            }
+            
+            const originalPriceRow = pricingTable.querySelector('tbody tr:nth-child(1)');
+            const salePriceRow = pricingTable.querySelector('tbody tr:nth-child(2)');
+            const programPriceRow = pricingTable.querySelector('tbody tr:nth-child(3)');
+            const caseSizeRow = pricingTable.querySelector('tr:nth-child(4)');
+            
             // Update original price row
-            const originalPriceRow = pricingTable.querySelector('tr:nth-child(1)');
             if (originalPriceRow && pricingData.original_price) {
+                // Always use "Original Price: $" label
+                const labelCell = originalPriceRow.querySelector('td:first-child');
+                if (labelCell) {
+                    labelCell.textContent = "Original Price: $";
+                }
+                
                 const cells = originalPriceRow.querySelectorAll('td:not(:first-child)');
                 cells.forEach((cell, index) => {
                     const size = displayedSizes[index];
@@ -524,32 +528,41 @@
                 });
             }
             
-            // Update sale price row
-            const salePriceRow = pricingTable.querySelector('tr:nth-child(2)');
-            if (salePriceRow && pricingData.sale_price) {
-                const cells = salePriceRow.querySelectorAll('td:not(:first-child)');
-                cells.forEach((cell, index) => {
-                    const size = displayedSizes[index];
-                    if (size && pricingData.sale_price[size]) {
-                        cell.textContent = pricingData.sale_price[size].toFixed(2);
-                    }
-                });
+            // Toggle sale price row visibility based on whether there's a sale
+            if (salePriceRow) {
+                if (hasSale) {
+                    salePriceRow.style.display = '';
+                    // Update sale price values
+                    const cells = salePriceRow.querySelectorAll('td:not(:first-child)');
+                    cells.forEach((cell, index) => {
+                        const size = displayedSizes[index];
+                        if (size && pricingData.sale_price[size]) {
+                            cell.textContent = pricingData.sale_price[size].toFixed(2);
+                        }
+                    });
+                } else {
+                    // Hide sale price row if there's no sale
+                    salePriceRow.style.display = 'none';
+                }
             }
             
-            // Update program price row
-            const programPriceRow = pricingTable.querySelector('tr:nth-child(3)');
-            if (programPriceRow && pricingData.program_price) {
-                const cells = programPriceRow.querySelectorAll('td:not(:first-child)');
-                cells.forEach((cell, index) => {
-                    const size = displayedSizes[index];
-                    if (size && pricingData.program_price[size]) {
-                        cell.textContent = pricingData.program_price[size].toFixed(2);
-                    }
-                });
+            // Always show program price row
+            if (programPriceRow) {
+                programPriceRow.style.display = '';
+                
+                // Update program price values
+                if (pricingData.program_price) {
+                    const cells = programPriceRow.querySelectorAll('td:not(:first-child)');
+                    cells.forEach((cell, index) => {
+                        const size = displayedSizes[index];
+                        if (size && pricingData.program_price[size]) {
+                            cell.textContent = pricingData.program_price[size].toFixed(2);
+                        }
+                    });
+                }
             }
             
-            // Update case size row
-            const caseSizeRow = pricingTable.querySelector('tr:nth-child(4)');
+            // Always update case size row
             if (caseSizeRow && pricingData.case_size) {
                 const cells = caseSizeRow.querySelectorAll('td:not(:first-child)');
                 cells.forEach((cell, index) => {
@@ -638,8 +651,21 @@
                             // Update pricing display with new data
                             updatePricingDisplay(data, selectedTableId);
                             
+                            // Check if there's a real sale by comparing original and sale prices
+                            let hasSale = false;
+                            if (data.original_price && data.sale_price) {
+                                // Compare prices for each size
+                                for (const size in data.original_price) {
+                                    if (data.sale_price[size] &&
+                                        data.original_price[size] !== data.sale_price[size]) {
+                                        hasSale = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            
                             // Add sale badge to product image if on sale
-                            if (data.meta && data.meta.has_sale) {
+                            if (hasSale) {
                                 // Remove any existing sale badge first
                                 const existingBadge = document.querySelector('.sale-badge');
                                 if (existingBadge) {
