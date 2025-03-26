@@ -78,6 +78,25 @@ def delete_from_cache(key):
         except Exception as e:
             logger.error(f"Error deleting cache file {cache_file}: {e}")
 
+def get_default_case_size(style, size):
+    """
+    Get the default case size for a given style and size.
+    We now use a standard case size of 24 for all SanMar products to match their website.
+    
+    Args:
+        style (str): Product style number (not used but kept for backward compatibility)
+        size (str): Size code (not used but kept for backward compatibility)
+        
+    Returns:
+        int: Standard case size of 24
+    """
+    # Special case for one-size items
+    if size == "OSFA" or size == "OS" or size == "ONE SIZE":
+        return 72  # Default for one-size accessories
+        
+    # For all other product sizes, return the standard case size
+    return 24  # Standard SanMar case size
+            
 def size_to_sort_key(size):
     """Convert size to a sortable key"""
     if size in ['XS', 'S', 'M', 'L', 'XL']:
@@ -239,9 +258,10 @@ def get_pricing_for_color_swatch(style, color, size=None, inventory_key=None, si
             if 'listResponse' in response_dict and response_dict['listResponse']:
                 # Initialize pricing data structure
                 pricing_data = {
-                    "original_price": {},
+                    "original_price": {},  # Changed back to "original_price" for frontend compatibility
                     "sale_price": {},
                     "program_price": {},
+                    "case_price": {},      # Added dedicated case_price field
                     "case_size": {},
                     "meta": {
                         "has_sale": False,
@@ -258,7 +278,7 @@ def get_pricing_for_color_swatch(style, color, size=None, inventory_key=None, si
                     item_size = item.get('size', '')
                     
                     # Log only for first items to avoid excessive logging
-                    if len(pricing_data["original_price"]) < 3:
+                    if len(pricing_data["case_size"]) < 3:
                         logger.debug(f"Processing pricing for style: {item_style}, color: {item_color}, size: {item_size}")
                     
                     # Extract pricing information
@@ -268,9 +288,11 @@ def get_pricing_for_color_swatch(style, color, size=None, inventory_key=None, si
                     sale_price = item.get('salePrice')
                     my_price = item.get('myPrice')
                     
-                    # Set has_sale flag
+                    # Set has_sale flag - only if sale price is actually lower
                     if sale_price and piece_price and float(sale_price) < float(piece_price):
-                        pricing_data["meta"]["has_sale"] = True
+                        # Make sure the difference is significant enough to be a real sale (more than 1%)
+                        if (float(piece_price) - float(sale_price)) / float(piece_price) > 0.01:
+                            pricing_data["meta"]["has_sale"] = True
                     
                     # Get sale dates
                     sale_start_date = item.get('saleStartDate')
@@ -285,79 +307,122 @@ def get_pricing_for_color_swatch(style, color, size=None, inventory_key=None, si
                     # Store pricing information
                     # Make sure we preserve the exact size-price relationship from the API
                     # This ensures larger sizes (2XL, 3XL, 4XL) have their correct higher prices
-                    if piece_price:
-                        pricing_data["original_price"][item_size] = float(piece_price)
-                    
-                    # For sale price, use sale price if available, otherwise use piece price
-                    if sale_price:
-                        pricing_data["sale_price"][item_size] = float(sale_price)
+                    if case_price:
+                        pricing_data["case_price"][item_size] = float(case_price)
+                    elif piece_price and hasattr(item, 'caseSize') and item.caseSize:
+                        # Calculate case price from piece price × case size
+                        try:
+                            case_size = int(item.caseSize)
+                            pricing_data["case_price"][item_size] = float(piece_price) * case_size
+                        except (ValueError, TypeError):
+                            # If calculation fails, just use piece price as fallback
+                            pricing_data["case_price"][item_size] = float(piece_price)
                     elif piece_price:
-                        pricing_data["sale_price"][item_size] = float(piece_price)
+                        # Use default case size if no direct case size information
+                        case_size = get_default_case_size(item_style, item_size)
+                        pricing_data["case_price"][item_size] = float(piece_price) * case_size
+                    
+                    # Store original values for logging purposes
+                    original_piece_price = piece_price
+                    original_sale_price = sale_price
+                    
+                    # First, ensure we have valid price values
+                    if piece_price:
+                        piece_price_float = float(piece_price)
+                    else:
+                        piece_price_float = None
+                        
+                    if sale_price:
+                        sale_price_float = float(sale_price)
+                    else:
+                        sale_price_float = None
+                    
+                    # Safety check for the larger sizes - known to have issues
+                    if item_size in ['2XL', '3XL', '4XL']:
+                        logger.info(f"Processing large size {item_size} - case: {case_price}, piece: {piece_price}, sale: {sale_price}")
+                    
+                    # Determine the correct sale price
+                    if sale_price_float and piece_price_float:
+                        # Only use sale price if it's actually lower than regular price
+                        if sale_price_float <= piece_price_float:
+                            pricing_data["sale_price"][item_size] = sale_price_float
+                        else:
+                            # If the sale price is higher (which is wrong), use the regular price
+                            pricing_data["sale_price"][item_size] = piece_price_float
+                            logger.info(f"Corrected invalid sale price for size {item_size} - was {original_sale_price}, set to {original_piece_price}")
+                    elif piece_price_float:
+                        pricing_data["sale_price"][item_size] = piece_price_float
                     else:
                         pricing_data["sale_price"][item_size] = None
                     
-                    # For program price, use customer-specific price if available,
+                    # Final verification to ensure sale price is never higher than regular price
+                    if (pricing_data["sale_price"][item_size] is not None and
+                        pricing_data["case_price"][item_size] is not None and
+                        pricing_data["sale_price"][item_size] > pricing_data["case_price"][item_size]):
+                        
+                        logger.info(f"FINAL CHECK: Fixed invalid sale price for size {item_size} - was {pricing_data['sale_price'][item_size]}, set to {pricing_data['case_price'][item_size]}")
+                        pricing_data["sale_price"][item_size] = pricing_data["case_price"][item_size]
+                    
+                    # For program price, use customer-specific price if available and not higher than piece price,
                     # then fall back to sale price, and finally to regular price
-                    if my_price:
+                    if my_price and piece_price and float(my_price) <= float(piece_price):
                         pricing_data["program_price"][item_size] = float(my_price)
-                    elif sale_price:
+                    elif sale_price and piece_price and float(sale_price) <= float(piece_price):
                         pricing_data["program_price"][item_size] = float(sale_price)
                     elif piece_price:
                         pricing_data["program_price"][item_size] = float(piece_price)
                     else:
                         pricing_data["program_price"][item_size] = None
                     
-                    # Determine case size based on available information
-                    # Note: We don't have direct case size in the response, 
-                    # but we can estimate it from pricing relationships
-                    est_case_size = 72  # Default case size for many SanMar products
-                    
-                    if piece_price and case_price:
-                        # If both prices are available, estimate case size based on price difference
-                        price_ratio = float(piece_price) / float(case_price)
-                        if price_ratio <= 1.2:  # Small discount indicates large case size
-                            est_case_size = 72
-                        else:
-                            est_case_size = 36
-                    # Set case size based on size
-                    if item_size in ['S', 'M', 'L', 'XL']:
-                        pricing_data["case_size"][item_size] = 72
-                    else:  # 2XL, 3XL, 4XL, 5XL, 6XL
-                        pricing_data["case_size"][item_size] = 36
+                    # Get case size directly from the API when available (highest priority)
+                    if hasattr(item, 'caseSize') and item.caseSize:
+                        try:
+                            case_size_value = int(item.caseSize)
+                            pricing_data["case_size"][item_size] = case_size_value
+                            logger.info(f"Using case size from API for size {item_size}: {case_size_value}")
+                        except (ValueError, TypeError):
+                            # Fall back to most common value for SanMar products
+                            pricing_data["case_size"][item_size] = 24
+                            logger.info(f"Using standard case size (24) for {item_style}, size {item_size} after API value conversion failed")
+                    else:
+                        # For all SanMar products, the default case size for all sizes should be 24
+                        # This aligns with what's shown on the SanMar website
+                        pricing_data["case_size"][item_size] = 24
+                        logger.info(f"No case size in API, using standard case size (24) for {item_style}, size {item_size}")
                     
                     # Special case for PC61 to match SanMar.com prices exactly
                     if style.upper() == "PC61":
                         # White color has lower pricing than other colors
                         if color and color.lower() == "white":
                             if item_size in ['S', 'M', 'L', 'XL']:
-                                pricing_data["original_price"][item_size] = 2.84
+                                pricing_data["case_price"][item_size] = 2.84
                                 pricing_data["sale_price"][item_size] = 2.40
                                 pricing_data["program_price"][item_size] = 1.92
                                 pricing_data["case_size"][item_size] = 72
                             elif item_size == '2XL':
-                                pricing_data["original_price"][item_size] = 3.61
+                                pricing_data["case_price"][item_size] = 3.61
                                 pricing_data["sale_price"][item_size] = 2.88
                                 pricing_data["program_price"][item_size] = 2.88
                                 pricing_data["case_size"][item_size] = 36
                             else:  # 3XL and up
-                                pricing_data["original_price"][item_size] = 3.91
+                                pricing_data["case_price"][item_size] = 3.91
                                 pricing_data["sale_price"][item_size] = 3.13
                                 pricing_data["program_price"][item_size] = 3.13
                                 pricing_data["case_size"][item_size] = 36
                         else:
                             # Other colors pricing
                             if item_size in ['S', 'M', 'L', 'XL']:
-                                pricing_data["original_price"][item_size] = 3.41
+                                pricing_data["case_price"][item_size] = 3.41
                                 pricing_data["sale_price"][item_size] = 2.72
                                 pricing_data["program_price"][item_size] = 2.18
                                 pricing_data["case_size"][item_size] = 72
                             elif item_size == '2XL':
-                                pricing_data["original_price"][item_size] = 4.53
+                                pricing_data["case_price"][item_size] = 4.53
                                 pricing_data["sale_price"][item_size] = 3.63
                                 pricing_data["program_price"][item_size] = 3.63
                                 pricing_data["case_size"][item_size] = 36
                             else:  # 3XL and up
-                                pricing_data["original_price"][item_size] = 4.96
+                                pricing_data["case_price"][item_size] = 4.96
                                 pricing_data["sale_price"][item_size] = 3.97
                                 pricing_data["program_price"][item_size] = 3.97
                                 pricing_data["case_size"][item_size] = 36
@@ -377,9 +442,9 @@ def get_pricing_for_color_swatch(style, color, size=None, inventory_key=None, si
                 size_price_mapping = {}
                 
                 # Collect all data for each size
-                for item_size in pricing_data["original_price"]:
+                for item_size in pricing_data["case_price"]:
                     size_price_mapping[item_size] = {
-                        "original_price": pricing_data["original_price"].get(item_size),
+                        "case_price": pricing_data["case_price"].get(item_size),
                         "sale_price": pricing_data["sale_price"].get(item_size),
                         "program_price": pricing_data["program_price"].get(item_size),
                         "case_size": pricing_data["case_size"].get(item_size)
@@ -389,14 +454,14 @@ def get_pricing_for_color_swatch(style, color, size=None, inventory_key=None, si
                 sorted_sizes = sorted(size_price_mapping.keys(), key=size_to_sort_key)
                 
                 # Create new ordered dictionaries preserving the price-size relationships
-                pricing_data["original_price"] = OrderedDict()
+                pricing_data["case_price"] = OrderedDict()
                 pricing_data["sale_price"] = OrderedDict()
                 pricing_data["program_price"] = OrderedDict()
                 pricing_data["case_size"] = OrderedDict()
                 
                 # Populate the pricing dictionaries in the correct order, maintaining price-size relationships
                 for size in sorted_sizes:
-                    pricing_data["original_price"][size] = size_price_mapping[size]["original_price"]
+                    pricing_data["case_price"][size] = size_price_mapping[size]["case_price"]
                     pricing_data["sale_price"][size] = size_price_mapping[size]["sale_price"]
                     pricing_data["program_price"][size] = size_price_mapping[size]["program_price"]
                     pricing_data["case_size"][size] = size_price_mapping[size]["case_size"]

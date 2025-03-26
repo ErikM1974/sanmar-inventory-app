@@ -150,20 +150,7 @@
             padding: 2px 5px;
             border-radius: 3px;
         }
-        .sale-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #dc3545;
-            color: white;
-            font-weight: bold;
-            padding: 5px 10px;
-            border-radius: 3px;
-            z-index: 5;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            transform: rotate(10deg);
-            font-size: 14px;
-        }
+        /* Sale badge removed as requested */
         .product-image {
             position: relative;
         }
@@ -275,12 +262,12 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Original Price: $</td>
+                                    <td>Case Price: $</td>
                                     {% for size in sizes %}
-                                    {% if color_pricing and catalog_color in color_pricing and color_pricing[catalog_color].original_price %}
-                                        <td>{{ "%.2f"|format(color_pricing[catalog_color].original_price.get(size, 0)) }}</td>
+                                    {% if color_pricing and catalog_color in color_pricing and color_pricing[catalog_color].case_price %}
+                                        <td>{{ "%.2f"|format(color_pricing[catalog_color].case_price.get(size, 0)) }}</td>
                                     {% else %}
-                                        <td>{{ "%.2f"|format(pricing.original_price.get(size, 0)) }}</td>
+                                        <td>{{ "%.2f"|format(pricing.case_price.get(size, 0)) }}</td>
                                     {% endif %}
                                     {% endfor %}
                                 </tr>
@@ -494,12 +481,12 @@
             console.log("Displayed sizes in table order:", displayedSizes);
             
             // Check if the product has sale prices
-            // If original price and sale price are the same for all sizes, we don't have a sale
+            // If case price and sale price are the same for all sizes, we don't have a sale
             let hasSale = false;
-            if (pricingData.original_price && pricingData.sale_price) {
+            if (pricingData.case_price && pricingData.sale_price) {
                 for (const size of displayedSizes) {
-                    if (size && pricingData.original_price[size] && pricingData.sale_price[size] &&
-                        pricingData.original_price[size] !== pricingData.sale_price[size]) {
+                    if (size && pricingData.case_price[size] && pricingData.sale_price[size] &&
+                        pricingData.case_price[size] !== pricingData.sale_price[size]) {
                         hasSale = true;
                         break;
                     }
@@ -511,26 +498,42 @@
             const programPriceRow = pricingTable.querySelector('tbody tr:nth-child(3)');
             const caseSizeRow = pricingTable.querySelector('tr:nth-child(4)');
             
-            // Update original price row
-            if (originalPriceRow && pricingData.original_price) {
-                // Always use "Original Price: $" label
+            // Update case price row
+            if (originalPriceRow && pricingData.case_price) {
+                // Always use "Case Price: $" label
                 const labelCell = originalPriceRow.querySelector('td:first-child');
                 if (labelCell) {
-                    labelCell.textContent = "Original Price: $";
+                    labelCell.textContent = "Case Price: $";
                 }
                 
                 const cells = originalPriceRow.querySelectorAll('td:not(:first-child)');
                 cells.forEach((cell, index) => {
                     const size = displayedSizes[index];
-                    if (size && pricingData.original_price[size]) {
-                        cell.textContent = pricingData.original_price[size].toFixed(2);
+                    if (size && pricingData.case_price[size]) {
+                        cell.textContent = pricingData.case_price[size].toFixed(2);
                     }
                 });
             }
             
-            // Toggle sale price row visibility based on whether there's a sale
+            // Determine if we need to show the sale price row
+            // Only show it if there's a sale AND the sale price is better than the program price for at least one size
             if (salePriceRow) {
-                if (hasSale) {
+                let showSalePriceRow = false;
+                
+                if (hasSale && pricingData.sale_price && pricingData.program_price) {
+                    // Check if the sale price is better than the program price for any size
+                    for (const size of displayedSizes) {
+                        if (size &&
+                            pricingData.sale_price[size] &&
+                            pricingData.program_price[size] &&
+                            pricingData.sale_price[size] < pricingData.program_price[size]) {
+                            showSalePriceRow = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if (showSalePriceRow) {
                     salePriceRow.style.display = '';
                     // Update sale price values
                     const cells = salePriceRow.querySelectorAll('td:not(:first-child)');
@@ -541,7 +544,7 @@
                         }
                     });
                 } else {
-                    // Hide sale price row if there's no sale
+                    // Hide sale price row if there's no sale or if program price is better
                     salePriceRow.style.display = 'none';
                 }
             }
@@ -651,37 +654,11 @@
                             // Update pricing display with new data
                             updatePricingDisplay(data, selectedTableId);
                             
-                            // Check if there's a real sale by comparing original and sale prices
-                            let hasSale = false;
-                            if (data.original_price && data.sale_price) {
-                                // Compare prices for each size
-                                for (const size in data.original_price) {
-                                    if (data.sale_price[size] &&
-                                        data.original_price[size] !== data.sale_price[size]) {
-                                        hasSale = true;
-                                        break;
-                                    }
-                                }
-                            }
-                            
-                            // Add sale badge to product image if on sale
-                            if (hasSale) {
-                                // Remove any existing sale badge first
-                                const existingBadge = document.querySelector('.sale-badge');
-                                if (existingBadge) {
-                                    existingBadge.remove();
-                                }
-                                
-                                const badge = document.createElement('div');
-                                badge.className = 'sale-badge';
-                                badge.textContent = 'SALE';
-                                document.querySelector('.product-image').appendChild(badge);
-                            } else {
-                                // Remove sale badge if not on sale
-                                const existingBadge = document.querySelector('.sale-badge');
-                                if (existingBadge) {
-                                    existingBadge.remove();
-                                }
+                            // No longer adding SALE badge as requested
+                            // Remove any existing sale badge
+                            const existingBadge = document.querySelector('.sale-badge');
+                            if (existingBadge) {
+                                existingBadge.remove();
                             }
                         })
                         .catch(error => {
@@ -710,24 +687,11 @@
                             // Update pricing display with new data
                             updatePricingDisplay(data, altTableId);
                             
-                            // Add sale badge to product image if on sale
-                            if (data.meta && data.meta.has_sale) {
-                                // Remove any existing sale badge first
-                                const existingBadge = document.querySelector('.sale-badge');
-                                if (existingBadge) {
-                                    existingBadge.remove();
-                                }
-                                
-                                const badge = document.createElement('div');
-                                badge.className = 'sale-badge';
-                                badge.textContent = 'SALE';
-                                document.querySelector('.product-image').appendChild(badge);
-                            } else {
-                                // Remove sale badge if not on sale
-                                const existingBadge = document.querySelector('.sale-badge');
-                                if (existingBadge) {
-                                    existingBadge.remove();
-                                }
+                            // No longer adding SALE badge as requested
+                            // Remove any existing sale badge
+                            const existingBadge = document.querySelector('.sale-badge');
+                            if (existingBadge) {
+                                existingBadge.remove();
                             }
                         })
                         .catch(error => {
