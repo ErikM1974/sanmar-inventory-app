@@ -457,59 +457,100 @@
             document.querySelectorAll('.color-swatch').forEach(function(swatch) {
                 swatch.addEventListener('click', function() {
                     try {
-                        // Extract data attributes safely
+                        // Extract data attributes safely with explicit debug info
                         const catalogColor = this.getAttribute('data-catalog-color') || '';
                         const displayColor = this.getAttribute('data-display-color') || catalogColor;
                         const imageUrl = this.getAttribute('data-image') || '';
                         
                         console.log(`Swatch clicked: ${catalogColor}, display: ${displayColor}, image: ${imageUrl}`);
                         
+                        // Stop here if we don't have a valid catalog color
+                        if (!catalogColor) {
+                            console.error('No catalog color found on swatch element');
+                            return;
+                        }
+                        
+                        // Stop here if we don't have a valid image URL
+                        if (!imageUrl) {
+                            console.warn('No image URL found on swatch element');
+                            // Continue anyway as we can update other elements
+                        }
+                        
                         // Safely update selected color text
                         const selectedColorElement = document.getElementById('selected-color');
                         if (selectedColorElement) {
                             selectedColorElement.textContent = displayColor;
+                            console.log(`Updated selected color text to: ${displayColor}`);
+                        } else {
+                            console.error('Selected color element not found');
                         }
                         
-                        // Update active swatch
+                        // Update active swatch styling
                         document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
                         this.classList.add('active');
+                        console.log(`Updated active swatch to: ${catalogColor}`);
                         
-                        // Safely update product image
+                        // Safely update product image - this is critical!
                         const productImage = document.getElementById('product-image');
                         if (productImage && imageUrl) {
-                            productImage.src = imageUrl;
-                            if (productImage.alt) {
-                                const altParts = productImage.alt.split(' ');
-                                if (altParts.length > 1) {
-                                    productImage.alt = `${displayColor} ${altParts.slice(1).join(' ')}`;
+                            console.log(`Updating image from ${productImage.src} to ${imageUrl}`);
+                            
+                            // Force a reflow with a small timeout to ensure the image updates
+                            setTimeout(() => {
+                                productImage.src = imageUrl;
+                                
+                                // Also update the alt text for accessibility
+                                if (productImage.alt) {
+                                    const altParts = productImage.alt.split(' ');
+                                    if (altParts.length > 1) {
+                                        productImage.alt = `${displayColor} ${altParts.slice(1).join(' ')}`;
+                                    } else {
+                                        productImage.alt = displayColor;
+                                    }
                                 } else {
                                     productImage.alt = displayColor;
                                 }
-                            } else {
-                                productImage.alt = displayColor;
-                            }
+                                
+                                console.log(`Image updated to: ${imageUrl}`);
+                            }, 10);
+                        } else {
+                            console.error(`Product image element ${productImage ? 'found' : 'not found'}, imageUrl ${imageUrl ? 'valid' : 'invalid'}`);
                         }
                         
                         // Hide all inventory tables
-                        document.querySelectorAll('.inventory-tables').forEach(table => {
+                        const allTables = document.querySelectorAll('.inventory-tables');
+                        console.log(`Found ${allTables.length} inventory tables to hide`);
+                        allTables.forEach(table => {
                             table.style.display = 'none';
                         });
                         
                         // Show the selected inventory table
-                        const tableId = `inventory-${catalogColor}`;
-                        const table = document.getElementById(tableId);
+                        // Use a sanitized catalog color for the ID (replace slashes and spaces)
+                        const safeColorId = catalogColor.replace(/\//g, '-').replace(/ /g, '-');
+                        const tableId = `inventory-${safeColorId}`;
+                        console.log(`Looking for table with ID: ${tableId}`);
+                        let table = document.getElementById(tableId);
+                        
+                        // If we can't find the table with the exact ID, try a more permissive selector
+                        if (!table) {
+                            console.warn(`Table not found by ID: ${tableId}, trying attribute selector...`);
+                            table = document.querySelector(`.inventory-tables[id*="${catalogColor}"]`);
+                        }
                         
                         if (table) {
                             table.style.display = 'block';
+                            console.log(`Showing inventory table for ${catalogColor}`);
                             
                             // Fetch updated pricing data
                             const path = window.location.pathname;
                             const style = path.includes('/') ? path.split('/').pop() : path;
                             
                             if (style) {
+                                console.log(`Fetching pricing data for style: ${style}, color: ${catalogColor}`);
                                 fetchColorPricing(style, catalogColor)
                                     .then(data => {
-                                        updatePricingDisplay(data, tableId);
+                                        console.log(`Successfully retrieved pricing data for ${catalogColor}`, data);
+                                        updatePricingDisplay(data, table.id); // Use the actual table.id
                                     })
                                     .catch(error => {
                                         console.error(`Error updating pricing: ${error}`);
@@ -517,27 +558,49 @@
                             }
                         } else {
                             console.warn(`Table not found: ${tableId}, trying fallback...`);
-                            // Try fallback by display color
-                            const fallbackTableId = `inventory-${displayColor}`;
-                            const fallbackTable = document.getElementById(fallbackTableId);
+                            
+                            // Try using the actual table with data-display-color attribute
+                            const fallbackTable = document.querySelector(`.inventory-tables[data-display-color="${displayColor}"]`);
                             
                             if (fallbackTable) {
                                 fallbackTable.style.display = 'block';
+                                console.log(`Showing fallback inventory table for ${displayColor}`);
                                 
                                 const path = window.location.pathname;
                                 const style = path.includes('/') ? path.split('/').pop() : path;
                                 
                                 if (style) {
+                                    console.log(`Fetching pricing data for style: ${style}, color: ${displayColor}`);
                                     fetchColorPricing(style, displayColor)
                                         .then(data => {
-                                            updatePricingDisplay(data, fallbackTableId);
+                                            console.log(`Successfully retrieved pricing data for ${displayColor}`, data);
+                                            updatePricingDisplay(data, fallbackTable.id);
                                         })
                                         .catch(error => {
                                             console.error(`Error updating pricing for display color: ${error}`);
                                         });
                                 }
                             } else {
-                                console.error(`No table found for either ${tableId} or ${fallbackTableId}`);
+                                // Last resort - just show the first inventory table
+                                console.error(`No table found for either ${tableId} or by display color attribute`);
+                                const firstTable = document.querySelector('.inventory-tables');
+                                if (firstTable) {
+                                    firstTable.style.display = 'block';
+                                    console.log(`Showing first available inventory table as last resort`);
+                                    
+                                    // At least try to fetch the pricing
+                                    const path = window.location.pathname;
+                                    const style = path.includes('/') ? path.split('/').pop() : path;
+                                    if (style) {
+                                        fetchColorPricing(style, catalogColor)
+                                            .then(data => {
+                                                updatePricingDisplay(data, firstTable.id);
+                                            })
+                                            .catch(error => {
+                                                console.error(`Error updating pricing: ${error}`);
+                                            });
+                                    }
+                                }
                             }
                         }
                     } catch (err) {
