@@ -199,6 +199,26 @@ h4 {
     font-size: 18px;
 }
 
+/* SALE Badge */
+.sale-badge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #e74c3c;
+    color: white;
+    padding: 5px 10px;
+    font-weight: bold;
+    font-size: 14px;
+    z-index: 10;
+    border-radius: 0 0 5px 0;
+}
+
+/* Position the product image container relatively for the sale badge */
+.product-image {
+    text-align: center;
+    position: relative;
+}
+
 /* Warehouse Table */
 #warehouse-table {
     width: 100%;

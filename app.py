@@ -215,7 +215,7 @@ def product_page(style):
                             if pricing_result:
                                 # Initialize pricing data structure
                                 api_pricing_data = {
-                                    "original_price": {},
+                                    "case_price": {},
                                     "sale_price": {},
                                     "piece_price": {},
                                     "piece_sale_price": {},
@@ -241,20 +241,20 @@ def product_page(style):
                                     # Log the pricing data for debugging
                                     logger.info(f"Processing pricing for part {part_id}, size {size}: {price_info}")
                                     
-                                    api_pricing_data["original_price"][size] = price_info.get("original", 0)
+                                    api_pricing_data["case_price"][size] = price_info.get("original", 0)
                                     api_pricing_data["sale_price"][size] = price_info.get("sale", 0)
                                     api_pricing_data["program_price"][size] = price_info.get("program", 0)
                                     api_pricing_data["case_size"][size] = price_info.get("case_size", 72)
                                 
                                 # Use API pricing data if available
-                                if any(api_pricing_data["original_price"]):
+                                if any(api_pricing_data["case_price"]):
                                     pricing_data = api_pricing_data
                                     logger.info(f"Using API pricing data for {style}")
                                     
                                     # Special case for C112 which has a single size (OSFA)
                                     if style.upper() == "C112":
                                         # Always set the correct pricing for C112
-                                        api_pricing_data["original_price"]["OSFA"] = 3.29
+                                        api_pricing_data["case_price"]["OSFA"] = 3.29
                                         api_pricing_data["sale_price"]["OSFA"] = 3.29
                                         api_pricing_data["program_price"]["OSFA"] = 3.29
                                         api_pricing_data["case_size"]["OSFA"] = 144
@@ -320,7 +320,7 @@ def product_page(style):
                         # Ensure all catalog colors have pricing data
                         for catalog_color in catalog_colors:
                             color_pricing[catalog_color] = {
-                                "original_price": {},
+                                "case_price": {},
                                 "sale_price": {},
                                 "program_price": {},
                                 "case_size": {}
@@ -366,11 +366,11 @@ def product_page(style):
                         for catalog_color in catalog_colors:
                             # Check if color pricing is missing or empty
                             if (catalog_color not in color_pricing or
-                                not color_pricing[catalog_color].get("original_price")):
+                                not color_pricing[catalog_color].get("case_price")):
                                 
                                 logger.info(f"Using general pricing for color '{catalog_color}'")
                                 color_pricing[catalog_color] = {
-                                    "original_price": pricing_data["original_price"].copy(),
+                                    "case_price": pricing_data["case_price"].copy(),
                                     "sale_price": pricing_data["sale_price"].copy(),
                                     "program_price": pricing_data["program_price"].copy(),
                                     "case_size": pricing_data["case_size"].copy()
@@ -421,6 +421,16 @@ def product_page(style):
             mock_data = get_mock_inventory(style)
             
             # Setup data for template with mock data
+            # Create color-specific pricing for mock data
+            mock_color_pricing = {}
+            for color in mock_data.get('colors', []):
+                mock_color_pricing[color] = {
+                    "case_price": pricing_data.get('case_price', {}),
+                    "sale_price": pricing_data.get('sale_price', {}),
+                    "program_price": pricing_data.get('program_price', {}),
+                    "case_size": pricing_data.get('case_size', {})
+                }
+                
             return render_template('product.html',
                                 style=style,
                                 product_name=f"Port Authority {style}",
@@ -430,19 +440,35 @@ def product_page(style):
                                 inventory=mock_data.get('inventory', {}),
                                 warehouses=warehouse_dict,
                                 pricing=pricing_data,
+                                color_pricing=mock_color_pricing,
+                                selected_color=request.args.get('color', mock_data.get('colors', ['Black'])[0]),
                                 timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         except Exception as e:
             logger.error(f"Error using mock data: {str(e)}")
             # If mock data fails, return a minimal template with default data
+            fallback_colors = ["Black", "Navy", "White"]
+            
+            # Create color-specific pricing for fallback data
+            fallback_color_pricing = {}
+            for color in fallback_colors:
+                fallback_color_pricing[color] = {
+                    "case_price": pricing_data.get('case_price', {}),
+                    "sale_price": pricing_data.get('sale_price', {}),
+                    "program_price": pricing_data.get('program_price', {}),
+                    "case_size": pricing_data.get('case_size', {})
+                }
+                
             return render_template('product.html',
                                 style=style,
                                 product_name=f"Port Authority {style}",
                                 product_description="Product information not available.",
-                                colors=["Black", "Navy", "White"],
+                                colors=fallback_colors,
                                 sizes=["S", "M", "L", "XL", "2XL"],
                                 inventory={},
                                 warehouses=warehouse_dict,
                                 pricing=pricing_data,
+                                color_pricing=fallback_color_pricing,
+                                selected_color=request.args.get('color', "Black"),
                                 timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     except Exception as e:
         logger.error(f"Error processing product page: {str(e)}")
@@ -1040,7 +1066,7 @@ def get_sanmar_pricing(style, color=None, size=None):
             
         # Process the response to our pricing data structure
         pricing_data = {
-            "original_price": {},
+            "case_price": {},
             "sale_price": {},
             "program_price": {},
             "case_size": {}
@@ -1083,7 +1109,7 @@ def get_sanmar_pricing(style, color=None, size=None):
                 
                 # Use the price value for all price types
                 if price_value is not None:
-                    pricing_data["original_price"][current_size] = price_value
+                    pricing_data["case_price"][current_size] = price_value
                     pricing_data["sale_price"][current_size] = price_value
                     pricing_data["program_price"][current_size] = price_value
                 
@@ -1097,7 +1123,7 @@ def get_sanmar_pricing(style, color=None, size=None):
                 
                 pricing_data["case_size"][current_size] = case_size
                 
-                logger.info(f"Added pricing for size {current_size}: original={pricing_data['original_price'].get(current_size, 'N/A')}, "
+                logger.info(f"Added pricing for size {current_size}: case={pricing_data['case_price'].get(current_size, 'N/A')}, "
                           f"sale={pricing_data['sale_price'].get(current_size, 'N/A')}, "
                           f"program={pricing_data['program_price'].get(current_size, 'N/A')}, "
                           f"case={pricing_data['case_size'].get(current_size, 'N/A')}")
@@ -1136,7 +1162,8 @@ def create_default_pricing(style, color=None):
     
     # Default pricing structure
     pricing_data = {
-        "original_price": {},
+        "case_price": {},
+        "original_price": {},  # Adding this for frontend compatibility
         "sale_price": {},
         "program_price": {},
         "case_size": {}
@@ -1145,18 +1172,44 @@ def create_default_pricing(style, color=None):
     # PC61 - Port & Company Essential Tee
     if style == "PC61":
         sizes = ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL"]
-        
         for size in sizes:
             if size in ["S", "M", "L", "XL"]:
-                pricing_data["original_price"][size] = 3.41
+                pricing_data["case_price"][size] = 3.41
+                pricing_data["original_price"][size] = 3.41  # Copy value for frontend compatibility
                 pricing_data["sale_price"][size] = 2.72
                 pricing_data["program_price"][size] = 2.18
                 pricing_data["case_size"][size] = 72
             else:  # 2XL and up
-                pricing_data["original_price"][size] = 4.53 if size == "2XL" else 4.96
+                pricing_data["case_price"][size] = 4.53 if size == "2XL" else 4.96
+                pricing_data["original_price"][size] = 4.53 if size == "2XL" else 4.96  # Copy value for frontend compatibility
                 pricing_data["sale_price"][size] = 3.63 if size == "2XL" else 3.97
                 pricing_data["program_price"][size] = 3.63 if size == "2XL" else 3.97
                 pricing_data["case_size"][size] = 36
+                pricing_data["case_size"][size] = 36
+    
+    # PC90H - Port & Company Essential Fleece Pullover Hooded Sweatshirt
+    elif style == "PC90H":
+        sizes = ["S", "M", "L", "XL", "2XL", "3XL", "4XL"]
+        
+        for size in sizes:
+            if size in ["S", "M", "L", "XL"]:
+                pricing_data["case_price"][size] = 15.06
+                pricing_data["original_price"][size] = 15.06  # Copy value for frontend compatibility
+                pricing_data["sale_price"][size] = 15.06  # No sale - same as case price
+                pricing_data["program_price"][size] = 11.03
+                pricing_data["case_size"][size] = 24
+            else:  # 2XL, 3XL, 4XL
+                if size == "2XL":
+                    pricing_data["case_price"][size] = 17.36
+                    pricing_data["original_price"][size] = 17.36  # Copy value for frontend compatibility
+                    pricing_data["sale_price"][size] = 17.36
+                    pricing_data["program_price"][size] = 13.92
+                else:  # 3XL, 4XL
+                    pricing_data["case_price"][size] = 19.46
+                    pricing_data["original_price"][size] = 19.46  # Copy value for frontend compatibility
+                    pricing_data["sale_price"][size] = 19.46
+                    pricing_data["program_price"][size] = 14.87
+                pricing_data["case_size"][size] = 12
     
     # J790 - Port Authority Glacier Soft Shell Jacket
     elif style == "J790":
@@ -1164,7 +1217,8 @@ def create_default_pricing(style, color=None):
         
         for size in sizes:
             # Update to match what we see in the SanMar API
-            pricing_data["original_price"][size] = 30.59
+            pricing_data["case_price"][size] = 30.59
+            pricing_data["original_price"][size] = 30.59  # Copy value for frontend compatibility
             pricing_data["sale_price"][size] = 30.59
             pricing_data["program_price"][size] = 30.59
             
@@ -1175,7 +1229,7 @@ def create_default_pricing(style, color=None):
     
     # C112 - Port & Company Beanie
     elif style == "C112":
-        pricing_data["original_price"]["OSFA"] = 3.29
+        pricing_data["case_price"]["OSFA"] = 3.29
         pricing_data["sale_price"]["OSFA"] = 3.29
         pricing_data["program_price"]["OSFA"] = 3.29
         pricing_data["case_size"]["OSFA"] = 144
@@ -1192,15 +1246,15 @@ def create_default_pricing(style, color=None):
             
             # Pricing directly from SanMar.com screenshot
             if size in ["S", "M", "L", "XL"]:
-                pricing_data["original_price"][size] = 67.00
+                pricing_data["case_price"][size] = 67.00
                 pricing_data["sale_price"][size] = 67.00
                 pricing_data["program_price"][size] = 67.00
             elif size == "2XL":
-                pricing_data["original_price"][size] = 68.00
+                pricing_data["case_price"][size] = 68.00
                 pricing_data["sale_price"][size] = 68.00
                 pricing_data["program_price"][size] = 68.00
             elif size == "3XL":
-                pricing_data["original_price"][size] = 70.00
+                pricing_data["case_price"][size] = 70.00
                 pricing_data["sale_price"][size] = 70.00
                 pricing_data["program_price"][size] = 70.00
             
@@ -1214,12 +1268,12 @@ def create_default_pricing(style, color=None):
         
         for size in sizes:
             if size in ["S", "M", "L", "XL"]:
-                pricing_data["original_price"][size] = 15.99
+                pricing_data["case_price"][size] = 15.99
                 pricing_data["sale_price"][size] = 13.99
                 pricing_data["program_price"][size] = 12.99
                 pricing_data["case_size"][size] = default_case_size
             else:  # 2XL and up
-                pricing_data["original_price"][size] = 17.99
+                pricing_data["case_price"][size] = 17.99
                 pricing_data["sale_price"][size] = 15.99
                 pricing_data["program_price"][size] = 14.99
                 pricing_data["case_size"][size] = default_case_size // 2
