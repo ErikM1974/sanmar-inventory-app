@@ -21,7 +21,12 @@ def get_cache_key(style=None, color=None, size=None, inventory_key=None, size_in
     if inventory_key and size_index:
         return f"{inventory_key}_{size_index}"
     else:
-        return f"{style.lower()}_{color.lower() if color else ''}" if style else ""
+        if style:
+            # Replace dangerous characters in color with safe ones
+            safe_color = color.lower().replace('/', '-').replace('\\', '-') if color else ''
+            return f"{style.lower()}_{safe_color}"
+        else:
+            return ""
 
 def get_from_cache(key):
     """Retrieve data from cache if available and not expired"""

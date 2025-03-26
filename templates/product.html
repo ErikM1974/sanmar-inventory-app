@@ -5,254 +5,123 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ style }} - SanMar Inventory</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .color-swatch {
-            width: 50px;
-            height: 50px;
-            margin: 5px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s;
-            background-color: #f8f9fa;
-            position: relative;
-        }
-        .color-swatch:hover {
-            transform: scale(1.05);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .color-swatch.active {
-            border: 2px solid #0d6efd;
-            font-weight: bold;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-        .color-swatch.active::after {
-            content: "✓";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-weight: bold;
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
-        }
-        .in-stock {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        .low-stock {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-        .no-stock {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-        .product-info {
-            padding: 20px;
-            border-radius: 8px;
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .color-section {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 8px;
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        /* Pricing and Inventory Tables */
-        .pricing-table, .inventory-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .pricing-table th, .inventory-table th {
-            background-color: #6c757d;
-            color: white;
-            text-align: center;
-            font-weight: 500;
-        }
-        .pricing-table td, .inventory-table td {
-            text-align: center;
-            padding: 8px;
-        }
-        .pricing-table td:first-child, .inventory-table td:first-child {
-            text-align: left;
-            font-weight: 500;
-        }
-        .sale-price {
-            color: #dc3545;
-        }
-        .sale-price td {
-            color: #dc3545;
-        }
-        .program-price {
-            background-color: #d4edda;
-        }
-        .total-inventory {
-            background-color: #e9ecef;
-            font-weight: bold;
-        }
-        .inventory-tables {
-            margin-bottom: 30px;
-        }
-        /* Loading indicator styles */
-        .price-loading {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.7);
-            z-index: 10;
-            text-align: center;
-            padding-top: 50px;
-        }
-        .table-container {
-            position: relative;
-        }
-        .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #0d6efd;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .price-error {
-            display: none;
-            color: #dc3545;
-            margin: 10px 0;
-            padding: 10px;
-            background-color: #f8d7da;
-            border-radius: 4px;
-        }
-        .on-sale {
-            position: relative;
-        }
-        .on-sale::after {
-            content: "SALE";
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background-color: #dc3545;
-            color: white;
-            font-size: 10px;
-            padding: 2px 5px;
-            border-radius: 3px;
-        }
-        /* Sale badge removed as requested */
-        .product-image {
-            position: relative;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body class="bg-light">
-    <div class="container py-4">
-        <!-- Navigation -->
-        <nav aria-label="breadcrumb" class="mb-4">
+<body>
+    <!-- Main Header -->
+    <header class="py-3 mb-3 text-center">
+        <h1>SanMar Inventory</h1>
+    </header>
+
+    <!-- New header with search bar - SanMar style -->
+    <div class="container mb-4">
+        <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
                 <li class="breadcrumb-item active" aria-current="page">{{ style }}</li>
             </ol>
         </nav>
         
-        <!-- Product Information -->
-        <div class="product-info mb-4">
-            <div class="row">
-                <div class="col-md-12">
-                    <h2 class="mb-2">{{ style }}</h2>
-                    <h1 class="mb-3">{{ product_name }}</h1>
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <a href="#" class="btn btn-outline-secondary btn-sm me-2">See Product Details</a>
-                            <a href="#" class="btn btn-outline-secondary btn-sm">View Spec Sheet</a>
-                        </div>
-                        <div>
-                            <a href="https://www.sanmar.com/p/{{ style }}" target="_blank" class="btn btn-outline-primary">
-                                View on SanMar.com
-                            </a>
-                        </div>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <form class="d-flex" action="/product" method="GET" id="productSearchForm">
+                    <div class="position-relative flex-grow-1 me-2">
+                        <input type="text"
+                               class="form-control"
+                               id="productStyleInput"
+                               name="style"
+                               placeholder="Search by style number..."
+                               autocomplete="off">
+                        <div class="search-loading"></div>
+                        <div class="autocomplete-results" id="productAutocompleteResults"></div>
                     </div>
-                </div>
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </form>
             </div>
+        </div>
+    </div>
+    
+    <div class="container bg-white p-4 rounded shadow-sm">
+        <!-- Product Header -->
+        <div class="product-header mb-4 pb-3 border-bottom">
+            <h2 class="mb-2">{{ product_name }}</h2>
+            <p class="text-muted">Style: {{ style }}</p>
+            <!-- No action buttons here -->
         </div>
         
-        <!-- Product Image and Color Selection -->
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="product-image mb-3">
+        <!-- Product Content -->
+        <div class="row">
+            <!-- Left column - Image section with color swatches below -->
+            <div class="col-md-4 mb-4">
+                <div class="position-relative">
                     {% if catalog_colors|length > 0 and catalog_colors[0] in images %}
                         <img src="{{ images[catalog_colors[0]] }}"
-                             id="product-image" class="img-fluid" alt="{{ product_name }}">
+                             id="product-image" alt="{{ product_name }}" class="img-fluid rounded">
                     {% else %}
                         <img src="https://www.sanmar.com/products/catalog/2022/f1/port__company/fullsize/PC90H_Orange_Model_Front_2022.jpg"
-                             id="product-image" class="img-fluid" alt="{{ product_name }}">
+                             id="product-image" alt="{{ product_name }}" class="img-fluid rounded">
+                    {% endif %}
+                    
+                    {% if on_sale %}
+                    <div class="position-absolute top-0 start-0 bg-danger text-white px-2 py-1 rounded-end">SALE</div>
                     {% endif %}
                 </div>
-            </div>
-            <div class="col-md-8">
-                <div class="color-section p-3">
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            <h5>Color selected: <span id="selected-color" class="fw-bold"></span></h5>
-                            <p class="text-muted small">Prices in <span class="text-danger">red</span> indicate on sale.</p>
+                
+                <!-- Color swatches will be below the image -->
+                <div class="mt-4">
+                    <h3 class="h5 mb-3">Available Colors:</h3>
+                    <div class="d-flex flex-wrap gap-2 position-relative">
+                        {% for catalog_color in catalog_colors %}
+                        <div class="color-swatch border rounded p-1" style="width: 50px; height: 50px; cursor: pointer;"
+                             data-catalog-color="{{ catalog_color }}"
+                             data-display-color="{{ display_colors.get(catalog_color, catalog_color) }}"
+                             data-image="{{ images.get(catalog_color, '') }}"
+                             title="{{ display_colors.get(catalog_color, catalog_color) }}">
+                            <div class="swatch-label">{{ display_colors.get(catalog_color, catalog_color) }}</div>
+                            {% if catalog_color in swatch_images and swatch_images[catalog_color] %}
+                                <img src="{{ swatch_images[catalog_color] }}" alt="{{ display_colors.get(catalog_color, catalog_color) }}" style="width: 100%; height: 100%;">
+                            {% else %}
+                                <span class="d-flex justify-content-center align-items-center h-100 text-center small">{{ display_colors.get(catalog_color, catalog_color) }}</span>
+                            {% endif %}
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="d-flex flex-wrap">
-                                {% for catalog_color in catalog_colors %}
-                                <div class="color-swatch"
-                                     data-catalog-color="{{ catalog_color }}"
-                                     data-display-color="{{ display_colors.get(catalog_color, catalog_color) }}"
-                                     data-image="{{ images.get(catalog_color, '') }}"
-                                     onclick="selectColor('{{ catalog_color }}')">
-                                    {% if catalog_color in swatch_images and swatch_images[catalog_color] %}
-                                        <img src="{{ swatch_images[catalog_color] }}" alt="{{ display_colors.get(catalog_color, catalog_color) }}" style="width: 100%; height: 100%;">
-                                    {% else %}
-                                        {{ display_colors.get(catalog_color, catalog_color) }}
-                                    {% endif %}
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- Pricing and Inventory Tables -->
-        <div class="row mt-4">
-            <div class="col-md-12">
-                {% for catalog_color in catalog_colors %}
-                {% set display_color = display_colors.get(catalog_color, catalog_color) %}
-                <div class="inventory-tables" id="inventory-{{ catalog_color }}" data-display-color="{{ display_color }}" style="display: none;">
-                    <h4 class="mb-3">Inventory for {{ display_color }}</h4>
-                    
-                    <!-- Pricing Table -->
-                    <div class="table-responsive mb-4 table-container">
+            
+            <!-- Right column - Product details and pricing/inventory -->
+            <div class="col-md-8">
+                <div class="mb-3 p-2 bg-light rounded">
+                    <strong>Color:</strong> <span id="selected-color"></span>
+                </div>
+            <!-- Pricing and Inventory Tables -->
+            {% for catalog_color in catalog_colors %}
+            {% set display_color = display_colors.get(catalog_color, catalog_color) %}
+            <div class="inventory-tables" id="inventory-{{ catalog_color }}" data-display-color="{{ display_color }}" style="display: none;">
+                <h4 class="mb-3">Inventory for {{ display_color }}</h4>
+                
+                <!-- Pricing Information -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="h5 mb-0">Pricing for {{ display_color }}</h3>
+                    </div>
+                    <div class="card-body">
                         <!-- Loading indicator -->
-                        <div class="price-loading" id="loading-{{ catalog_color }}">
-                            <div class="loading-spinner"></div>
+                        <div class="price-loading text-center my-3" id="loading-{{ catalog_color }}" style="display: none;">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
                             <p class="mt-2">Fetching latest pricing data...</p>
                         </div>
                         
                         <!-- Error message -->
-                        <div class="price-error" id="error-{{ catalog_color }}">
-                            <p>Unable to fetch current pricing. Showing cached data.</p>
+                        <div class="price-error alert alert-warning" id="error-{{ catalog_color }}" style="display: none;">
+                            <p class="mb-0">Unable to fetch current pricing. Showing cached data.</p>
                         </div>
                         
-                        <table class="table table-bordered pricing-table">
-                            <thead class="table-secondary">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped pricing-table">
+                            <thead>
                                 <tr>
                                     <th>Pricing</th>
                                     {% for size in sizes %}
@@ -271,7 +140,7 @@
                                     {% endif %}
                                     {% endfor %}
                                 </tr>
-                                <tr class="sale-price">
+                                <tr class="sale-price text-danger">
                                     <td>Sale Price: $</td>
                                     {% for size in sizes %}
                                     {% if color_pricing and catalog_color in color_pricing and color_pricing[catalog_color].sale_price %}
@@ -281,7 +150,7 @@
                                     {% endif %}
                                     {% endfor %}
                                 </tr>
-                                <tr class="program-price">
+                                <tr class="program-price text-success">
                                     <td>Program Price: $</td>
                                     {% for size in sizes %}
                                     {% if color_pricing and catalog_color in color_pricing and color_pricing[catalog_color].program_price %}
@@ -304,11 +173,20 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+                
+            <!-- Inventory Section -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h3 class="h5 mb-0">Inventory Availability</h3>
+                </div>
+                <div class="card-body">
+                    <p class="inventory-total mb-3">Total inventory for {{ display_color }}</p>
                     
-                    <!-- Inventory Table -->
                     <div class="table-responsive">
-                        <table class="table table-bordered inventory-table">
-                            <thead class="table-secondary">
+                        <table class="table table-bordered table-striped inventory-table">
+                            <thead>
                                 <tr>
                                     <th>Warehouse</th>
                                     {% for size in sizes %}
@@ -325,55 +203,61 @@
                                     
                                     <!-- First check the display color -->
                                     {% if display_color in inventory and size in inventory[display_color] and 'warehouses' in inventory[display_color][size] and whse_id in inventory[display_color][size]['warehouses'] %}
-                                        <td class="{{ 'in-stock' if inventory[display_color][size]['warehouses'][whse_id] > 10 else 'low-stock' if inventory[display_color][size]['warehouses'][whse_id] > 0 else 'no-stock' }}">
-                                            {{ inventory[display_color][size]['warehouses'][whse_id] }}
+                                        {% set stock_qty = inventory[display_color][size]['warehouses'][whse_id] %}
+                                        <td class="text-center {% if stock_qty > 10 %}bg-success text-white{% elif stock_qty > 0 %}bg-warning{% else %}bg-light text-muted{% endif %}">
+                                            {{ stock_qty }}
                                         </td>
                                     
                                     <!-- Then check the catalog color -->
                                     {% elif catalog_color in inventory and size in inventory[catalog_color] and 'warehouses' in inventory[catalog_color][size] and whse_id in inventory[catalog_color][size]['warehouses'] %}
-                                        <td class="{{ 'in-stock' if inventory[catalog_color][size]['warehouses'][whse_id] > 10 else 'low-stock' if inventory[catalog_color][size]['warehouses'][whse_id] > 0 else 'no-stock' }}">
-                                            {{ inventory[catalog_color][size]['warehouses'][whse_id] }}
+                                        {% set stock_qty = inventory[catalog_color][size]['warehouses'][whse_id] %}
+                                        <td class="text-center {% if stock_qty > 10 %}bg-success text-white{% elif stock_qty > 0 %}bg-warning{% else %}bg-light text-muted{% endif %}">
+                                            {{ stock_qty }}
                                         </td>
                                     
                                     <!-- Special case for Smoke Grey/ Chrome -->
                                     {% elif display_color == 'Smoke Grey/ Chrome' and 'Smk Gry/Chrome' in inventory and size in inventory['Smk Gry/Chrome'] and 'warehouses' in inventory['Smk Gry/Chrome'][size] and whse_id in inventory['Smk Gry/Chrome'][size]['warehouses'] %}
-                                        <td class="{{ 'in-stock' if inventory['Smk Gry/Chrome'][size]['warehouses'][whse_id] > 10 else 'low-stock' if inventory['Smk Gry/Chrome'][size]['warehouses'][whse_id] > 0 else 'no-stock' }}">
-                                            {{ inventory['Smk Gry/Chrome'][size]['warehouses'][whse_id] }}
+                                        {% set stock_qty = inventory['Smk Gry/Chrome'][size]['warehouses'][whse_id] %}
+                                        <td class="text-center {% if stock_qty > 10 %}bg-success text-white{% elif stock_qty > 0 %}bg-warning{% else %}bg-light text-muted{% endif %}">
+                                            {{ stock_qty }}
                                         </td>
                                     
                                     <!-- No inventory found -->
                                     {% else %}
-                                        <td class="no-stock">0</td>
+                                        <td class="text-center text-muted bg-light">0</td>
                                     {% endif %}
                                     {% endfor %}
                                 </tr>
                                 {% endfor %}
-                                <tr class="total-inventory">
-                                    <td><strong>Total Inventory</strong></td>
+                                <tr class="total-inventory fw-bold">
+                                    <td>Total Inventory</td>
                                     {% for size in sizes %}
                                     {% set display_color = display_colors.get(catalog_color, catalog_color) %}
                                     
                                     <!-- First check the display color -->
                                     {% if display_color in inventory and size in inventory[display_color] and 'total' in inventory[display_color][size] %}
-                                        <td class="{{ 'in-stock' if inventory[display_color][size]['total'] > 10 else 'low-stock' if inventory[display_color][size]['total'] > 0 else 'no-stock' }}">
-                                            <strong>{{ inventory[display_color][size]['total'] }}</strong>
+                                        {% set stock_qty = inventory[display_color][size]['total'] %}
+                                        <td class="text-center {% if stock_qty > 10 %}bg-success text-white{% elif stock_qty > 0 %}bg-warning{% else %}bg-light text-muted{% endif %}">
+                                            {{ stock_qty }}
                                         </td>
                                     
                                     <!-- Then check the catalog color -->
                                     {% elif catalog_color in inventory and size in inventory[catalog_color] and 'total' in inventory[catalog_color][size] %}
-                                        <td class="{{ 'in-stock' if inventory[catalog_color][size]['total'] > 10 else 'low-stock' if inventory[catalog_color][size]['total'] > 0 else 'no-stock' }}">
-                                            <strong>{{ inventory[catalog_color][size]['total'] }}</strong>
+                                        {% set stock_qty = inventory[catalog_color][size]['total'] %}
+                                        <td class="text-center {% if stock_qty > 10 %}bg-success text-white{% elif stock_qty > 0 %}bg-warning{% else %}bg-light text-muted{% endif %}">
+                                            {{ stock_qty }}
                                         </td>
                                     
                                     <!-- Special case for Smoke Grey/ Chrome -->
                                     {% elif display_color == 'Smoke Grey/ Chrome' and 'Smk Gry/Chrome' in inventory and size in inventory['Smk Gry/Chrome'] and 'total' in inventory['Smk Gry/Chrome'][size] %}
-                                        <td class="{{ 'in-stock' if inventory['Smk Gry/Chrome'][size]['total'] > 10 else 'low-stock' if inventory['Smk Gry/Chrome'][size]['total'] > 0 else 'no-stock' }}">
-                                            <strong>{{ inventory['Smk Gry/Chrome'][size]['total'] }}</strong>
+                                        {% set stock_qty = inventory['Smk Gry/Chrome'][size]['total'] %}
+                                        <td class="text-center {% if stock_qty > 10 %}bg-success text-white{% elif stock_qty > 0 %}bg-warning{% else %}bg-light text-muted{% endif %}">
+                                            {{ stock_qty }}
                                         </td>
                                     
                                     <!-- No inventory found -->
                                     {% else %}
-                                        <td class="no-stock"><strong>0</strong></td>
+                                        <td class="text-center text-muted bg-light">0</td>
                                     {% endif %}
                                     {% endfor %}
                                 </tr>
@@ -381,347 +265,680 @@
                         </table>
                     </div>
                 </div>
-                {% endfor %}
+            </div>
+            </div>
+            {% endfor %}
             </div>
         </div>
     </div>
-    
-    <script>
-        // Function to fetch color-specific pricing via AJAX
-        function fetchColorPricing(style, color) {
-            return new Promise((resolve, reject) => {
-                console.log(`Fetching pricing data for style: ${style}, color: ${color}`);
-                
-                // Show loading indicator
-                const loadingElementId = `loading-${color.replace(/\//g, '-')}`;
-                const loadingElement = document.getElementById(loadingElementId);
-                if (loadingElement) {
-                    loadingElement.style.display = 'block';
-                }
-                
-                // Hide error message if visible
-                const errorElementId = `error-${color.replace(/\//g, '-')}`;
-                const errorElement = document.getElementById(errorElementId);
-                if (errorElement) {
-                    errorElement.style.display = 'none';
-                }
-                
-                // Create a URL object
-                const url = new URL(`${window.location.origin}/api/pricing`);
-                url.searchParams.append('style', style);
-                url.searchParams.append('color', color);
-                
-                // Make the AJAX request
-                fetch(url)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log(`Received pricing data:`, data);
-                        
-                        // Hide loading indicator
-                        if (loadingElement) {
-                            loadingElement.style.display = 'none';
-                        }
-                        
-                        // Check if data contains error flag
-                        if (data.error) {
-                            console.error(`API error: ${data.message || 'Unknown error'}`);
-                            if (errorElement) {
-                                errorElement.style.display = 'block';
-                                errorElement.querySelector('p').textContent = `Pricing error: ${data.message || 'Unknown error'}`;
-                            }
-                        }
-                        
-                        // Client requested to not show sale indicators
-                        // No visual indication of sale prices needed
-                        
-                        resolve(data);
-                    })
-                    .catch(error => {
-                        console.error(`Error fetching pricing: ${error.message}`);
-                        
-                        // Hide loading indicator
-                        if (loadingElement) {
-                            loadingElement.style.display = 'none';
-                        }
-                        
-                        // Show error message
+
+<script>
+    // Function to fetch color-specific pricing via AJAX
+    function fetchColorPricing(style, color) {
+        return new Promise((resolve, reject) => {
+            console.log(`Fetching pricing data for style: ${style}, color: ${color}`);
+            
+            // Show loading indicator
+            const loadingElementId = `loading-${color.replace(/\//g, '-')}`;
+            const loadingElement = document.getElementById(loadingElementId);
+            if (loadingElement) {
+                loadingElement.style.display = 'block';
+            }
+            
+            // Hide error message if visible
+            const errorElementId = `error-${color.replace(/\//g, '-')}`;
+            const errorElement = document.getElementById(errorElementId);
+            if (errorElement) {
+                errorElement.style.display = 'none';
+            }
+            
+            // Create a URL object
+            const url = new URL(`${window.location.origin}/api/pricing`);
+            url.searchParams.append('style', style);
+            url.searchParams.append('color', color);
+            
+            // Make the AJAX request
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(`Received pricing data:`, data);
+                    
+                    // Hide loading indicator
+                    if (loadingElement) {
+                        loadingElement.style.display = 'none';
+                    }
+                    
+                    // Check if data contains error flag
+                    if (data.error) {
+                        console.error(`API error: ${data.message || 'Unknown error'}`);
                         if (errorElement) {
                             errorElement.style.display = 'block';
-                            errorElement.querySelector('p').textContent = `Unable to fetch pricing data: ${error.message}`;
+                            errorElement.querySelector('p').textContent = `Pricing error: ${data.message || 'Unknown error'}`;
                         }
-                        
-                        reject(error);
-                    });
+                    }
+                    
+                    // Client requested to not show sale indicators
+                    // No visual indication of sale prices needed
+                    
+                    resolve(data);
+                })
+                .catch(error => {
+                    console.error(`Error fetching pricing: ${error.message}`);
+                    
+                    // Hide loading indicator
+                    if (loadingElement) {
+                        loadingElement.style.display = 'none';
+                    }
+                    
+                    // Show error message
+                    if (errorElement) {
+                        errorElement.style.display = 'block';
+                        errorElement.querySelector('p').textContent = `Unable to fetch pricing data: ${error.message}`;
+                    }
+                    
+                    reject(error);
+                });
+        });
+    }
+    
+    // Function to update pricing tables with new data
+    function updatePricingDisplay(pricingData, tableId) {
+        const table = document.getElementById(tableId);
+        if (!table) {
+            console.error(`Table with ID ${tableId} not found`);
+            return;
+        }
+        
+        const pricingTable = table.querySelector('.pricing-table');
+        if (!pricingTable) {
+            console.error(`Pricing table not found in ${tableId}`);
+            return;
+        }
+        
+        // Get the sizes from the table headers in the correct display order
+        const sizeHeaders = pricingTable.querySelectorAll('thead th:not(:first-child)');
+        const displayedSizes = Array.from(sizeHeaders).map(header => header.textContent.trim());
+        
+        console.log("Displayed sizes in table order:", displayedSizes);
+        
+        // Check if the product has sale prices
+        // If case price and sale price are the same for all sizes, we don't have a sale
+        let hasSale = false;
+        if (pricingData.case_price && pricingData.sale_price) {
+            for (const size of displayedSizes) {
+                if (size && pricingData.case_price[size] && pricingData.sale_price[size] &&
+                    pricingData.case_price[size] !== pricingData.sale_price[size]) {
+                    hasSale = true;
+                    break;
+                }
+            }
+        }
+        
+        const originalPriceRow = pricingTable.querySelector('tbody tr:nth-child(1)');
+        const salePriceRow = pricingTable.querySelector('tbody tr:nth-child(2)');
+        const programPriceRow = pricingTable.querySelector('tbody tr:nth-child(3)');
+        const caseSizeRow = pricingTable.querySelector('tr:nth-child(4)');
+        
+        // Update case price row
+        if (originalPriceRow && pricingData.case_price) {
+            // Always use "Case Price: $" label
+            const labelCell = originalPriceRow.querySelector('td:first-child');
+            if (labelCell) {
+                labelCell.textContent = "Case Price: $";
+            }
+            
+            const cells = originalPriceRow.querySelectorAll('td:not(:first-child)');
+            cells.forEach((cell, index) => {
+                const size = displayedSizes[index];
+                if (size && pricingData.case_price[size]) {
+                    cell.textContent = pricingData.case_price[size].toFixed(2);
+                }
             });
         }
         
-        // Function to update pricing tables with new data
-        function updatePricingDisplay(pricingData, tableId) {
-            const table = document.getElementById(tableId);
-            if (!table) {
-                console.error(`Table with ID ${tableId} not found`);
-                return;
-            }
+        // Determine if we need to show the sale price row
+        // Only show it if there's a sale AND the sale price is better than the program price for at least one size
+        if (salePriceRow) {
+            let showSalePriceRow = false;
             
-            const pricingTable = table.querySelector('.pricing-table');
-            if (!pricingTable) {
-                console.error(`Pricing table not found in ${tableId}`);
-                return;
-            }
-            
-            // Get the sizes from the table headers in the correct display order
-            const sizeHeaders = pricingTable.querySelectorAll('thead th:not(:first-child)');
-            const displayedSizes = Array.from(sizeHeaders).map(header => header.textContent.trim());
-            
-            console.log("Displayed sizes in table order:", displayedSizes);
-            
-            // Check if the product has sale prices
-            // If case price and sale price are the same for all sizes, we don't have a sale
-            let hasSale = false;
-            if (pricingData.case_price && pricingData.sale_price) {
+            if (hasSale && pricingData.sale_price && pricingData.program_price) {
+                // Check if the sale price is better than the program price for any size
                 for (const size of displayedSizes) {
-                    if (size && pricingData.case_price[size] && pricingData.sale_price[size] &&
-                        pricingData.case_price[size] !== pricingData.sale_price[size]) {
-                        hasSale = true;
+                    if (size &&
+                        pricingData.sale_price[size] &&
+                        pricingData.program_price[size] &&
+                        pricingData.sale_price[size] < pricingData.program_price[size]) {
+                        showSalePriceRow = true;
                         break;
                     }
                 }
             }
             
-            const originalPriceRow = pricingTable.querySelector('tbody tr:nth-child(1)');
-            const salePriceRow = pricingTable.querySelector('tbody tr:nth-child(2)');
-            const programPriceRow = pricingTable.querySelector('tbody tr:nth-child(3)');
-            const caseSizeRow = pricingTable.querySelector('tr:nth-child(4)');
-            
-            // Update case price row
-            if (originalPriceRow && pricingData.case_price) {
-                // Always use "Case Price: $" label
-                const labelCell = originalPriceRow.querySelector('td:first-child');
-                if (labelCell) {
-                    labelCell.textContent = "Case Price: $";
-                }
-                
-                const cells = originalPriceRow.querySelectorAll('td:not(:first-child)');
+            if (showSalePriceRow) {
+                salePriceRow.style.display = '';
+                // Update sale price values
+                const cells = salePriceRow.querySelectorAll('td:not(:first-child)');
                 cells.forEach((cell, index) => {
                     const size = displayedSizes[index];
-                    if (size && pricingData.case_price[size]) {
-                        cell.textContent = pricingData.case_price[size].toFixed(2);
+                    if (size && pricingData.sale_price[size]) {
+                        cell.textContent = pricingData.sale_price[size].toFixed(2);
                     }
                 });
+            } else {
+                // Hide sale price row if there's no sale or if program price is better
+                salePriceRow.style.display = 'none';
             }
-            
-            // Determine if we need to show the sale price row
-            // Only show it if there's a sale AND the sale price is better than the program price for at least one size
-            if (salePriceRow) {
-                let showSalePriceRow = false;
-                
-                if (hasSale && pricingData.sale_price && pricingData.program_price) {
-                    // Check if the sale price is better than the program price for any size
-                    for (const size of displayedSizes) {
-                        if (size &&
-                            pricingData.sale_price[size] &&
-                            pricingData.program_price[size] &&
-                            pricingData.sale_price[size] < pricingData.program_price[size]) {
-                            showSalePriceRow = true;
-                            break;
-                        }
-                    }
-                }
-                
-                if (showSalePriceRow) {
-                    salePriceRow.style.display = '';
-                    // Update sale price values
-                    const cells = salePriceRow.querySelectorAll('td:not(:first-child)');
-                    cells.forEach((cell, index) => {
-                        const size = displayedSizes[index];
-                        if (size && pricingData.sale_price[size]) {
-                            cell.textContent = pricingData.sale_price[size].toFixed(2);
-                        }
-                    });
-                } else {
-                    // Hide sale price row if there's no sale or if program price is better
-                    salePriceRow.style.display = 'none';
-                }
-            }
-            
-            // Always show program price row
-            if (programPriceRow) {
-                programPriceRow.style.display = '';
-                
-                // Update program price values
-                if (pricingData.program_price) {
-                    const cells = programPriceRow.querySelectorAll('td:not(:first-child)');
-                    cells.forEach((cell, index) => {
-                        const size = displayedSizes[index];
-                        if (size && pricingData.program_price[size]) {
-                            cell.textContent = pricingData.program_price[size].toFixed(2);
-                        }
-                    });
-                }
-            }
-            
-            // Always update case size row
-            if (caseSizeRow && pricingData.case_size) {
-                const cells = caseSizeRow.querySelectorAll('td:not(:first-child)');
-                cells.forEach((cell, index) => {
-                    const size = displayedSizes[index];
-                    if (size && pricingData.case_size[size]) {
-                        cell.textContent = pricingData.case_size[size];
-                    }
-                });
-            }
-            
-            console.log('Pricing display updated successfully');
         }
+        
+        // Always show program price row
+        if (programPriceRow) {
+            programPriceRow.style.display = '';
+            
+            // Update program price values
+            if (pricingData.program_price) {
+                const cells = programPriceRow.querySelectorAll('td:not(:first-child)');
+                cells.forEach((cell, index) => {
+                    const size = displayedSizes[index];
+                    if (size && pricingData.program_price[size]) {
+                        cell.textContent = pricingData.program_price[size].toFixed(2);
+                    }
+                });
+            }
+        }
+        
+        // Always update case size row
+        if (caseSizeRow && pricingData.case_size) {
+            const cells = caseSizeRow.querySelectorAll('td:not(:first-child)');
+            cells.forEach((cell, index) => {
+                const size = displayedSizes[index];
+                if (size && pricingData.case_size[size]) {
+                    cell.textContent = pricingData.case_size[size];
+                }
+            });
+        }
+        
+        console.log('Pricing display updated successfully');
+    }
 
-        // Function to handle color swatch clicks
-        function selectColor(catalogColor) {
-            // Find the selected swatch
-            console.log(`Selecting color: ${catalogColor}`);
-            const selectedSwatch = document.querySelector(`.color-swatch[data-catalog-color="${catalogColor}"]`);
-            if (!selectedSwatch) {
-                console.error(`No swatch found for catalog color: ${catalogColor}`);
+    // Wait until DOM is fully loaded before attaching event handlers
+    document.addEventListener('DOMContentLoaded', function() {
+        // Find and set up the color swatches with proper error handling
+        try {
+            // Set up the color swatches
+            document.querySelectorAll('.color-swatch').forEach(function(swatch) {
+                swatch.addEventListener('click', function() {
+                    try {
+                        // Extract data attributes safely with explicit debug info
+                        const catalogColor = this.getAttribute('data-catalog-color') || '';
+                        const displayColor = this.getAttribute('data-display-color') || catalogColor;
+                        const imageUrl = this.getAttribute('data-image') || '';
+                        
+                        console.log(`Swatch clicked: ${catalogColor}, display: ${displayColor}, image: ${imageUrl}`);
+                        
+                        // Stop here if we don't have a valid catalog color
+                        if (!catalogColor) {
+                            console.error('No catalog color found on swatch element');
+                            return;
+                        }
+                        
+                        // Stop here if we don't have a valid image URL
+                        if (!imageUrl) {
+                            console.warn('No image URL found on swatch element');
+                            // Continue anyway as we can update other elements
+                        }
+                        
+                        // Safely update selected color text
+                        const selectedColorElement = document.getElementById('selected-color');
+                        if (selectedColorElement) {
+                            selectedColorElement.textContent = displayColor;
+                            console.log(`Updated selected color text to: ${displayColor}`);
+                        } else {
+                            console.error('Selected color element not found');
+                        }
+                        
+                        // Update active swatch styling
+                        document.querySelectorAll('.color-swatch').forEach(s => {
+                            s.classList.remove('active');
+                            s.classList.remove('border-primary');
+                        });
+                        this.classList.add('active');
+                        this.classList.add('border-primary');
+                        console.log(`Updated active swatch to: ${catalogColor}`);
+                        
+                        // Safely update product image - this is critical!
+                        const productImage = document.getElementById('product-image');
+                        if (productImage && imageUrl) {
+                            console.log(`Updating image from ${productImage.src} to ${imageUrl}`);
+                            
+                            // Force a reflow with a small timeout to ensure the image updates
+                            setTimeout(() => {
+                                productImage.src = imageUrl;
+                                
+                                // Also update the alt text for accessibility
+                                if (productImage.alt) {
+                                    const altParts = productImage.alt.split(' ');
+                                    if (altParts.length > 1) {
+                                        productImage.alt = `${displayColor} ${altParts.slice(1).join(' ')}`;
+                                    } else {
+                                        productImage.alt = displayColor;
+                                    }
+                                } else {
+                                    productImage.alt = displayColor;
+                                }
+                                
+                                console.log(`Image updated to: ${imageUrl}`);
+                            }, 10);
+                        } else {
+                            console.error(`Product image element ${productImage ? 'found' : 'not found'}, imageUrl ${imageUrl ? 'valid' : 'invalid'}`);
+                        }
+                        
+                        // Hide all inventory tables
+                        const allTables = document.querySelectorAll('.inventory-tables');
+                        console.log(`Found ${allTables.length} inventory tables to hide`);
+                        allTables.forEach(table => {
+                            table.style.display = 'none';
+                        });
+                        
+                        // Get the corresponding inventory table for this color
+                        // Try multiple approaches to find the right table
+                        
+                        // First: Try direct ID match using fully sanitized catalog color
+                        // Replace all potentially problematic characters
+                        const safeColorId = catalogColor.replace(/[\/\s.&]+/g, '-');
+                        let tableId = `inventory-${safeColorId}`;
+                        console.log(`Looking for table with ID: ${tableId}`);
+                        let table = document.getElementById(tableId);
+                        
+                        // Second: Try with more aggressive sanitization
+                        if (!table) {
+                            // Try even more aggressive sanitization - removing special chars completely
+                            const extraSafeColorId = catalogColor.replace(/[^a-zA-Z0-9]/g, '');
+                            tableId = `inventory-${extraSafeColorId}`;
+                            console.log(`Not found, trying more aggressive ID: ${tableId}`);
+                            table = document.getElementById(tableId);
+                        }
+                        
+                        // Third: Try to match using the exact ID from the template
+                        if (!table) {
+                            console.warn(`Table not found by sanitized IDs, trying exact catalog color...`);
+                            table = document.getElementById(`inventory-${catalogColor}`);
+                        }
+                        
+                        // Fourth: Try using a partial match on the ID attribute
+                        if (!table) {
+                            console.warn(`Still no match, trying partial ID match`);
+                            const tables = document.querySelectorAll('.inventory-tables');
+                            for (const t of tables) {
+                                if (t.id.includes(catalogColor) || catalogColor.includes(t.id.replace('inventory-', ''))) {
+                                    table = t;
+                                    console.log(`Found table with partial ID match: ${t.id}`);
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        // Fifth: Try matching by data-display-color attribute
+                        if (!table) {
+                            console.warn(`Table not found by ID matching, trying data-display-color attribute...`);
+                            table = document.querySelector(`.inventory-tables[data-display-color="${displayColor}"]`);
+                            
+                            // Try partial match on data-display-color as well
+                            if (!table) {
+                                const tables = document.querySelectorAll('.inventory-tables');
+                                for (const t of tables) {
+                                    const dataColor = t.getAttribute('data-display-color');
+                                    if (dataColor && (dataColor.includes(displayColor) || displayColor.includes(dataColor))) {
+                                        table = t;
+                                        console.log(`Found table with partial data-display-color match: ${dataColor}`);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // If we found a table, show it and update its data
+                        if (table) {
+                            // Update the inventory table header and content to match the selected color
+                            const inventoryHeader = table.querySelector('h4');
+                            if (inventoryHeader) {
+                                inventoryHeader.textContent = `Inventory for ${displayColor}`;
+                            }
+                            
+                            const inventoryTotal = table.querySelector('.inventory-total');
+                            if (inventoryTotal) {
+                                inventoryTotal.textContent = `Total inventory for ${displayColor}`;
+                            }
+                            
+                            const pricingHeader = table.querySelector('.card-header h3');
+                            if (pricingHeader) {
+                                pricingHeader.textContent = `Pricing for ${displayColor}`;
+                            }
+                            
+                            // Show the table
+                            table.style.display = '';
+                            console.log(`Showing inventory table for ${displayColor}`);
+                            
+                            // Fetch updated pricing data
+                            const path = window.location.pathname;
+                            const style = path.includes('/') ? path.split('/').pop() : path;
+                            
+                            if (style) {
+                                console.log(`Fetching pricing data for style: ${style}, color: ${catalogColor}`);
+                                fetchColorPricing(style, catalogColor)
+                                    .then(data => {
+                                        if (data && !data.error) {
+                                            console.log(`Successfully retrieved pricing data for ${displayColor}`, data);
+                                            updatePricingDisplay(data, table.id);
+                                            
+                                            // Hide the error message if visible
+                                            const errorElement = table.querySelector('.price-error');
+                                            if (errorElement) {
+                                                errorElement.style.display = 'none';
+                                            }
+                                        } else {
+                                            // Show error message but still try to use the data we got
+                                            console.warn(`Received error or incomplete pricing data`, data);
+                                            if (data) updatePricingDisplay(data, table.id);
+                                            
+                                            const errorElement = table.querySelector('.price-error');
+                                            if (errorElement) {
+                                                errorElement.style.display = 'block';
+                                            }
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error(`Error updating pricing: ${error.message}`);
+                                        
+                                        // Show error message
+                                        const errorElement = table.querySelector('.price-error');
+                                        if (errorElement) {
+                                            errorElement.style.display = 'block';
+                                            errorElement.querySelector('p').textContent = 'Unable to fetch current pricing. Showing cached data.';
+                                        }
+                                    });
+                            }
+                        } else {
+                            // Last resort - just show the first inventory table if we really can't find a match
+                            console.error(`No matching table found for color: ${displayColor}`);
+                            const firstTable = document.querySelector('.inventory-tables');
+                            if (firstTable) {
+                                // Update headers to match the selected color
+                                const inventoryHeader = firstTable.querySelector('h4');
+                                if (inventoryHeader) {
+                                    inventoryHeader.textContent = `Inventory for ${displayColor}`;
+                                }
+                                
+                                const inventoryTotal = firstTable.querySelector('.inventory-total');
+                                if (inventoryTotal) {
+                                    inventoryTotal.textContent = `Total inventory for ${displayColor}`;
+                                }
+                                
+                                const pricingHeader = firstTable.querySelector('.card-header h3');
+                                if (pricingHeader) {
+                                    pricingHeader.textContent = `Pricing for ${displayColor}`;
+                                }
+                                
+                                firstTable.style.display = '';
+                                console.log(`Showing first available inventory table as last resort`);
+                                
+                                // At least try to fetch the pricing
+                                const path = window.location.pathname;
+                                const style = path.includes('/') ? path.split('/').pop() : path;
+                                if (style) {
+                                    fetchColorPricing(style, catalogColor)
+                                        .then(data => {
+                                            if (data) updatePricingDisplay(data, firstTable.id);
+                                        })
+                                        .catch(error => {
+                                            console.error(`Error updating pricing: ${error.message}`);
+                                            const errorElement = firstTable.querySelector('.price-error');
+                                            if (errorElement) {
+                                                errorElement.style.display = 'block';
+                                            }
+                                        });
+                                }
+                            }
+                        }
+                    } catch (err) {
+                        console.error('Error in swatch click handler:', err);
+                    }
+                });
+                
+                // No need for hover event handlers for the tooltip
+                // The CSS handles displaying the color name on hover automatically
+            });
+            
+            // Select the first color by default
+            const firstSwatch = document.querySelector('.color-swatch');
+            if (firstSwatch) {
+                // Use setTimeout to ensure DOM is fully loaded
+                setTimeout(() => {
+                    firstSwatch.click();
+                }, 100);
+            }
+        } catch (err) {
+            console.error('Error setting up color swatches:', err);
+        }
+        
+        // Set up autocomplete for style search
+        try {
+            // Enhanced autocomplete for product search
+            const styleInput = document.getElementById('productStyleInput');
+            const autocompleteResults = document.getElementById('productAutocompleteResults');
+            const searchForm = document.getElementById('productSearchForm');
+            
+            if (!styleInput || !autocompleteResults || !searchForm) {
+                console.error('Missing required search elements for autocomplete');
                 return;
             }
             
-            // Get the display color from the data attribute
-            const displayColor = selectedSwatch.getAttribute('data-display-color');
-            console.log(`Display color for ${catalogColor}: ${displayColor}`);
+            // Popular styles for instant matching
+            const POPULAR_STYLES = ["PC61", "K500", "PC90H", "J790", "C112", "S600", "L510", "G200", "PC55", "DT6000"];
             
-            // Update active color display
-            document.getElementById('selected-color').textContent = displayColor;
+            // Cache for autocomplete results
+            const autocompleteCache = {};
+            let activeIndex = -1;
+            let timer = null;
+            const DEBOUNCE_TIME = 150; // ms
             
-            // Remove active class from all swatches
-            const swatches = document.querySelectorAll('.color-swatch');
-            swatches.forEach(swatch => {
-                swatch.classList.remove('active');
-            });
+            // Initialize event listeners
+            styleInput.addEventListener('input', handleInput);
+            styleInput.addEventListener('keydown', handleKeyNavigation);
+            document.addEventListener('click', handleProductClickOutside);
             
-            // Add active class to selected swatch
-            selectedSwatch.classList.add('active');
-            
-            // Hide all inventory tables
-            const tables = document.querySelectorAll('.inventory-tables');
-            tables.forEach(table => {
-                table.style.display = 'none';
-            });
-            
-            // List all inventory tables for debugging
-            console.log("All available inventory tables:");
-            document.querySelectorAll('.inventory-tables').forEach(t => {
-                console.log(`- Table ID: ${t.id}, Display color: ${t.getAttribute('data-display-color')}`);
-            });
-            
-            // Show selected inventory table
-            const selectedTableId = `inventory-${catalogColor}`;
-            console.log(`Looking for inventory table with ID: ${selectedTableId}`);
-            const selectedTable = document.getElementById(selectedTableId);
-            if (selectedTable) {
-                selectedTable.style.display = 'block';
-                console.log(`Found inventory table for catalog color: ${catalogColor}`);
+            // Handle input with debouncing and caching
+            function handleInput() {
+                const query = styleInput.value.trim().toUpperCase();
                 
-                // Debug color-specific pricing
-                const pricingRows = selectedTable.querySelectorAll('.pricing-table tr');
-                console.log(`Pricing table rows found: ${pricingRows.length}`);
-                if (pricingRows.length > 0) {
-                    const priceValues = [];
-                    pricingRows.forEach((row, i) => {
-                        const cells = row.querySelectorAll('td');
-                        if (cells.length > 1) {
-                            priceValues.push(`Row ${i}: ${cells[0].textContent} ${cells[1].textContent}`);
-                        }
-                    });
-                    console.log("Price values:", priceValues);
-                    
-                    // Enhanced debugging to show all prices
-                    console.log(`Table ID: ${selectedTable.id}`);
-                    console.log(`Data color: ${selectedTable.getAttribute('data-display-color')}`);
-                    // Fetch updated pricing data for this color
-                    const style = window.location.pathname.split('/').pop(); // Get style from URL
-                    
-                    // Reset any previous error indicators
-                    selectedTable.querySelectorAll('.on-sale').forEach(el => el.classList.remove('on-sale'));
-                    
-                    // Fetch data with loading and error element references
-                    fetchColorPricing(style, catalogColor)
-                        .then(data => {
-                            console.log('Fetched new pricing data:', data);
-                            // Update pricing display with new data
-                            updatePricingDisplay(data, selectedTableId);
-                            
-                            // No longer adding SALE badge as requested
-                            // Remove any existing sale badge
-                            const existingBadge = document.querySelector('.sale-badge');
-                            if (existingBadge) {
-                                existingBadge.remove();
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Failed to update pricing:', error);
-                        });
+                // Clear any existing timer
+                if (timer) {
+                    clearTimeout(timer);
                 }
-            } else {
-                console.error(`No inventory table found for catalog color: ${catalogColor}`);
-                // Try to find by display color as fallback
-                const altTableId = `inventory-${displayColor}`;
-                console.log(`Trying fallback inventory table with ID: ${altTableId}`);
-                const altTable = document.getElementById(altTableId);
-                if (altTable) {
-                    altTable.style.display = 'block';
-                    console.log(`Found inventory table using display color fallback: ${displayColor}`);
+                
+                // Reset active item
+                activeIndex = -1;
+                
+                // Clear results if query is empty
+                if (query.length === 0) {
+                    autocompleteResults.innerHTML = '';
+                    autocompleteResults.style.display = 'none';
+                    styleInput.classList.remove('loading');
+                    return;
+                }
+                
+                // Fast path: Check popular styles first
+                if (query.length >= 2) {
+                    const directMatches = POPULAR_STYLES.filter(style =>
+                        style.startsWith(query)
+                    );
                     
-                    // Fetch updated pricing data for this color
-                    const style = window.location.pathname.split('/').pop(); // Get style from URL
+                    if (directMatches.length > 0) {
+                        renderResults(directMatches, query);
+                        return;
+                    }
+                }
+                
+                // Check cache
+                const cacheKey = query.substring(0, 3);
+                if (query.length >= 2 && autocompleteCache[cacheKey]) {
+                    const cachedResults = autocompleteCache[cacheKey].filter(s =>
+                        s.startsWith(query)
+                    );
                     
-                    // Reset any previous error indicators
-                    altTable.querySelectorAll('.on-sale').forEach(el => el.classList.remove('on-sale'));
+                    if (cachedResults.length > 0) {
+                        renderResults(cachedResults, query);
+                        return;
+                    }
+                }
+                
+                // Show loading indicator
+                styleInput.classList.add('loading');
+                
+                // Clear results if query is too short
+                if (query.length < 2) {
+                    autocompleteResults.innerHTML = '';
+                    autocompleteResults.style.display = 'none';
+                    styleInput.classList.remove('loading');
+                    return;
+                }
+                
+                // Debounce API calls
+                timer = setTimeout(() => {
+                    fetchStyles(query);
+                }, DEBOUNCE_TIME);
+            }
+            
+            // Fetch autocomplete suggestions
+            function fetchStyles(query) {
+                fetch(`/autocomplete?q=${encodeURIComponent(query)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Cache the results
+                        if (query.length <= 3) {
+                            autocompleteCache[query] = data;
+                        }
+                        
+                        // Render the results
+                        renderResults(data, query);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching suggestions:', error);
+                        autocompleteResults.innerHTML = `<div class="autocomplete-item error">Error fetching suggestions</div>`;
+                        autocompleteResults.style.display = 'block';
+                    })
+                    .finally(() => {
+                        // Hide loading indicator
+                        styleInput.classList.remove('loading');
+                    });
+            }
+            
+            // Render results with highlighting
+            function renderResults(data, query) {
+                autocompleteResults.innerHTML = '';
+                
+                if (data.length === 0) {
+                    autocompleteResults.style.display = 'none';
+                    return;
+                }
+                
+                // Limit to 8 results for performance
+                const maxToShow = 8;
+                data.slice(0, maxToShow).forEach((style, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'autocomplete-item';
                     
-                    fetchColorPricing(style, displayColor)
-                        .then(data => {
-                            console.log('Fetched new pricing data for display color:', data);
-                            // Update pricing display with new data
-                            updatePricingDisplay(data, altTableId);
-                            
-                            // No longer adding SALE badge as requested
-                            // Remove any existing sale badge
-                            const existingBadge = document.querySelector('.sale-badge');
-                            if (existingBadge) {
-                                existingBadge.remove();
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Failed to update pricing for display color:', error);
-                        });
-                } else {
-                    console.error(`No inventory table found by catalog color or display color: ${catalogColor}/${displayColor}`);
+                    // Highlight matching part
+                    const regex = new RegExp(`(${query})`, 'gi');
+                    const highlighted = style.replace(regex, '<strong>$1</strong>');
+                    
+                    item.innerHTML = highlighted;
+                    item.dataset.value = style;
+                    
+                    // Add click handler
+                    item.addEventListener('click', () => {
+                        styleInput.value = style;
+                        autocompleteResults.style.display = 'none';
+                        searchForm.submit();
+                    });
+                    
+                    autocompleteResults.appendChild(item);
+                });
+                
+                // Show results
+                autocompleteResults.style.display = 'block';
+            }
+            
+            // Handle keyboard navigation
+            function handleKeyNavigation(e) {
+                const items = autocompleteResults.querySelectorAll('.autocomplete-item');
+                
+                if (items.length === 0 || autocompleteResults.style.display === 'none') {
+                    return;
+                }
+                
+                switch (e.key) {
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        activeIndex = Math.min(activeIndex + 1, items.length - 1);
+                        updateActiveItem(items);
+                        break;
+                        
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        activeIndex = Math.max(activeIndex - 1, -1);
+                        updateActiveItem(items);
+                        break;
+                        
+                    case 'Enter':
+                        if (activeIndex >= 0) {
+                            e.preventDefault();
+                            styleInput.value = items[activeIndex].dataset.value;
+                            autocompleteResults.style.display = 'none';
+                            searchForm.submit();
+                        }
+                        break;
+                        
+                    case 'Escape':
+                        autocompleteResults.style.display = 'none';
+                        activeIndex = -1;
+                        break;
                 }
             }
             
-            // Update product image (if available)
-            const productImage = document.getElementById('product-image');
-            if (productImage) {
-                // Get the image URL from the data attribute
-                const imageUrl = selectedSwatch.getAttribute('data-image');
-                if (imageUrl) {
-                    productImage.src = imageUrl;
-                    productImage.alt = `${displayColor} ${productImage.alt.split(' ').slice(1).join(' ')}`;
+            // Update active item highlighting
+            function updateActiveItem(items) {
+                items.forEach((item, index) => {
+                    if (index === activeIndex) {
+                        item.classList.add('active');
+                        item.scrollIntoView({ block: 'nearest' });
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+                
+                if (activeIndex >= 0) {
+                    styleInput.value = items[activeIndex].dataset.value;
                 }
             }
-        }
-
-        // Initialize with the first color
-        document.addEventListener('DOMContentLoaded', function() {
-            const firstSwatch = document.querySelector('.color-swatch');
-            if (firstSwatch) {
-                const firstCatalogColor = firstSwatch.getAttribute('data-catalog-color');
-                selectColor(firstCatalogColor);
+            
+            // Close autocomplete when clicking outside
+            function handleProductClickOutside(e) {
+                if (!autocompleteResults.contains(e.target) && e.target !== styleInput) {
+                    autocompleteResults.style.display = 'none';
+                }
             }
-        });
-    </script>
+        } catch (err) {
+            console.error('Error setting up autocomplete:', err);
+        }
+    });
+</script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
