@@ -4,76 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ style }} - SanMar Inventory</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <!-- Main Header -->
-    <header>
+    <header class="py-3 mb-3 text-center">
         <h1>SanMar Inventory</h1>
     </header>
 
     <!-- New header with search bar - SanMar style -->
-    <div class="breadcrumb">
-        <div class="breadcrumb-links">
-            <a href="/">Home</a> &gt; <span>{{ style }}</span>
-        </div>
+    <div class="container mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ style }}</li>
+            </ol>
+        </nav>
         
-        <div class="search-container">
-            <form class="search-form" action="/product" method="GET">
-                <input type="text" name="style" placeholder="Search by style number..." list="styleSuggestions" autocomplete="off">
-                <datalist id="styleSuggestions">
-                    <!-- Suggestions will be populated by JavaScript -->
-                </datalist>
-                <button type="submit">Search</button>
-            </form>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <form class="d-flex" action="/product" method="GET" id="productSearchForm">
+                    <div class="position-relative flex-grow-1 me-2">
+                        <input type="text"
+                               class="form-control"
+                               id="productStyleInput"
+                               name="style"
+                               placeholder="Search by style number..."
+                               autocomplete="off">
+                        <div class="search-loading"></div>
+                        <div class="autocomplete-results" id="productAutocompleteResults"></div>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </form>
+            </div>
         </div>
     </div>
     
-    <div class="container">
+    <div class="container bg-white p-4 rounded shadow-sm">
         <!-- Product Header -->
-        <div class="product-header">
-            <h2>{{ product_name }}</h2>
-            <p class="style-code">Style: {{ style }}</p>
-            <div class="product-actions">
-                <a href="#" class="action-btn">See Product Details</a>
-                <a href="#" class="action-btn">View Spec Sheet</a>
-                <a href="https://www.sanmar.com/p/{{ style }}" target="_blank" class="action-btn primary-btn">
-                    View on SanMar.com
-                </a>
-            </div>
+        <div class="product-header mb-4 pb-3 border-bottom">
+            <h2 class="mb-2">{{ product_name }}</h2>
+            <p class="text-muted">Style: {{ style }}</p>
+            <!-- No action buttons here -->
         </div>
         
         <!-- Product Content -->
-        <div class="product-grid">
+        <div class="row">
             <!-- Left column - Image section with color swatches below -->
-            <div class="product-image-section">
-                <div class="product-image">
+            <div class="col-md-4 mb-4">
+                <div class="position-relative">
                     {% if catalog_colors|length > 0 and catalog_colors[0] in images %}
                         <img src="{{ images[catalog_colors[0]] }}"
-                             id="product-image" alt="{{ product_name }}">
+                             id="product-image" alt="{{ product_name }}" class="img-fluid rounded">
                     {% else %}
                         <img src="https://www.sanmar.com/products/catalog/2022/f1/port__company/fullsize/PC90H_Orange_Model_Front_2022.jpg"
-                             id="product-image" alt="{{ product_name }}">
+                             id="product-image" alt="{{ product_name }}" class="img-fluid rounded">
                     {% endif %}
                     
                     {% if on_sale %}
-                    <div class="sale-badge">SALE</div>
+                    <div class="position-absolute top-0 start-0 bg-danger text-white px-2 py-1 rounded-end">SALE</div>
                     {% endif %}
                 </div>
                 
                 <!-- Color swatches will be below the image -->
-                <div class="color-swatches-container">
-                    <h3>Available Colors:</h3>
-                    <div class="swatches-grid">
+                <div class="mt-4">
+                    <h3 class="h5 mb-3">Available Colors:</h3>
+                    <div class="d-flex flex-wrap gap-2 position-relative">
                         {% for catalog_color in catalog_colors %}
-                        <div class="color-swatch"
+                        <div class="color-swatch border rounded p-1" style="width: 50px; height: 50px; cursor: pointer;"
                              data-catalog-color="{{ catalog_color }}"
                              data-display-color="{{ display_colors.get(catalog_color, catalog_color) }}"
-                             data-image="{{ images.get(catalog_color, '') }}">
+                             data-image="{{ images.get(catalog_color, '') }}"
+                             title="{{ display_colors.get(catalog_color, catalog_color) }}">
+                            <div class="swatch-label">{{ display_colors.get(catalog_color, catalog_color) }}</div>
                             {% if catalog_color in swatch_images and swatch_images[catalog_color] %}
                                 <img src="{{ swatch_images[catalog_color] }}" alt="{{ display_colors.get(catalog_color, catalog_color) }}" style="width: 100%; height: 100%;">
                             {% else %}
-                                <span>{{ display_colors.get(catalog_color, catalog_color) }}</span>
+                                <span class="d-flex justify-content-center align-items-center h-100 text-center small">{{ display_colors.get(catalog_color, catalog_color) }}</span>
                             {% endif %}
                         </div>
                         {% endfor %}
@@ -82,9 +90,9 @@
             </div>
             
             <!-- Right column - Product details and pricing/inventory -->
-            <div class="product-details">
-                <div class="color-selected-info">
-                    Color: <span id="selected-color"></span>
+            <div class="col-md-8">
+                <div class="mb-3 p-2 bg-light rounded">
+                    <strong>Color:</strong> <span id="selected-color"></span>
                 </div>
             <!-- Pricing and Inventory Tables -->
             {% for catalog_color in catalog_colors %}
@@ -93,22 +101,26 @@
                 <h4 class="mb-3">Inventory for {{ display_color }}</h4>
                 
                 <!-- Pricing Information -->
-                <div class="pricing-info">
-                    <h3>Pricing for {{ display_color }}</h3>
-                    
-                    <!-- Loading indicator -->
-                    <div class="price-loading" id="loading-{{ catalog_color }}">
-                        <div class="loading-spinner"></div>
-                        <p>Fetching latest pricing data...</p>
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="h5 mb-0">Pricing for {{ display_color }}</h3>
                     </div>
-                    
-                    <!-- Error message -->
-                    <div class="price-error" id="error-{{ catalog_color }}">
-                        <p>Unable to fetch current pricing. Showing cached data.</p>
-                    </div>
-                    
-                    <div class="table-container">
-                        <table class="table pricing-table">
+                    <div class="card-body">
+                        <!-- Loading indicator -->
+                        <div class="price-loading text-center my-3" id="loading-{{ catalog_color }}" style="display: none;">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Fetching latest pricing data...</p>
+                        </div>
+                        
+                        <!-- Error message -->
+                        <div class="price-error alert alert-warning" id="error-{{ catalog_color }}" style="display: none;">
+                            <p class="mb-0">Unable to fetch current pricing. Showing cached data.</p>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped pricing-table">
                             <thead>
                                 <tr>
                                     <th>Pricing</th>
@@ -128,7 +140,7 @@
                                     {% endif %}
                                     {% endfor %}
                                 </tr>
-                                <tr class="sale-price">
+                                <tr class="sale-price text-danger">
                                     <td>Sale Price: $</td>
                                     {% for size in sizes %}
                                     {% if color_pricing and catalog_color in color_pricing and color_pricing[catalog_color].sale_price %}
@@ -138,7 +150,7 @@
                                     {% endif %}
                                     {% endfor %}
                                 </tr>
-                                <tr class="program-price">
+                                <tr class="program-price text-success">
                                     <td>Program Price: $</td>
                                     {% for size in sizes %}
                                     {% if color_pricing and catalog_color in color_pricing and color_pricing[catalog_color].program_price %}
@@ -162,14 +174,18 @@
                         </table>
                     </div>
                 </div>
+            </div>
                 
-                <!-- Inventory Section -->
-                <div class="inventory-section">
-                    <h3>Inventory Availability</h3>
-                    <p class="inventory-total">Total inventory for {{ display_color }}</p>
+            <!-- Inventory Section -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h3 class="h5 mb-0">Inventory Availability</h3>
+                </div>
+                <div class="card-body">
+                    <p class="inventory-total mb-3">Total inventory for {{ display_color }}</p>
                     
-                    <div class="table-container">
-                        <table class="table inventory-table">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped inventory-table">
                             <thead>
                                 <tr>
                                     <th>Warehouse</th>
@@ -187,55 +203,61 @@
                                     
                                     <!-- First check the display color -->
                                     {% if display_color in inventory and size in inventory[display_color] and 'warehouses' in inventory[display_color][size] and whse_id in inventory[display_color][size]['warehouses'] %}
-                                        <td class="{{ 'in-stock' if inventory[display_color][size]['warehouses'][whse_id] > 10 else 'low-stock' if inventory[display_color][size]['warehouses'][whse_id] > 0 else 'no-stock' }}">
-                                            {{ inventory[display_color][size]['warehouses'][whse_id] }}
+                                        {% set stock_qty = inventory[display_color][size]['warehouses'][whse_id] %}
+                                        <td class="text-center {% if stock_qty > 10 %}bg-success text-white{% elif stock_qty > 0 %}bg-warning{% else %}bg-light text-muted{% endif %}">
+                                            {{ stock_qty }}
                                         </td>
                                     
                                     <!-- Then check the catalog color -->
                                     {% elif catalog_color in inventory and size in inventory[catalog_color] and 'warehouses' in inventory[catalog_color][size] and whse_id in inventory[catalog_color][size]['warehouses'] %}
-                                        <td class="{{ 'in-stock' if inventory[catalog_color][size]['warehouses'][whse_id] > 10 else 'low-stock' if inventory[catalog_color][size]['warehouses'][whse_id] > 0 else 'no-stock' }}">
-                                            {{ inventory[catalog_color][size]['warehouses'][whse_id] }}
+                                        {% set stock_qty = inventory[catalog_color][size]['warehouses'][whse_id] %}
+                                        <td class="text-center {% if stock_qty > 10 %}bg-success text-white{% elif stock_qty > 0 %}bg-warning{% else %}bg-light text-muted{% endif %}">
+                                            {{ stock_qty }}
                                         </td>
                                     
                                     <!-- Special case for Smoke Grey/ Chrome -->
                                     {% elif display_color == 'Smoke Grey/ Chrome' and 'Smk Gry/Chrome' in inventory and size in inventory['Smk Gry/Chrome'] and 'warehouses' in inventory['Smk Gry/Chrome'][size] and whse_id in inventory['Smk Gry/Chrome'][size]['warehouses'] %}
-                                        <td class="{{ 'in-stock' if inventory['Smk Gry/Chrome'][size]['warehouses'][whse_id] > 10 else 'low-stock' if inventory['Smk Gry/Chrome'][size]['warehouses'][whse_id] > 0 else 'no-stock' }}">
-                                            {{ inventory['Smk Gry/Chrome'][size]['warehouses'][whse_id] }}
+                                        {% set stock_qty = inventory['Smk Gry/Chrome'][size]['warehouses'][whse_id] %}
+                                        <td class="text-center {% if stock_qty > 10 %}bg-success text-white{% elif stock_qty > 0 %}bg-warning{% else %}bg-light text-muted{% endif %}">
+                                            {{ stock_qty }}
                                         </td>
                                     
                                     <!-- No inventory found -->
                                     {% else %}
-                                        <td class="no-stock">0</td>
+                                        <td class="text-center text-muted bg-light">0</td>
                                     {% endif %}
                                     {% endfor %}
                                 </tr>
                                 {% endfor %}
-                                <tr class="total-inventory">
+                                <tr class="total-inventory fw-bold">
                                     <td>Total Inventory</td>
                                     {% for size in sizes %}
                                     {% set display_color = display_colors.get(catalog_color, catalog_color) %}
                                     
                                     <!-- First check the display color -->
                                     {% if display_color in inventory and size in inventory[display_color] and 'total' in inventory[display_color][size] %}
-                                        <td class="{{ 'in-stock' if inventory[display_color][size]['total'] > 10 else 'low-stock' if inventory[display_color][size]['total'] > 0 else 'no-stock' }}">
-                                            {{ inventory[display_color][size]['total'] }}
+                                        {% set stock_qty = inventory[display_color][size]['total'] %}
+                                        <td class="text-center {% if stock_qty > 10 %}bg-success text-white{% elif stock_qty > 0 %}bg-warning{% else %}bg-light text-muted{% endif %}">
+                                            {{ stock_qty }}
                                         </td>
                                     
                                     <!-- Then check the catalog color -->
                                     {% elif catalog_color in inventory and size in inventory[catalog_color] and 'total' in inventory[catalog_color][size] %}
-                                        <td class="{{ 'in-stock' if inventory[catalog_color][size]['total'] > 10 else 'low-stock' if inventory[catalog_color][size]['total'] > 0 else 'no-stock' }}">
-                                            {{ inventory[catalog_color][size]['total'] }}
+                                        {% set stock_qty = inventory[catalog_color][size]['total'] %}
+                                        <td class="text-center {% if stock_qty > 10 %}bg-success text-white{% elif stock_qty > 0 %}bg-warning{% else %}bg-light text-muted{% endif %}">
+                                            {{ stock_qty }}
                                         </td>
                                     
                                     <!-- Special case for Smoke Grey/ Chrome -->
                                     {% elif display_color == 'Smoke Grey/ Chrome' and 'Smk Gry/Chrome' in inventory and size in inventory['Smk Gry/Chrome'] and 'total' in inventory['Smk Gry/Chrome'][size] %}
-                                        <td class="{{ 'in-stock' if inventory['Smk Gry/Chrome'][size]['total'] > 10 else 'low-stock' if inventory['Smk Gry/Chrome'][size]['total'] > 0 else 'no-stock' }}">
-                                            {{ inventory['Smk Gry/Chrome'][size]['total'] }}
+                                        {% set stock_qty = inventory['Smk Gry/Chrome'][size]['total'] %}
+                                        <td class="text-center {% if stock_qty > 10 %}bg-success text-white{% elif stock_qty > 0 %}bg-warning{% else %}bg-light text-muted{% endif %}">
+                                            {{ stock_qty }}
                                         </td>
                                     
                                     <!-- No inventory found -->
                                     {% else %}
-                                        <td class="no-stock">0</td>
+                                        <td class="text-center text-muted bg-light">0</td>
                                     {% endif %}
                                     {% endfor %}
                                 </tr>
@@ -244,10 +266,11 @@
                     </div>
                 </div>
             </div>
+            </div>
             {% endfor %}
+            </div>
         </div>
     </div>
-</div>
 
 <script>
     // Function to fetch color-specific pricing via AJAX
@@ -479,8 +502,12 @@
                         }
                         
                         // Update active swatch styling
-                        document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+                        document.querySelectorAll('.color-swatch').forEach(s => {
+                            s.classList.remove('active');
+                            s.classList.remove('border-primary');
+                        });
                         this.classList.add('active');
+                        this.classList.add('border-primary');
                         console.log(`Updated active swatch to: ${catalogColor}`);
                         
                         // Safely update product image - this is critical!
@@ -587,13 +614,13 @@
                                 inventoryTotal.textContent = `Total inventory for ${displayColor}`;
                             }
                             
-                            const pricingHeader = table.querySelector('.pricing-info h3');
+                            const pricingHeader = table.querySelector('.card-header h3');
                             if (pricingHeader) {
                                 pricingHeader.textContent = `Pricing for ${displayColor}`;
                             }
                             
                             // Show the table
-                            table.style.display = 'block';
+                            table.style.display = '';
                             console.log(`Showing inventory table for ${displayColor}`);
                             
                             // Fetch updated pricing data
@@ -651,12 +678,12 @@
                                     inventoryTotal.textContent = `Total inventory for ${displayColor}`;
                                 }
                                 
-                                const pricingHeader = firstTable.querySelector('.pricing-info h3');
+                                const pricingHeader = firstTable.querySelector('.card-header h3');
                                 if (pricingHeader) {
                                     pricingHeader.textContent = `Pricing for ${displayColor}`;
                                 }
                                 
-                                firstTable.style.display = 'block';
+                                firstTable.style.display = '';
                                 console.log(`Showing first available inventory table as last resort`);
                                 
                                 // At least try to fetch the pricing
@@ -682,30 +709,8 @@
                     }
                 });
                 
-                // Set up hover effect
-                swatch.addEventListener('mouseenter', function() {
-                    try {
-                        const displayColor = this.getAttribute('data-display-color') || '';
-                        const colorInfo = document.querySelector('.color-selected-info');
-                        if (colorInfo) {
-                            colorInfo.setAttribute('data-original', colorInfo.textContent || '');
-                            colorInfo.textContent = `Color: ${displayColor}`;
-                        }
-                    } catch (err) {
-                        console.error('Error in swatch hover handler:', err);
-                    }
-                });
-                
-                swatch.addEventListener('mouseleave', function() {
-                    try {
-                        const colorInfo = document.querySelector('.color-selected-info');
-                        if (colorInfo && colorInfo.hasAttribute('data-original')) {
-                            colorInfo.textContent = colorInfo.getAttribute('data-original');
-                        }
-                    } catch (err) {
-                        console.error('Error in swatch leave handler:', err);
-                    }
-                });
+                // No need for hover event handlers for the tooltip
+                // The CSS handles displaying the color name on hover automatically
             });
             
             // Select the first color by default
@@ -722,32 +727,218 @@
         
         // Set up autocomplete for style search
         try {
-            const styleInput = document.querySelector('.search-form input[name="style"]');
-            if (styleInput) {
-                styleInput.addEventListener('input', function() {
-                    const query = this.value.trim();
-                    if (query.length >= 2) {
-                        fetch(`/autocomplete?q=${encodeURIComponent(query)}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                const datalist = document.getElementById('styleSuggestions');
-                                if (datalist) {
-                                    datalist.innerHTML = '';
-                                    data.forEach(style => {
-                                        const option = document.createElement('option');
-                                        option.value = style;
-                                        datalist.appendChild(option);
-                                    });
-                                }
-                            })
-                            .catch(error => console.error(`Error fetching autocomplete: ${error}`));
+            // Enhanced autocomplete for product search
+            const styleInput = document.getElementById('productStyleInput');
+            const autocompleteResults = document.getElementById('productAutocompleteResults');
+            const searchForm = document.getElementById('productSearchForm');
+            
+            if (!styleInput || !autocompleteResults || !searchForm) {
+                console.error('Missing required search elements for autocomplete');
+                return;
+            }
+            
+            // Popular styles for instant matching
+            const POPULAR_STYLES = ["PC61", "K500", "PC90H", "J790", "C112", "S600", "L510", "G200", "PC55", "DT6000"];
+            
+            // Cache for autocomplete results
+            const autocompleteCache = {};
+            let activeIndex = -1;
+            let timer = null;
+            const DEBOUNCE_TIME = 150; // ms
+            
+            // Initialize event listeners
+            styleInput.addEventListener('input', handleInput);
+            styleInput.addEventListener('keydown', handleKeyNavigation);
+            document.addEventListener('click', handleProductClickOutside);
+            
+            // Handle input with debouncing and caching
+            function handleInput() {
+                const query = styleInput.value.trim().toUpperCase();
+                
+                // Clear any existing timer
+                if (timer) {
+                    clearTimeout(timer);
+                }
+                
+                // Reset active item
+                activeIndex = -1;
+                
+                // Clear results if query is empty
+                if (query.length === 0) {
+                    autocompleteResults.innerHTML = '';
+                    autocompleteResults.style.display = 'none';
+                    styleInput.classList.remove('loading');
+                    return;
+                }
+                
+                // Fast path: Check popular styles first
+                if (query.length >= 2) {
+                    const directMatches = POPULAR_STYLES.filter(style =>
+                        style.startsWith(query)
+                    );
+                    
+                    if (directMatches.length > 0) {
+                        renderResults(directMatches, query);
+                        return;
+                    }
+                }
+                
+                // Check cache
+                const cacheKey = query.substring(0, 3);
+                if (query.length >= 2 && autocompleteCache[cacheKey]) {
+                    const cachedResults = autocompleteCache[cacheKey].filter(s =>
+                        s.startsWith(query)
+                    );
+                    
+                    if (cachedResults.length > 0) {
+                        renderResults(cachedResults, query);
+                        return;
+                    }
+                }
+                
+                // Show loading indicator
+                styleInput.classList.add('loading');
+                
+                // Clear results if query is too short
+                if (query.length < 2) {
+                    autocompleteResults.innerHTML = '';
+                    autocompleteResults.style.display = 'none';
+                    styleInput.classList.remove('loading');
+                    return;
+                }
+                
+                // Debounce API calls
+                timer = setTimeout(() => {
+                    fetchStyles(query);
+                }, DEBOUNCE_TIME);
+            }
+            
+            // Fetch autocomplete suggestions
+            function fetchStyles(query) {
+                fetch(`/autocomplete?q=${encodeURIComponent(query)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Cache the results
+                        if (query.length <= 3) {
+                            autocompleteCache[query] = data;
+                        }
+                        
+                        // Render the results
+                        renderResults(data, query);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching suggestions:', error);
+                        autocompleteResults.innerHTML = `<div class="autocomplete-item error">Error fetching suggestions</div>`;
+                        autocompleteResults.style.display = 'block';
+                    })
+                    .finally(() => {
+                        // Hide loading indicator
+                        styleInput.classList.remove('loading');
+                    });
+            }
+            
+            // Render results with highlighting
+            function renderResults(data, query) {
+                autocompleteResults.innerHTML = '';
+                
+                if (data.length === 0) {
+                    autocompleteResults.style.display = 'none';
+                    return;
+                }
+                
+                // Limit to 8 results for performance
+                const maxToShow = 8;
+                data.slice(0, maxToShow).forEach((style, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'autocomplete-item';
+                    
+                    // Highlight matching part
+                    const regex = new RegExp(`(${query})`, 'gi');
+                    const highlighted = style.replace(regex, '<strong>$1</strong>');
+                    
+                    item.innerHTML = highlighted;
+                    item.dataset.value = style;
+                    
+                    // Add click handler
+                    item.addEventListener('click', () => {
+                        styleInput.value = style;
+                        autocompleteResults.style.display = 'none';
+                        searchForm.submit();
+                    });
+                    
+                    autocompleteResults.appendChild(item);
+                });
+                
+                // Show results
+                autocompleteResults.style.display = 'block';
+            }
+            
+            // Handle keyboard navigation
+            function handleKeyNavigation(e) {
+                const items = autocompleteResults.querySelectorAll('.autocomplete-item');
+                
+                if (items.length === 0 || autocompleteResults.style.display === 'none') {
+                    return;
+                }
+                
+                switch (e.key) {
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        activeIndex = Math.min(activeIndex + 1, items.length - 1);
+                        updateActiveItem(items);
+                        break;
+                        
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        activeIndex = Math.max(activeIndex - 1, -1);
+                        updateActiveItem(items);
+                        break;
+                        
+                    case 'Enter':
+                        if (activeIndex >= 0) {
+                            e.preventDefault();
+                            styleInput.value = items[activeIndex].dataset.value;
+                            autocompleteResults.style.display = 'none';
+                            searchForm.submit();
+                        }
+                        break;
+                        
+                    case 'Escape':
+                        autocompleteResults.style.display = 'none';
+                        activeIndex = -1;
+                        break;
+                }
+            }
+            
+            // Update active item highlighting
+            function updateActiveItem(items) {
+                items.forEach((item, index) => {
+                    if (index === activeIndex) {
+                        item.classList.add('active');
+                        item.scrollIntoView({ block: 'nearest' });
+                    } else {
+                        item.classList.remove('active');
                     }
                 });
+                
+                if (activeIndex >= 0) {
+                    styleInput.value = items[activeIndex].dataset.value;
+                }
+            }
+            
+            // Close autocomplete when clicking outside
+            function handleProductClickOutside(e) {
+                if (!autocompleteResults.contains(e.target) && e.target !== styleInput) {
+                    autocompleteResults.style.display = 'none';
+                }
             }
         } catch (err) {
             console.error('Error setting up autocomplete:', err);
         }
     });
 </script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
