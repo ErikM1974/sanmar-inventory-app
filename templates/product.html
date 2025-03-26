@@ -524,22 +524,84 @@
                             table.style.display = 'none';
                         });
                         
-                        // Show the selected inventory table
-                        // Use a sanitized catalog color for the ID (replace slashes and spaces)
-                        const safeColorId = catalogColor.replace(/\//g, '-').replace(/ /g, '-');
-                        const tableId = `inventory-${safeColorId}`;
+                        // Get the corresponding inventory table for this color
+                        // Try multiple approaches to find the right table
+                        
+                        // First: Try direct ID match using fully sanitized catalog color
+                        // Replace all potentially problematic characters
+                        const safeColorId = catalogColor.replace(/[\/\s.&]+/g, '-');
+                        let tableId = `inventory-${safeColorId}`;
                         console.log(`Looking for table with ID: ${tableId}`);
                         let table = document.getElementById(tableId);
                         
-                        // If we can't find the table with the exact ID, try a more permissive selector
+                        // Second: Try with more aggressive sanitization
                         if (!table) {
-                            console.warn(`Table not found by ID: ${tableId}, trying attribute selector...`);
-                            table = document.querySelector(`.inventory-tables[id*="${catalogColor}"]`);
+                            // Try even more aggressive sanitization - removing special chars completely
+                            const extraSafeColorId = catalogColor.replace(/[^a-zA-Z0-9]/g, '');
+                            tableId = `inventory-${extraSafeColorId}`;
+                            console.log(`Not found, trying more aggressive ID: ${tableId}`);
+                            table = document.getElementById(tableId);
                         }
                         
+                        // Third: Try to match using the exact ID from the template
+                        if (!table) {
+                            console.warn(`Table not found by sanitized IDs, trying exact catalog color...`);
+                            table = document.getElementById(`inventory-${catalogColor}`);
+                        }
+                        
+                        // Fourth: Try using a partial match on the ID attribute
+                        if (!table) {
+                            console.warn(`Still no match, trying partial ID match`);
+                            const tables = document.querySelectorAll('.inventory-tables');
+                            for (const t of tables) {
+                                if (t.id.includes(catalogColor) || catalogColor.includes(t.id.replace('inventory-', ''))) {
+                                    table = t;
+                                    console.log(`Found table with partial ID match: ${t.id}`);
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        // Fifth: Try matching by data-display-color attribute
+                        if (!table) {
+                            console.warn(`Table not found by ID matching, trying data-display-color attribute...`);
+                            table = document.querySelector(`.inventory-tables[data-display-color="${displayColor}"]`);
+                            
+                            // Try partial match on data-display-color as well
+                            if (!table) {
+                                const tables = document.querySelectorAll('.inventory-tables');
+                                for (const t of tables) {
+                                    const dataColor = t.getAttribute('data-display-color');
+                                    if (dataColor && (dataColor.includes(displayColor) || displayColor.includes(dataColor))) {
+                                        table = t;
+                                        console.log(`Found table with partial data-display-color match: ${dataColor}`);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // If we found a table, show it and update its data
                         if (table) {
+                            // Update the inventory table header and content to match the selected color
+                            const inventoryHeader = table.querySelector('h4');
+                            if (inventoryHeader) {
+                                inventoryHeader.textContent = `Inventory for ${displayColor}`;
+                            }
+                            
+                            const inventoryTotal = table.querySelector('.inventory-total');
+                            if (inventoryTotal) {
+                                inventoryTotal.textContent = `Total inventory for ${displayColor}`;
+                            }
+                            
+                            const pricingHeader = table.querySelector('.pricing-info h3');
+                            if (pricingHeader) {
+                                pricingHeader.textContent = `Pricing for ${displayColor}`;
+                            }
+                            
+                            // Show the table
                             table.style.display = 'block';
-                            console.log(`Showing inventory table for ${catalogColor}`);
+                            console.log(`Showing inventory table for ${displayColor}`);
                             
                             // Fetch updated pricing data
                             const path = window.location.pathname;
@@ -549,57 +611,76 @@
                                 console.log(`Fetching pricing data for style: ${style}, color: ${catalogColor}`);
                                 fetchColorPricing(style, catalogColor)
                                     .then(data => {
-                                        console.log(`Successfully retrieved pricing data for ${catalogColor}`, data);
-                                        updatePricingDisplay(data, table.id); // Use the actual table.id
+                                        if (data && !data.error) {
+                                            console.log(`Successfully retrieved pricing data for ${displayColor}`, data);
+                                            updatePricingDisplay(data, table.id);
+                                            
+                                            // Hide the error message if visible
+                                            const errorElement = table.querySelector('.price-error');
+                                            if (errorElement) {
+                                                errorElement.style.display = 'none';
+                                            }
+                                        } else {
+                                            // Show error message but still try to use the data we got
+                                            console.warn(`Received error or incomplete pricing data`, data);
+                                            if (data) updatePricingDisplay(data, table.id);
+                                            
+                                            const errorElement = table.querySelector('.price-error');
+                                            if (errorElement) {
+                                                errorElement.style.display = 'block';
+                                            }
+                                        }
                                     })
                                     .catch(error => {
-                                        console.error(`Error updating pricing: ${error}`);
+                                        console.error(`Error updating pricing: ${error.message}`);
+                                        
+                                        // Show error message
+                                        const errorElement = table.querySelector('.price-error');
+                                        if (errorElement) {
+                                            errorElement.style.display = 'block';
+                                            errorElement.querySelector('p').textContent = 'Unable to fetch current pricing. Showing cached data.';
+                                        }
                                     });
                             }
                         } else {
-                            console.warn(`Table not found: ${tableId}, trying fallback...`);
-                            
-                            // Try using the actual table with data-display-color attribute
-                            const fallbackTable = document.querySelector(`.inventory-tables[data-display-color="${displayColor}"]`);
-                            
-                            if (fallbackTable) {
-                                fallbackTable.style.display = 'block';
-                                console.log(`Showing fallback inventory table for ${displayColor}`);
+                            // Last resort - just show the first inventory table if we really can't find a match
+                            console.error(`No matching table found for color: ${displayColor}`);
+                            const firstTable = document.querySelector('.inventory-tables');
+                            if (firstTable) {
+                                // Update headers to match the selected color
+                                const inventoryHeader = firstTable.querySelector('h4');
+                                if (inventoryHeader) {
+                                    inventoryHeader.textContent = `Inventory for ${displayColor}`;
+                                }
                                 
+                                const inventoryTotal = firstTable.querySelector('.inventory-total');
+                                if (inventoryTotal) {
+                                    inventoryTotal.textContent = `Total inventory for ${displayColor}`;
+                                }
+                                
+                                const pricingHeader = firstTable.querySelector('.pricing-info h3');
+                                if (pricingHeader) {
+                                    pricingHeader.textContent = `Pricing for ${displayColor}`;
+                                }
+                                
+                                firstTable.style.display = 'block';
+                                console.log(`Showing first available inventory table as last resort`);
+                                
+                                // At least try to fetch the pricing
                                 const path = window.location.pathname;
                                 const style = path.includes('/') ? path.split('/').pop() : path;
-                                
                                 if (style) {
-                                    console.log(`Fetching pricing data for style: ${style}, color: ${displayColor}`);
-                                    fetchColorPricing(style, displayColor)
+                                    fetchColorPricing(style, catalogColor)
                                         .then(data => {
-                                            console.log(`Successfully retrieved pricing data for ${displayColor}`, data);
-                                            updatePricingDisplay(data, fallbackTable.id);
+                                            if (data) updatePricingDisplay(data, firstTable.id);
                                         })
                                         .catch(error => {
-                                            console.error(`Error updating pricing for display color: ${error}`);
+                                            console.error(`Error updating pricing: ${error.message}`);
+                                            const errorElement = firstTable.querySelector('.price-error');
+                                            if (errorElement) {
+                                                errorElement.style.display = 'block';
+                                            }
                                         });
-                                }
-                            } else {
-                                // Last resort - just show the first inventory table
-                                console.error(`No table found for either ${tableId} or by display color attribute`);
-                                const firstTable = document.querySelector('.inventory-tables');
-                                if (firstTable) {
-                                    firstTable.style.display = 'block';
-                                    console.log(`Showing first available inventory table as last resort`);
-                                    
-                                    // At least try to fetch the pricing
-                                    const path = window.location.pathname;
-                                    const style = path.includes('/') ? path.split('/').pop() : path;
-                                    if (style) {
-                                        fetchColorPricing(style, catalogColor)
-                                            .then(data => {
-                                                updatePricingDisplay(data, firstTable.id);
-                                            })
-                                            .catch(error => {
-                                                console.error(`Error updating pricing: ${error}`);
-                                            });
-                                    }
                                 }
                             }
                         }
