@@ -280,6 +280,7 @@ def get_pricing_for_color_swatch(style, color, size=None, inventory_key=None, si
                     "sale_price": {},
                     "program_price": {},
                     "case_price": {},      # Added dedicated case_price field
+                    "case_size": {},       # Add case_size field to store quantity per case
                     "meta": {
                         "has_sale": False,
                         "sale_start_date": "",
