@@ -86,21 +86,34 @@ def delete_from_cache(key):
 def get_default_case_size(style, size):
     """
     Get the default case size for a given style and size.
-    We now use a standard case size of 24 for all SanMar products to match their website.
+    We now use a standard case size of 144 for most SanMar products.
     
     Args:
-        style (str): Product style number (not used but kept for backward compatibility)
-        size (str): Size code (not used but kept for backward compatibility)
+        style (str): Product style number
+        size (str): Size code
         
     Returns:
-        int: Standard case size of 24
+        int: Appropriate case size based on style and size
     """
+    # Handle specific styles that have known case size patterns
+    if style:
+        style_upper = style.upper()
+        # PC61 - Port & Company Essential Tee
+        if style_upper.startswith('PC61'):
+            if size in ['S', 'M', 'L', 'XL']:
+                return 72
+            else:  # 2XL and up
+                return 36
+        # J790 - Port Authority Glacier Soft Shell Jacket
+        elif style_upper.startswith('J790'):
+            return 144  # Standard case size for all sizes
+    
     # Special case for one-size items
     if size == "OSFA" or size == "OS" or size == "ONE SIZE":
-        return 72  # Default for one-size accessories
+        return 144  # Default for one-size accessories, was 72
         
     # For all other product sizes, return the standard case size
-    return 24  # Standard SanMar case size
+    return 144  # Standard SanMar case size
             
 def size_to_sort_key(size):
     """Convert size to a sortable key"""
@@ -267,7 +280,6 @@ def get_pricing_for_color_swatch(style, color, size=None, inventory_key=None, si
                     "sale_price": {},
                     "program_price": {},
                     "case_price": {},      # Added dedicated case_price field
-                    "case_size": {},
                     "meta": {
                         "has_sale": False,
                         "sale_start_date": "",
@@ -386,14 +398,14 @@ def get_pricing_for_color_swatch(style, color, size=None, inventory_key=None, si
                             pricing_data["case_size"][item_size] = case_size_value
                             logger.info(f"Using case size from API for size {item_size}: {case_size_value}")
                         except (ValueError, TypeError):
-                            # Fall back to most common value for SanMar products
-                            pricing_data["case_size"][item_size] = 24
-                            logger.info(f"Using standard case size (24) for {item_style}, size {item_size} after API value conversion failed")
+                            # Fall back to standard case size for SanMar products
+                            pricing_data["case_size"][item_size] = 144
+                            logger.info(f"Using standard case size (144) for {item_style}, size {item_size} after API value conversion failed")
                     else:
-                        # For all SanMar products, the default case size for all sizes should be 24
-                        # This aligns with what's shown on the SanMar website
-                        pricing_data["case_size"][item_size] = 24
-                        logger.info(f"No case size in API, using standard case size (24) for {item_style}, size {item_size}")
+                        # For all SanMar products, the default case size for all sizes should be 144
+                        # Updated to match actual SanMar case quantities
+                        pricing_data["case_size"][item_size] = 144
+                        logger.info(f"No case size in API, using standard case size (144) for {item_style}, size {item_size}")
                     
                     # Special case for PC61 to match SanMar.com prices exactly
                     if style.upper() == "PC61":
