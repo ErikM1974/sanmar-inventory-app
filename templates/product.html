@@ -160,16 +160,6 @@
                                     {% endif %}
                                     {% endfor %}
                                 </tr>
-                                <tr>
-                                    <td>Case Size</td>
-                                    {% for size in sizes %}
-                                    {% if color_pricing and catalog_color in color_pricing and color_pricing[catalog_color].case_size %}
-                                        <td>{{ color_pricing[catalog_color].case_size.get(size, 0) }}</td>
-                                    {% else %}
-                                        <td>{{ pricing.case_size.get(size, 0) }}</td>
-                                    {% endif %}
-                                    {% endfor %}
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -308,6 +298,23 @@
                 .then(data => {
                     console.log(`Received pricing data:`, data);
                     
+                    // Log specific pricing data for debugging
+                    if (data.case_price) {
+                        console.log("Case Price data:", data.case_price);
+                        const sizes = Object.keys(data.case_price);
+                        if (sizes.length > 0) {
+                            console.log(`Sample case price for size ${sizes[0]}: ${data.case_price[sizes[0]]}`);
+                        } else {
+                            console.warn("Case price object exists but has no size keys");
+                        }
+                    } else {
+                        console.warn("No case_price object in API response");
+                        // Check if original_price is available as fallback
+                        if (data.original_price) {
+                            console.log("Original Price data (fallback):", data.original_price);
+                        }
+                    }
+                    
                     // Hide loading indicator
                     if (loadingElement) {
                         loadingElement.style.display = 'none';
@@ -382,23 +389,88 @@
         const originalPriceRow = pricingTable.querySelector('tbody tr:nth-child(1)');
         const salePriceRow = pricingTable.querySelector('tbody tr:nth-child(2)');
         const programPriceRow = pricingTable.querySelector('tbody tr:nth-child(3)');
-        const caseSizeRow = pricingTable.querySelector('tr:nth-child(4)');
         
         // Update case price row
-        if (originalPriceRow && pricingData.case_price) {
+        console.log("Received pricing data for updating:", pricingData);
+        console.log("Case price data:", pricingData.case_price);
+        console.log("Original price data:", pricingData.original_price);
+        
+        if (originalPriceRow) {
             // Always use "Case Price: $" label
             const labelCell = originalPriceRow.querySelector('td:first-child');
             if (labelCell) {
                 labelCell.textContent = "Case Price: $";
             }
             
+            console.log("Updating case price row. Displayed sizes:", displayedSizes);
             const cells = originalPriceRow.querySelectorAll('td:not(:first-child)');
+            console.log(`Found ${cells.length} cells to update in case price row`);
+            
+            // Combine case_price and original_price for more robust display
+            const combinedPriceData = {};
+            
+            // Create a more reliable data source for prices
+            // Log exact data we're receiving for debugging
+            console.log("DETAILED CASE PRICE DATA:", JSON.stringify(pricingData.case_price));
+            
+            // First, copy any available case price data - only use non-null, non-zero values
+            if (pricingData.case_price) {
+                for (const size in pricingData.case_price) {
+                    if (pricingData.case_price[size] !== null && pricingData.case_price[size] !== undefined && pricingData.case_price[size] !== 0) {
+                        combinedPriceData[size] = pricingData.case_price[size];
+                        console.log(`Using direct case_price for size ${size}: ${pricingData.case_price[size]}`);
+                    }
+                }
+            }
+            
+            // Then, fill in any missing sizes from original_price as fallback
+            if (pricingData.original_price) {
+                for (const size in pricingData.original_price) {
+                    if (!combinedPriceData[size] || combinedPriceData[size] === 0) {
+                        if (pricingData.original_price[size] !== null && pricingData.original_price[size] !== undefined && pricingData.original_price[size] !== 0) {
+                            combinedPriceData[size] = pricingData.original_price[size];
+                            console.log(`Using original_price as fallback for size ${size}: ${pricingData.original_price[size]}`);
+                        }
+                    }
+                }
+            }
+            
+            // If we still have no data for a size, try direct access to any other price field
+            for (const size of displayedSizes) {
+                if (!combinedPriceData[size] || combinedPriceData[size] === 0) {
+                    // Try other price fields as last resort
+                    if (pricingData.program_price && pricingData.program_price[size]) {
+                        combinedPriceData[size] = pricingData.program_price[size];
+                        console.log(`Last resort: using program_price for ${size}: ${pricingData.program_price[size]}`);
+                    } else if (pricingData.sale_price && pricingData.sale_price[size]) {
+                        combinedPriceData[size] = pricingData.sale_price[size];
+                        console.log(`Last resort: using sale_price for ${size}: ${pricingData.sale_price[size]}`);
+                    }
+                }
+            }
+            
+            // Now update the cells using our combined data
             cells.forEach((cell, index) => {
                 const size = displayedSizes[index];
-                if (size && pricingData.case_price[size]) {
-                    cell.textContent = pricingData.case_price[size].toFixed(2);
+                if (size && combinedPriceData[size]) {
+                    console.log(`Updating case price cell ${index} for size ${size} with value: ${combinedPriceData[size]}`);
+                    cell.textContent = combinedPriceData[size].toFixed(2);
+                } else {
+                    console.warn(`Missing price data for size ${size} in both case_price and original_price`);
+                    // Try direct access as last resort
+                    if (size && pricingData.case_price && pricingData.case_price[size]) {
+                        cell.textContent = pricingData.case_price[size].toFixed(2);
+                        console.log(`Last resort: using direct case_price for ${size}: ${pricingData.case_price[size]}`);
+                    } else if (size && pricingData.original_price && pricingData.original_price[size]) {
+                        cell.textContent = pricingData.original_price[size].toFixed(2);
+                        console.log(`Last resort: using direct original_price for ${size}: ${pricingData.original_price[size]}`);
+                    } else {
+                        console.error(`No price data available for size ${size}`);
+                    }
                 }
             });
+        } else {
+            console.error("Cannot find the case price row to update");
         }
         
         // Determine if we need to show the sale price row
@@ -449,17 +521,6 @@
                     }
                 });
             }
-        }
-        
-        // Always update case size row
-        if (caseSizeRow && pricingData.case_size) {
-            const cells = caseSizeRow.querySelectorAll('td:not(:first-child)');
-            cells.forEach((cell, index) => {
-                const size = displayedSizes[index];
-                if (size && pricingData.case_size[size]) {
-                    cell.textContent = pricingData.case_size[size];
-                }
-            });
         }
         
         console.log('Pricing display updated successfully');
