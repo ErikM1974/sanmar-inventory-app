@@ -13,6 +13,7 @@ from requests.packages.urllib3.util.retry import Retry
 from promostandards_pricing import PromoStandardsPricing
 from sanmar_pricing_service import SanmarPricingService
 from sanmar_pricing_api import get_pricing_for_color_swatch
+import sanmar_product
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -83,7 +84,8 @@ initialize_app()
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    categories = sanmar_product.get_categories()
+    return render_template('index.html', categories=categories)
 
 @app.route('/autocomplete')
 def autocomplete():
@@ -116,32 +118,6 @@ def autocomplete():
     
     # Limit to 15 results for better performance
     return jsonify(sorted_results[:15])
-
-def sort_autocomplete_results(query, results):
-    """Sort autocomplete results by relevance"""
-    query_upper = query.upper()
-    
-    # Split into categories for sorting
-    exact_matches = []
-    starts_with_matches = []
-    contains_matches = []
-    
-    for result in results:
-        result_upper = result.upper()
-        if result_upper == query_upper:
-            exact_matches.append(result)
-        elif result_upper.startswith(query_upper):
-            starts_with_matches.append(result)
-        else:
-            contains_matches.append(result)
-    
-    # Sort each category alphabetically
-    exact_matches.sort()
-    starts_with_matches.sort()
-    contains_matches.sort()
-    
-    # Combine the categories in priority order
-    return exact_matches + starts_with_matches + contains_matches
 
 def sort_autocomplete_results(query, results):
     """Sort autocomplete results by relevance"""
@@ -1674,7 +1650,6 @@ def api_pricing():
     except Exception as e:
         logger.error(f"Error in API pricing endpoint: {str(e)}")
         import traceback
-        import traceback
         logger.error(f"Traceback: {traceback.format_exc()}")
         return jsonify({"error": f"Internal server error: {str(e)}"}), 500
 
@@ -1694,3 +1669,145 @@ def health_check():
         return render_template('health.html', status=status)
     else:
         return jsonify(status)
+
+@app.route('/search')
+def search():
+    """
+    Search route to handle product searches by category, brand, or query.
+    This renders the search_results.html template with matching products.
+    """
+    # Get search parameters from query string
+    query = request.args.get('query', '')
+    category = request.args.get('category', '')
+    brand = request.args.get('brand', '')
+    sort = request.args.get('sort', 'bestselling')
+    page = int(request.args.get('page', 1))
+    
+    # Log the search request for debugging
+    logger.info(f"Search request - query: '{query}', category: '{category}', brand: '{brand}', sort: '{sort}', page: {page}")
+    
+    # Fetch products based on parameters
+    products = []
+    
+    if category:
+        # Enhanced logging for category search
+        logger.info(f"Search by category: '{category}' - Starting API call")
+        
+        # Log the exact category name and check for special characters
+        logger.info(f"Category name: '{category}', Length: {len(category)}, ASCII: {[ord(c) for c in category]}")
+        
+        # Use the existing API function to get products by category
+        category_products, raw_response = sanmar_product.get_products_by_category(category)
+        
+        # Log the results
+        logger.info(f"Found {len(category_products)} products for category '{category}'")
+        if len(category_products) == 0:
+            logger.warning(f"No products found for category '{category}'. Raw response: {raw_response[:200]}...")
+        else:
+            logger.info(f"First product: {category_products[0] if category_products else 'None'}")
+        
+        products.extend(category_products)
+    elif brand:
+        # For brand searches, we should implement a proper API call
+        # For now, we'll return an empty list until the API is implemented
+        logger.info(f"Brand search for '{brand}' - API not yet implemented")
+        logger.warning(f"Brand search API not implemented yet - returning empty results")
+        products = []
+    elif query:
+        # For query searches, we should implement a proper API call
+        # For now, we'll try to use the query as a style number if it looks like one
+        logger.info(f"Text search for '{query}'")
+        if query.isalnum() and len(query) >= 3 and len(query) <= 10:
+            # This looks like a style number, try to get the product directly
+            try:
+                # Get product data to extract color mapping
+                product_data = get_product_data(query.upper())
+                if product_data and 'product_name' in product_data:
+                    # Create a product entry from the product data
+                    product = {
+                        'style': query.upper(),
+                        'name': product_data.get('product_name', f'Style {query.upper()}'),
+                        'image': '',  # We don't have a default image
+                        'brand': 'SanMar'
+                    }
+                    
+                    # If we have images, use the first one
+                    if 'images' in product_data and product_data['images']:
+                        first_color = next(iter(product_data['images']))
+                        product['image'] = product_data['images'][first_color]
+                    
+                    products.append(product)
+                    logger.info(f"Found product for style number: {query.upper()}")
+                else:
+                    logger.info(f"No product found for style number: {query.upper()}")
+            except Exception as e:
+                logger.error(f"Error searching for style {query.upper()}: {str(e)}")
+        else:
+            logger.info(f"Query doesn't look like a style number, API search not implemented yet")
+    
+    # Apply sorting
+    if sort == 'price_low':
+        # In a real implementation, you would sort by price
+        logger.info("Sorting by price (low to high)")
+    elif sort == 'price_high':
+        # In a real implementation, you would sort by price in reverse
+        logger.info("Sorting by price (high to low)")
+    elif sort == 'newest':
+        # In a real implementation, you would sort by date
+        logger.info("Sorting by newest")
+    else:  # bestselling
+        # Default sort is bestselling
+        logger.info("Sorting by bestselling")
+    
+    # Pagination
+    items_per_page = 24
+    total_products = len(products)
+    total_pages = max(1, (total_products + items_per_page - 1) // items_per_page)
+    
+    # Ensure page is within valid range
+    page = max(1, min(page, total_pages))
+    
+    # Calculate start and end indices for pagination
+    start_idx = (page - 1) * items_per_page
+    end_idx = min(start_idx + items_per_page, total_products)
+    
+    # Get the products for the current page
+    paginated_products = products[start_idx:end_idx]
+    
+    # Build pagination URL
+    pagination_url = f"/search?query={query}&category={category}&brand={brand}&sort={sort}"
+    
+    # Render the search results template
+    return render_template('search_results.html',
+                          query=query,
+                          category=category,
+                          brand=brand,
+                          sort=sort,
+                          products=paginated_products,
+                          page=page,
+                          total_pages=total_pages,
+                          pagination_url=pagination_url)
+
+@app.route('/api/products/<category_name>')
+def get_products_api(category_name):
+    """API endpoint to fetch products by category."""
+    logger.info(f"API request for products in category: '{category_name}'")
+    
+    # Log the exact category name and check for special characters
+    logger.info(f"Category name: '{category_name}', Length: {len(category_name)}, ASCII: {[ord(c) for c in category_name]}")
+    
+    products, raw_response = sanmar_product.get_products_by_category(category_name)
+    
+    logger.info(f"API response for category '{category_name}': Found {len(products)} products")
+    if len(products) > 0:
+        logger.info(f"First product: {products[0]}")
+    else:
+        logger.warning(f"No products found for category '{category_name}'")
+    
+    return jsonify({
+        'products': products,
+        'raw_response': raw_response # Include raw response for debugging
+    })
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)
