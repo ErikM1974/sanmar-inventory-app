@@ -26,6 +26,49 @@
             background-color: #e9ecef;
             border-radius: 10px;
         }
+        /* New styles for autocomplete dropdown */
+        .autocomplete-container {
+            position: relative;
+        }
+        .autocomplete-results {
+            position: absolute;
+            z-index: 1000;
+            width: 100%;
+            max-height: 250px;
+            overflow-y: auto;
+            background: white;
+            border: 1px solid #ced4da;
+            border-radius: 0 0 0.25rem 0.25rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: none;
+        }
+        .autocomplete-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .autocomplete-item:hover,
+        .autocomplete-item:focus {
+            background-color: #f8f9fa;
+        }
+        .autocomplete-loading {
+            padding: 0.75rem 1rem;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+        }
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-top-color: #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -34,19 +77,16 @@
             <h1 class="mb-4 text-center">SanMar Inventory Lookup</h1>
             <p class="lead" data-component-name="<p />">Enter a SanMar style number to view product details, inventory, and pricing information.</p>
             
-            <form action="/product" method="GET">
-                <div class="form-group">
+            <form action="/product" method="GET" id="searchForm">
+                <div class="form-group autocomplete-container">
                     <input type="text"
                            class="form-control form-control-lg"
                            id="styleInput"
                            name="style"
                            placeholder="Enter style number (e.g. K500)"
-                           list="styleSuggestions"
                            autocomplete="off"
                            required>
-                    <datalist id="styleSuggestions">
-                        <!-- Suggestions will be populated by JavaScript -->
-                    </datalist>
+                    <div id="autocompleteResults" class="autocomplete-results"></div>
                 </div>
                 <button type="submit" class="btn btn-primary btn-lg w-100 search-btn">
                     Search Inventory
@@ -54,29 +94,429 @@
             </form>
             
             <script>
-                // Auto-suggest functionality
-                const styleInput = document.getElementById('styleInput');
-                const suggestionsList = document.getElementById('styleSuggestions');
-                
-                styleInput.addEventListener('input', function() {
-                    const query = this.value.trim();
+                // Improved autocomplete with debouncing and caching
+                class AutocompleteManager {
+                    constructor(inputSelector, resultsSelector, formSelector) {
+                        this.inputElement = document.querySelector(inputSelector);
+                        this.resultsElement = document.querySelector(resultsSelector);
+                        this.formElement = document.querySelector(formSelector);
+                        this.debounceTimer = null;
+                        this.debounceDelay = 300; // ms
+                        this.minChars = 2;
+                        this.cacheTTL = 24 * 60 * 60 * 1000; // 24 hours
+                        this.setupListeners();
+                    }
                     
-                    if (query.length >= 2) {
-                        // Fetch suggestions from the server
-                        fetch(`/autocomplete?q=${encodeURIComponent(query)}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                // Clear existing suggestions
-                                suggestionsList.innerHTML = '';
-                                
-                                // Add new suggestions
-                                data.forEach(style => {
-                                    const option = document.createElement('option');
-                                    option.value = style;
-                                    suggestionsList.appendChild(option);
-                                });
-                            })
-                            .catch(error => console.error('Error fetching suggestions:', error));
+                    setupListeners() {
+                        // Input event for autocomplete
+                        this.inputElement.addEventListener('input', () => {
+                            this.handleInput();
+                        });
+                        
+                        // Close results when clicking outside
+                        document.addEventListener('click', (e) => {
+                            if (!this.inputElement.contains(e.target) && !this.resultsElement.contains(e.target)) {
+                                this.hideResults();
+                            }
+                        });
+                        
+                        // Handle keyboard navigation
+                        this.inputElement.addEventListener('keydown', (e) => {
+                            if (e.key === 'ArrowDown') {
+                                e.preventDefault();
+                                this.focusNextItem();
+                            } else if (e.key === 'ArrowUp') {
+                                e.preventDefault();
+                                this.focusPreviousItem();
+                            } else if (e.key === 'Enter' && this.resultsElement.querySelector('.autocomplete-item.focused')) {
+                                e.preventDefault();
+                                this.selectFocusedItem();
+                            } else if (e.key === 'Escape') {
+                                this.hideResults();
+                            }
+                        });
+                    }
+                    
+                    handleInput() {
+                        const query = this.inputElement.value.trim();
+                        
+                        // Clear previous timer
+                        if (this.debounceTimer) {
+                            clearTimeout(this.debounceTimer);
+                        }
+                        
+                        // Clear results if query is too short
+                        if (query.length < this.minChars) {
+                            this.hideResults();
+                            return;
+                        }
+                        
+                        // Debounce the API call
+                        this.debounceTimer = setTimeout(() => {
+                            this.getSuggestions(query);
+                        }, this.debounceDelay);
+                    }
+                    
+                    async getSuggestions(query) {
+                        // First check browser cache
+                        const cachedResults = this.getFromCache(query);
+                        if (cachedResults) {
+                            this.showResults(cachedResults, query);
+                            return;
+                        }
+                        
+                        // Show loading indicator
+                        this.showLoading();
+                        
+                        try {
+                            // Set up timeout for fetch
+                            const controller = new AbortController();
+                            const timeoutId = setTimeout(() => controller.abort(), 5000);
+                            
+                            const response = await fetch(`/autocomplete?q=${encodeURIComponent(query)}`, {
+                                signal: controller.signal
+                            });
+                            clearTimeout(timeoutId);
+                            
+                            if (!response.ok) {
+                                throw new Error(`API error: ${response.status}`);
+                            }
+                            
+                            const results = await response.json();
+                            
+                            // Store in cache
+                            this.storeInCache(query, results);
+                            
+                            // Display results
+                            this.showResults(results, query);
+                            
+                        } catch (error) {
+                            console.error('Error fetching suggestions:', error);
+                            // Show error or use partial results from cache
+                            this.showError(error, query);
+                        }
+                    }
+                    
+                    getFromCache(query) {
+                        query = query.toUpperCase();
+                        const cacheKey = `autocomplete_${query}`;
+                        const cached = localStorage.getItem(cacheKey);
+                        
+                        if (cached) {
+                            try {
+                                const parsedCache = JSON.parse(cached);
+                                // Check if cache is still valid
+                                if (Date.now() - parsedCache.timestamp < this.cacheTTL) {
+                                    return parsedCache.results;
+                                }
+                            } catch (e) {
+                                // Invalid cache format, ignore
+                                console.warn('Invalid cache format:', e);
+                            }
+                        }
+                        
+                        // Check if we have partial matches in cache
+                        if (query.length >= 3) {
+                            const prefix = query.substring(0, 2);
+                            const prefixCacheKey = `autocomplete_${prefix}`;
+                            const prefixCache = localStorage.getItem(prefixCacheKey);
+                            
+                            if (prefixCache) {
+                                try {
+                                    const parsedCache = JSON.parse(prefixCache);
+                                    if (Date.now() - parsedCache.timestamp < this.cacheTTL) {
+                                        // Filter for matching items
+                                        const filteredResults = parsedCache.results.filter(
+                                            style => style.toUpperCase().includes(query)
+                                        );
+                                        if (filteredResults.length > 0) {
+                                            return filteredResults;
+                                        }
+                                    }
+                                } catch (e) {
+                                    console.warn('Invalid prefix cache format:', e);
+                                }
+                            }
+                        }
+                        
+                        return null;
+                    }
+                    
+                    storeInCache(query, results) {
+                        query = query.toUpperCase();
+                        const cacheKey = `autocomplete_${query}`;
+                        const cacheData = {
+                            results: results,
+                            timestamp: Date.now()
+                        };
+                        
+                        try {
+                            localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+                            
+                            // Also cache the prefix for future partial matches
+                            if (query.length >= 3) {
+                                const prefix = query.substring(0, 2);
+                                const prefixCacheKey = `autocomplete_${prefix}`;
+                                if (!localStorage.getItem(prefixCacheKey)) {
+                                    localStorage.setItem(prefixCacheKey, JSON.stringify(cacheData));
+                                }
+                            }
+                        } catch (e) {
+                            console.warn('Failed to cache results:', e);
+                            // Maybe cache storage is full, try to clear old items
+                            this.pruneCache();
+                        }
+                    }
+                    
+                    pruneCache() {
+                        // Remove oldest cache entries
+                        const MAX_CACHE_ENTRIES = 50;
+                        const cacheKeys = [];
+                        
+                        // Collect all autocomplete cache keys
+                        for (let i = 0; i < localStorage.length; i++) {
+                            const key = localStorage.key(i);
+                            if (key && key.startsWith('autocomplete_')) {
+                                try {
+                                    const data = JSON.parse(localStorage.getItem(key));
+                                    cacheKeys.push({
+                                        key: key,
+                                        timestamp: data.timestamp
+                                    });
+                                } catch (e) {
+                                    // Invalid cache entry, remove it
+                                    localStorage.removeItem(key);
+                                }
+                            }
+                        }
+                        
+                        // If we have too many entries, remove the oldest ones
+                        if (cacheKeys.length > MAX_CACHE_ENTRIES) {
+                            // Sort by timestamp (oldest first)
+                            cacheKeys.sort((a, b) => a.timestamp - b.timestamp);
+                            
+                            // Remove oldest entries
+                            const toRemove = cacheKeys.slice(0, cacheKeys.length - MAX_CACHE_ENTRIES);
+                            for (const entry of toRemove) {
+                                localStorage.removeItem(entry.key);
+                            }
+                        }
+                    }
+                    
+                    showResults(results, query) {
+                        // Clear loading state
+                        this.resultsElement.classList.remove('loading');
+                        
+                        // Clear existing results
+                        this.resultsElement.innerHTML = '';
+                        
+                        if (!results || results.length === 0) {
+                            this.hideResults();
+                            return;
+                        }
+                        
+                        // Sort results to prioritize exact matches and starts with matches
+                        const sortedResults = this.sortResults(results, query);
+                        
+                        // Take only top results to prevent overwhelming the user
+                        const topResults = sortedResults.slice(0, 15);
+                        
+                        // Create result items
+                        for (const result of topResults) {
+                            const item = document.createElement('div');
+                            item.classList.add('autocomplete-item');
+                            item.textContent = result;
+                            item.addEventListener('click', () => {
+                                this.selectItem(result);
+                            });
+                            this.resultsElement.appendChild(item);
+                        }
+                        
+                        this.resultsElement.style.display = 'block';
+                    }
+                    
+                    sortResults(results, query) {
+                        // Normalize query for comparison
+                        const queryUpper = query.toUpperCase();
+                        
+                        return results.sort((a, b) => {
+                            const aUpper = a.toUpperCase();
+                            const bUpper = b.toUpperCase();
+                            
+                            // Exact matches come first
+                            if (aUpper === queryUpper && bUpper !== queryUpper) return -1;
+                            if (bUpper === queryUpper && aUpper !== queryUpper) return 1;
+                            
+                            // Then, starts with matches
+                            if (aUpper.startsWith(queryUpper) && !bUpper.startsWith(queryUpper)) return -1;
+                            if (bUpper.startsWith(queryUpper) && !aUpper.startsWith(queryUpper)) return 1;
+                            
+                            // Finally, alphabetical order
+                            return aUpper.localeCompare(bUpper);
+                        });
+                    }
+                    
+                    showLoading() {
+                        this.resultsElement.innerHTML = `
+                            <div class="autocomplete-loading">
+                                <div class="spinner"></div>
+                                <span>Loading suggestions...</span>
+                            </div>
+                        `;
+                        this.resultsElement.style.display = 'block';
+                    }
+                    
+                    showError(error, query) {
+                        this.resultsElement.innerHTML = `
+                            <div class="autocomplete-loading">
+                                <span>No suggestions available</span>
+                            </div>
+                        `;
+                        
+                        // Try to find partial matches in cache
+                        setTimeout(() => {
+                            const partialMatches = this.findPartialMatches(query);
+                            if (partialMatches && partialMatches.length > 0) {
+                                this.showResults(partialMatches, query);
+                            } else {
+                                setTimeout(() => {
+                                    this.hideResults();
+                                }, 2000);
+                            }
+                        }, 1000);
+                    }
+                    
+                    findPartialMatches(query) {
+                        query = query.toUpperCase();
+                        let matches = [];
+                        
+                        // Look for any cached items that might match
+                        for (let i = 0; i < localStorage.length; i++) {
+                            const key = localStorage.key(i);
+                            if (key && key.startsWith('autocomplete_')) {
+                                try {
+                                    const cacheKey = key.replace('autocomplete_', '');
+                                    if (cacheKey.includes(query) || query.includes(cacheKey)) {
+                                        const data = JSON.parse(localStorage.getItem(key));
+                                        // Filter results to match current query
+                                        const filteredMatches = data.results.filter(r => 
+                                            r.toUpperCase().includes(query));
+                                        matches = [...matches, ...filteredMatches];
+                                    }
+                                } catch (e) {
+                                    // Ignore invalid cache entries
+                                }
+                            }
+                        }
+                        
+                        // Deduplicate
+                        return [...new Set(matches)];
+                    }
+                    
+                    hideResults() {
+                        this.resultsElement.style.display = 'none';
+                        // Remove focused class from all items
+                        const focusedItems = this.resultsElement.querySelectorAll('.autocomplete-item.focused');
+                        focusedItems.forEach(item => item.classList.remove('focused'));
+                    }
+                    
+                    selectItem(value) {
+                        this.inputElement.value = value;
+                        this.hideResults();
+                        // Submit the form
+                        this.formElement.submit();
+                    }
+                    
+                    focusNextItem() {
+                        const items = this.resultsElement.querySelectorAll('.autocomplete-item');
+                        if (!items.length) return;
+                        
+                        const focused = this.resultsElement.querySelector('.autocomplete-item.focused');
+                        
+                        if (!focused) {
+                            // No item is focused yet, focus the first one
+                            items[0].classList.add('focused');
+                            this.scrollToItem(items[0]);
+                        } else {
+                            // Find the next item to focus
+                            for (let i = 0; i < items.length - 1; i++) {
+                                if (items[i] === focused) {
+                                    focused.classList.remove('focused');
+                                    items[i + 1].classList.add('focused');
+                                    this.scrollToItem(items[i + 1]);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    
+                    focusPreviousItem() {
+                        const items = this.resultsElement.querySelectorAll('.autocomplete-item');
+                        if (!items.length) return;
+                        
+                        const focused = this.resultsElement.querySelector('.autocomplete-item.focused');
+                        
+                        if (!focused) {
+                            // No item is focused yet, focus the last one
+                            items[items.length - 1].classList.add('focused');
+                            this.scrollToItem(items[items.length - 1]);
+                        } else {
+                            // Find the previous item to focus
+                            for (let i = 1; i < items.length; i++) {
+                                if (items[i] === focused) {
+                                    focused.classList.remove('focused');
+                                    items[i - 1].classList.add('focused');
+                                    this.scrollToItem(items[i - 1]);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    
+                    selectFocusedItem() {
+                        const focused = this.resultsElement.querySelector('.autocomplete-item.focused');
+                        if (focused) {
+                            this.selectItem(focused.textContent);
+                        }
+                    }
+                    
+                    scrollToItem(item) {
+                        if (!item) return;
+                        
+                        const container = this.resultsElement;
+                        const containerTop = container.scrollTop;
+                        const containerBottom = containerTop + container.clientHeight;
+                        
+                        const itemTop = item.offsetTop;
+                        const itemBottom = itemTop + item.clientHeight;
+                        
+                        if (itemTop < containerTop) {
+                            container.scrollTop = itemTop;
+                        } else if (itemBottom > containerBottom) {
+                            container.scrollTop = itemBottom - container.clientHeight;
+                        }
+                    }
+                }
+
+                // Initialize when DOM is ready
+                document.addEventListener('DOMContentLoaded', () => {
+                    const autocomplete = new AutocompleteManager('#styleInput', '#autocompleteResults', '#searchForm');
+                    
+                    // Preload common searches
+                    const commonPrefixes = ['PC', 'K5', 'J7', 'L1', 'ST', 'EB', 'DM', 'TW'];
+                    for (const prefix of commonPrefixes) {
+                        // Silently preload in the background
+                        setTimeout(() => {
+                            fetch(`/autocomplete?q=${prefix}`).then(res => res.json())
+                                .then(data => {
+                                    // Store in cache
+                                    localStorage.setItem(`autocomplete_${prefix}`, JSON.stringify({
+                                        results: data,
+                                        timestamp: Date.now()
+                                    }));
+                                })
+                                .catch(() => {}); // Ignore errors during preloading
+                        }, Math.random() * 2000); // Stagger requests to avoid overloading
                     }
                 });
             </script>

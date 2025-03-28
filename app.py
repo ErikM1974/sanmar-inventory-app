@@ -62,6 +62,25 @@ else:
     promostandards_pricing = None
     sanmar_pricing_service = None
 
+# Initialize cache preloading function
+def initialize_app():
+    """
+    Initialize application state, preload caches, etc.
+    """
+    logger.info("Initializing application and preloading common searches...")
+    # Start preloading common search prefixes in a background thread
+    import threading
+    from middleware_client import preload_common_searches
+    
+    thread = threading.Thread(target=preload_common_searches)
+    thread.daemon = True
+    thread.start()
+    logger.info("Preload thread started")
+
+# Run preloading on startup - modern alternative to before_first_request
+# This is executed when this module is imported (at app startup)
+initialize_app()
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -69,18 +88,86 @@ def index():
 @app.route('/autocomplete')
 def autocomplete():
     query = request.args.get('q', '')
-    if not query:
+    if not query or len(query) < 2:
         return jsonify([])
     
-    # Try to get autocomplete data from middleware
-    results = fetch_autocomplete(query)
+    # Set a timeout for the request to improve responsiveness
+    import time
+    start_time = time.time()
+    timeout = 3.0  # 3 seconds timeout
     
-    # If middleware fails, use mock data
-    if not results:
-        # Filter common styles that match the query
-        results = [style for style in COMMON_STYLES if query.lower() in style.lower()]
+    # Try to get autocomplete data from middleware with improved error handling
+    try:
+        results = fetch_autocomplete(query)
         
-    return jsonify(results)
+        # If middleware fails or is too slow, use mock data
+        if not results or time.time() - start_time > timeout:
+            # Filter common styles that match the query
+            results = [style for style in COMMON_STYLES if query.lower() in style.lower()]
+            logger.info(f"Using mock data for autocomplete query: {query} (middleware failed or timed out)")
+    except Exception as e:
+        logger.error(f"Error in autocomplete: {str(e)}")
+        # Fallback to simple filtering
+        results = [style for style in COMMON_STYLES if query.lower() in style.lower()]
+        logger.info(f"Using mock data for autocomplete query: {query} (exception occurred)")
+    
+    # Sort results to prioritize exact matches and starts-with matches
+    sorted_results = sort_autocomplete_results(query, results)
+    
+    # Limit to 15 results for better performance
+    return jsonify(sorted_results[:15])
+
+def sort_autocomplete_results(query, results):
+    """Sort autocomplete results by relevance"""
+    query_upper = query.upper()
+    
+    # Split into categories for sorting
+    exact_matches = []
+    starts_with_matches = []
+    contains_matches = []
+    
+    for result in results:
+        result_upper = result.upper()
+        if result_upper == query_upper:
+            exact_matches.append(result)
+        elif result_upper.startswith(query_upper):
+            starts_with_matches.append(result)
+        else:
+            contains_matches.append(result)
+    
+    # Sort each category alphabetically
+    exact_matches.sort()
+    starts_with_matches.sort()
+    contains_matches.sort()
+    
+    # Combine the categories in priority order
+    return exact_matches + starts_with_matches + contains_matches
+
+def sort_autocomplete_results(query, results):
+    """Sort autocomplete results by relevance"""
+    query_upper = query.upper()
+    
+    # Split into categories for sorting
+    exact_matches = []
+    starts_with_matches = []
+    contains_matches = []
+    
+    for result in results:
+        result_upper = result.upper()
+        if result_upper == query_upper:
+            exact_matches.append(result)
+        elif result_upper.startswith(query_upper):
+            starts_with_matches.append(result)
+        else:
+            contains_matches.append(result)
+    
+    # Sort each category alphabetically
+    exact_matches.sort()
+    starts_with_matches.sort()
+    contains_matches.sort()
+    
+    # Combine the categories in priority order
+    return exact_matches + starts_with_matches + contains_matches
 
 @app.route('/product')
 def product_redirect():
