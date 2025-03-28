@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - SanMar Inventory</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='home-page.css') }}">
+</head>
+<body>
+    <!-- Main Navigation -->
+    <header class="main-header">
+        <div class="header-container">
+            <!-- Top Navigation Bar -->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="/">SanMar Inventory</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarMain">
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-bs-toggle="dropdown">
+                                    Products
+                                </a>
+                                <div class="dropdown-menu mega-menu p-3" aria-labelledby="productsDropdown">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <h6 class="dropdown-header">Clothing</h6>
+                                            <a class="dropdown-item" href="/search?category=T-SHIRTS">T-Shirts</a>
+                                            <a class="dropdown-item" href="/search?category=POLOS">Polos/Knits</a>
+                                            <a class="dropdown-item" href="/search?category=SWEATSHIRTS">Sweatshirts/Fleece</a>
+                                            <a class="dropdown-item" href="/search?category=OUTERWEAR">Outerwear</a>
+                                            <a class="dropdown-item" href="/search?category=WOVEN">Woven Shirts</a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <h6 class="dropdown-header">Accessories</h6>
+                                            <a class="dropdown-item" href="/search?category=CAPS">Caps</a>
+                                            <a class="dropdown-item" href="/search?category=BAGS">Bags</a>
+                                            <a class="dropdown-item" href="/search?category=ACCESSORIES">Accessories</a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <h6 class="dropdown-header">Special Collections</h6>
+                                            <a class="dropdown-item" href="/search?category=NEW">New Arrivals</a>
+                                            <a class="dropdown-item" href="/search?category=ACTIVEWEAR">Activewear</a>
+                                            <a class="dropdown-item" href="/search?category=LADIES">Ladies</a>
+                                            <a class="dropdown-item" href="/search?category=YOUTH">Youth</a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <h6 class="dropdown-header">Brands</h6>
+                                            <a class="dropdown-item" href="/search?brand=PORT_AUTHORITY">Port Authority</a>
+                                            <a class="dropdown-item" href="/search?brand=PORT_COMPANY">Port & Company</a>
+                                            <a class="dropdown-item" href="/search?brand=SPORT_TEK">Sport-Tek</a>
+                                            <a class="dropdown-item" href="/search?brand=DISTRICT">District</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/colors">Color Guide</a>
+                            </li>
+                        </ul>
+                        <form class="d-flex ms-auto" action="/search" method="GET">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="query" placeholder="Search styles..." aria-label="Search styles" value="{{ query or '' }}">
+                                <button class="btn btn-light" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container py-4">
+        <!-- Search Filters -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Filter Results</h5>
+                        <form action="/search" method="GET" class="row g-3">
+                            {% if query %}
+                            <input type="hidden" name="query" value="{{ query }}">
+                            {% endif %}
+                            <div class="col-md-3">
+                                <label for="category" class="form-label">Category</label>
+                                <select name="category" id="category" class="form-select">
+                                    <option value="">All Categories</option>
+                                    <option value="T-SHIRTS" {% if category == 'T-SHIRTS' %}selected{% endif %}>T-Shirts</option>
+                                    <option value="POLOS" {% if category == 'POLOS' %}selected{% endif %}>Polos</option>
+                                    <option value="OUTERWEAR" {% if category == 'OUTERWEAR' %}selected{% endif %}>Outerwear</option>
+                                    <option value="FLEECE" {% if category == 'FLEECE' %}selected{% endif %}>Fleece</option>
+                                    <option value="WOVEN" {% if category == 'WOVEN' %}selected{% endif %}>Woven Shirts</option>
+                                    <option value="ACTIVEWEAR" {% if category == 'ACTIVEWEAR' %}selected{% endif %}>Activewear</option>
+                                    <option value="CAPS" {% if category == 'CAPS' %}selected{% endif %}>Caps</option>
+                                    <option value="BAGS" {% if category == 'BAGS' %}selected{% endif %}>Bags</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="brand" class="form-label">Brand</label>
+                                <select name="brand" id="brand" class="form-select">
+                                    <option value="">All Brands</option>
+                                    <option value="PORT_AUTHORITY" {% if brand == 'PORT_AUTHORITY' %}selected{% endif %}>Port Authority</option>
+                                    <option value="PORT_COMPANY" {% if brand == 'PORT_COMPANY' %}selected{% endif %}>Port & Company</option>
+                                    <option value="SPORT_TEK" {% if brand == 'SPORT_TEK' %}selected{% endif %}>Sport-Tek</option>
+                                    <option value="DISTRICT" {% if brand == 'DISTRICT' %}selected{% endif %}>District</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="sort" class="form-label">Sort By</label>
+                                <select name="sort" id="sort" class="form-select">
+                                    <option value="bestselling" {% if sort == 'bestselling' %}selected{% endif %}>Best Selling</option>
+                                    <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                                    <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+                                    <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Newest</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Results -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <h2 class="section-title border-bottom pb-2 mb-4">
+                    Search Results
+                    {% if query %} for "{{ query }}"{% endif %}
+                    {% if category %} in {{ category }}{% endif %}
+                    {% if brand %} by {{ brand|replace('_', ' ') }}{% endif %}
+                </h2>
+                <p>Found {{ products|length }} products</p>
+            </div>
+            
+            {% if products %}
+                {% for product in products %}
+                <div class="col-md-3 mb-4">
+                    <div class="card product-card h-100">
+                        <a href="/product/{{ product.style }}">
+                            <img src="{{ product.image }}" 
+                                 class="card-img-top" 
+                                 alt="{{ product.name }}"
+                                 onerror="this.src='https://www.sanmar.com/products/catalog/2022/f1/port_authority/fullsize/{{ product.style }}_Black_Flat_Front_2022.jpg'; this.onerror=function(){this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22200%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20200%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_1848e3518b1%20text%20%7B%20fill%3Argba(128%2C128%2C128%2C1)%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A10pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1848e3518b1%22%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20fill%3D%22%23EEEEEE%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2274%22%20y%3D%22104%22%3E{{ product.style }}%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E'}">
+                        </a>
+                        <div class="card-body">
+                            <p class="brand text-muted small mb-1">{{ product.brand }}</p>
+                            <h5 class="card-title">
+                                <a href="/product/{{ product.style }}" class="text-decoration-none text-dark">{{ product.name }}</a>
+                            </h5>
+                            <p class="text-muted small">Style: {{ product.style }}</p>
+                            {% if product.colors %}
+                            <div class="color-swatches mb-2">
+                                {% for color in product.colors[:4] %}
+                                <span class="color-dot color-{{ color|lower|replace(' ', '-')|replace('/', '-') }}" 
+                                     title="{{ color }}"></span>
+                                {% endfor %}
+                                {% if product.colors|length > 4 %}
+                                <span class="color-count">+{{ product.colors|length - 4 }}</span>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <span class="price fw-bold">{{ product.price }}</span>
+                                <a href="/product/{{ product.style }}" class="btn btn-sm btn-outline-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        <h4 class="alert-heading">No products found</h4>
+                        <p>We couldn't find any products matching your search criteria. Please try adjusting your filters or search for a different term.</p>
+                        <hr>
+                        <p class="mb-0">
+                            <a href="/new" class="btn btn-primary">Back to Home</a>
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Pagination -->
+        {% if products and products|length > 24 %}
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="Search results pages">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                            <a class="page-link" href="{{ pagination_url }}&page={{ page - 1 }}" tabindex="-1" {% if page == 1 %}aria-disabled="true"{% endif %}>Previous</a>
+                        </li>
+                        {% for p in range(1, total_pages + 1) %}
+                        <li class="page-item {% if p == page %}active{% endif %}">
+                            <a class="page-link" href="{{ pagination_url }}&page={{ p }}">{{ p }}</a>
+                        </li>
+                        {% endfor %}
+                        <li class="page-item {% if page == total_pages %}disabled{% endif %}">
+                            <a class="page-link" href="{{ pagination_url }}&page={{ page + 1 }}" {% if page == total_pages %}aria-disabled="true"{% endif %}>Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        {% endif %}
+    </main>
+
+    <footer class="bg-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">© 2025 SanMar Inventory App</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0"><a href="#" class="text-decoration-none">Terms of Service</a> | <a href="#" class="text-decoration-none">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='home-page.js') }}"></script>
+</body>
+</html>

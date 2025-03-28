@@ -1791,10 +1791,20 @@ def search():
 @app.route('/api/products/<category_name>')
 def get_products_api(category_name):
     """API endpoint to fetch products by category."""
+    # URL decode the category name
+    import urllib.parse
+    category_name = urllib.parse.unquote(category_name)
+    
     logger.info(f"API request for products in category: '{category_name}'")
     
     # Log the exact category name and check for special characters
     logger.info(f"Category name: '{category_name}', Length: {len(category_name)}, ASCII: {[ord(c) for c in category_name]}")
+    
+    # Log the request headers
+    logger.info(f"Request headers: {request.headers}")
+    
+    # Log the request URL
+    logger.info(f"Request URL: {request.url}")
     
     products, raw_response = sanmar_product.get_products_by_category(category_name)
     
@@ -1804,10 +1814,16 @@ def get_products_api(category_name):
     else:
         logger.warning(f"No products found for category '{category_name}'")
     
-    return jsonify({
+    # Create the response
+    response_data = {
         'products': products,
         'raw_response': raw_response # Include raw response for debugging
-    })
+    }
+    
+    # Log the response data
+    logger.info(f"Response data: {response_data}")
+    
+    return jsonify(response_data)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
