@@ -14,6 +14,8 @@ from promostandards_pricing import PromoStandardsPricing
 from sanmar_pricing_service import SanmarPricingService
 from sanmar_pricing_api import get_pricing_for_color_swatch
 import sanmar_product
+import sanmar_media_service
+import sanmar_category_service
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -84,8 +86,68 @@ initialize_app()
 
 @app.route('/')
 def index():
-    categories = sanmar_product.get_categories()
-    return render_template('index.html', categories=categories)
+    # Get categories from the SanMar API
+    categories = sanmar_category_service.get_categories()
+    
+    # Debug print to confirm this route is being called
+    print("Index route called, rendering new_index.html")
+    
+    # For each category, get a representative product image
+    for category in categories:
+        product_id = sanmar_media_service.get_representative_product_for_category(category['id'])
+        category['representative_product'] = product_id
+        category['image'] = sanmar_media_service.get_best_image_for_product(product_id)
+    
+    # Create featured products for the home page with dynamic images
+    featured_product_styles = ['PC61', 'K500', 'PC90H', 'J790', 'ST850', 'C112', 'DT6000', 'L500']
+    featured_products = []
+    
+    # Product name and brand mapping
+    product_names = {
+        'PC61': 'Port & Company Essential T-Shirt',
+        'K500': 'Port Authority Silk Touch Polo',
+        'PC90H': 'Port & Company Essential Fleece Pullover Hooded Sweatshirt',
+        'J790': 'Port Authority Glacier Soft Shell Jacket',
+        'ST850': 'Sport-Tek PosiCharge Competitor Tee',
+        'C112': 'Port & Company Beanie Cap',
+        'DT6000': 'District Very Important Tee',
+        'L500': 'Port Authority Ladies Silk Touch Polo'
+    }
+    
+    product_prices = {
+        'PC61': '$3.41',
+        'K500': '$15.99',
+        'PC90H': '$15.06',
+        'J790': '$30.59',
+        'ST850': '$7.99',
+        'C112': '$3.29',
+        'DT6000': '$4.99',
+        'L500': '$15.99'
+    }
+    
+    for style in featured_product_styles:
+        # Get the best image for this product
+        image_url = sanmar_media_service.get_best_image_for_product(style, preferred_type="primary")
+        
+        # Create the product object with dynamic image
+        product = {
+            'style': style,
+            'name': product_names.get(style, f'{style} Product'),
+            'image': image_url,
+            'brand': sanmar_category_service.get_product_brand(style),
+            'price': product_prices.get(style, '$9.99')
+        }
+        featured_products.append(product)
+    
+    # Pass both categories and featured products to the template
+    return render_template('new_index.html',
+                          categories=categories,
+                          featured_products=featured_products,
+                          search_results=None)
+
+@app.route('/test')
+def test():
+    return "Test route is working!"
 
 @app.route('/autocomplete')
 def autocomplete():

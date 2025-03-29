@@ -6,7 +6,7 @@
     <title>SanMar Inventory Lookup</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> <!-- Re-enabled -->
     <link rel="stylesheet" href="{{ url_for('static', filename='home-page.css') }}">
 </head>
 <body>
@@ -100,21 +100,71 @@
                                         </div>
                                     </form>
                                     
-                                    <!-- Quick Links -->
-                                    <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
-                                        <a href="/product/K500" class="badge bg-primary text-white text-decoration-none p-2 fs-6">K500 Polo</a>
-                                        <a href="/product/PC61" class="badge bg-primary text-white text-decoration-none p-2 fs-6">PC61 Tee</a>
-                                        <a href="/product/ST850" class="badge bg-primary text-white text-decoration-none p-2 fs-6">ST850</a>
-                                        <a href="/product/PC90H" class="badge bg-primary text-white text-decoration-none p-2 fs-6">PC90H Hoodie</a>
-                                        <a href="/product/J790" class="badge bg-primary text-white text-decoration-none p-2 fs-6">J790 Jacket</a>
+                                    <!-- Product Categories -->
+                                    <div class="product-categories mt-3">
+                                        <div class="row row-cols-2 row-cols-md-3 g-2">
+                                            <div class="col">
+                                                <a href="/search?category=NEW" class="btn btn-outline-primary w-100 text-start">NEW</a>
+                                            </div>
+                                            <div class="col">
+                                                <a href="/search?category=BRANDS" class="btn btn-outline-primary w-100 text-start">Brands</a>
+                                            </div>
+                                            <div class="col">
+                                                <a href="/search?category=T-SHIRTS" class="btn btn-outline-primary w-100 text-start">T-Shirts</a>
+                                            </div>
+                                            <div class="col">
+                                                <a href="/search?category=POLOS" class="btn btn-outline-primary w-100 text-start">Polos/Knits</a>
+                                            </div>
+                                            <div class="col">
+                                                <a href="/search?category=SWEATSHIRTS" class="btn btn-outline-primary w-100 text-start">Sweatshirts/Fleece</a>
+                                            </div>
+                                            <div class="col">
+                                                <a href="/search?category=CAPS" class="btn btn-outline-primary w-100 text-start">Caps</a>
+                                            </div>
+                                            <div class="col">
+                                                <a href="/search?category=ACTIVEWEAR" class="btn btn-outline-primary w-100 text-start">Activewear</a>
+                                            </div>
+                                            <div class="col">
+                                                <a href="/search?category=OUTERWEAR" class="btn btn-outline-primary w-100 text-start">Outerwear</a>
+                                            </div>
+                                            <div class="col">
+                                                <a href="/search?category=WOVEN" class="btn btn-outline-primary w-100 text-start">Woven/Dress Shirts</a>
+                                            </div>
+                                            <div class="col">
+                                                <a href="/search?category=BOTTOMS" class="btn btn-outline-primary w-100 text-start">Bottoms</a>
+                                            </div>
+                                            <div class="col">
+                                                <a href="/search?category=WORKWEAR" class="btn btn-outline-primary w-100 text-start">Workwear</a>
+                                            </div>
+                                            <div class="col">
+                                                <a href="/search?category=BAGS" class="btn btn-outline-primary w-100 text-start">Bags</a>
+                                            </div>
+                                            <div class="col">
+                                                <a href="/search?category=ACCESSORIES" class="btn btn-outline-primary w-100 text-start">Accessories</a>
+                                            </div>
+                                            <div class="col">
+                                                <a href="/search?category=PROTECTION" class="btn btn-outline-primary w-100 text-start">Personal Protection</a>
+                                            </div>
+                                            <div class="col">
+                                                <a href="/search?category=LADIES" class="btn btn-outline-primary w-100 text-start">Women's</a>
+                                            </div>
+                                            <div class="col">
+                                                <a href="/search?category=YOUTH" class="btn btn-outline-primary w-100 text-start">Youth</a>
+                                            </div>
+                                            <div class="col">
+                                                <a href="/search?category=OUTLET" class="btn btn-outline-primary w-100 text-start">Outlet</a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-6 text-center">
-                                <img src="https://www.sanmar.com/products/catalog/2022/f1/port_authority/fullsize/K500_Black_Model_Front_2022.jpg"
-                                     class="img-fluid rounded hero-image shadow"
-                                     alt="SanMar Apparel"
-                                     style="max-height: 450px; object-fit: cover;">
+                                <div class="bg-primary rounded shadow d-flex align-items-center justify-content-center"
+                                     style="height: 450px;">
+                                    <span class="text-white display-1">
+                                        <i class="fas fa-tshirt"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
         </div>
@@ -130,101 +180,45 @@
             
             <div class="row g-4">
                 <!-- Using a 3-column layout for medium screens and up for better visibility -->
+                {% for category in categories %}
                 <div class="col-6 col-md-4">
-                    <a href="/search?category=T-SHIRTS" class="text-decoration-none">
+                    <a href="/search?category={{ category.id }}" class="text-decoration-none">
                         <div class="card category-card h-100 shadow-sm border-0 overflow-hidden">
                             <div class="position-relative">
-                                <img src="https://www.sanmar.com/products/catalog/2022/f2/port__company/fullsize/PC61_Athletic_Heather_Model_Front_2022.jpg"
-                                     class="card-img-top"
-                                     alt="T-Shirts"
-                                     style="height: 240px; object-fit: cover;">
+                                <div class="bg-white d-flex align-items-center justify-content-center"
+                                     style="height: 240px;">
+                                    {% if category.image %}
+                                    <img src="{{ category.image }}"
+                                         alt="{{ category.name }}"
+                                         class="img-fluid"
+                                         style="max-height: 100%; max-width: 100%; object-fit: contain;"
+                                         onerror="this.src='https://cdnm.sanmar.com/catalog/images/{{ category.representative_product }}.jpg'; this.onerror=function(){this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22240%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20240%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_text%20%7B%20fill%3A%23777%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%3Bfont-size%3A12pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder%22%3E%3Crect%20width%3D%22200%22%20height%3D%22240%22%20fill%3D%22%23f8f9fa%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20id%3D%22holder_text%22%20x%3D%2262%22%20y%3D%22128%22%3E{{ category.name }}%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E'}">
+                                    {% else %}
+                                    <span class="text-primary fs-1">
+                                        <i class="fas fa-{{ category.icon }}"></i>
+                                    </span>
+                                    {% endif %}
+                                </div>
                                 <div class="position-absolute bottom-0 start-0 w-100 bg-dark bg-opacity-50 text-white p-2">
-                                    <h5 class="card-title m-0">T-Shirts</h5>
+                                    <h5 class="card-title m-0">{{ category.name }}</h5>
                                 </div>
                             </div>
                         </div>
                     </a>
                 </div>
-                
-                <div class="col-6 col-md-4">
-                    <a href="/search?category=POLOS" class="text-decoration-none">
-                        <div class="card category-card h-100 shadow-sm border-0 overflow-hidden">
-                            <div class="position-relative">
-                                <img src="https://www.sanmar.com/products/catalog/2022/f1/port_authority/fullsize/K500_Black_Model_Front_2022.jpg"
-                                     class="card-img-top"
-                                     alt="Polos"
-                                     style="height: 240px; object-fit: cover;">
-                                <div class="position-absolute bottom-0 start-0 w-100 bg-dark bg-opacity-50 text-white p-2">
-                                    <h5 class="card-title m-0">Polos</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                
-                <div class="col-6 col-md-4">
-                    <a href="/search?category=OUTERWEAR" class="text-decoration-none">
-                        <div class="card category-card h-100 shadow-sm border-0 overflow-hidden">
-                            <div class="position-relative">
-                                <img src="https://www.sanmar.com/products/catalog/2022/f1/port_authority/fullsize/J790_Black_Chrome_Model_Front_2022.jpg"
-                                     class="card-img-top"
-                                     alt="Outerwear"
-                                     style="height: 240px; object-fit: cover;">
-                                <div class="position-absolute bottom-0 start-0 w-100 bg-dark bg-opacity-50 text-white p-2">
-                                    <h5 class="card-title m-0">Jackets</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                
-                <div class="col-6 col-md-4">
-                    <a href="/search?category=FLEECE" class="text-decoration-none">
-                        <div class="card category-card h-100 shadow-sm border-0 overflow-hidden">
-                            <div class="position-relative">
-                                <img src="https://www.sanmar.com/products/catalog/2022/f1/port__company/fullsize/PC90H_Black_Model_Front_2022.jpg"
-                                     class="card-img-top"
-                                     alt="Fleece"
-                                     style="height: 240px; object-fit: cover;">
-                                <div class="position-absolute bottom-0 start-0 w-100 bg-dark bg-opacity-50 text-white p-2">
-                                    <h5 class="card-title m-0">Hoodies</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                
-                <div class="col-6 col-md-4">
-                    <a href="/search?category=WOVEN" class="text-decoration-none">
-                        <div class="card category-card h-100 shadow-sm border-0 overflow-hidden">
-                            <div class="position-relative">
-                                <img src="https://www.sanmar.com/products/catalog/2022/f1/port_authority/fullsize/S608_White_Model_Front_2022.jpg"
-                                     class="card-img-top"
-                                     alt="Woven Shirts"
-                                     style="height: 240px; object-fit: cover;">
-                                <div class="position-absolute bottom-0 start-0 w-100 bg-dark bg-opacity-50 text-white p-2">
-                                    <h5 class="card-title m-0">Woven Shirts</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                
-                <div class="col-6 col-md-4">
-                    <a href="/search?category=CAPS" class="text-decoration-none">
-                        <div class="card category-card h-100 shadow-sm border-0 overflow-hidden">
-                            <div class="position-relative">
-                                <img src="https://www.sanmar.com/products/catalog/2020/f1/port__company/fullsize/CP90_Navy_Flat_Front_012019.jpg"
-                                     class="card-img-top"
-                                     alt="Caps"
-                                     style="height: 240px; object-fit: cover;">
-                                <div class="position-absolute bottom-0 start-0 w-100 bg-dark bg-opacity-50 text-white p-2">
-                                    <h5 class="card-title m-0">Caps & Hats</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Showroom Banner -->
+        <div class="mb-5">
+            <div class="card border-0 shadow-sm overflow-hidden">
+                <a href="https://www.nwcustomapparel.com/showroom" target="_blank" class="text-decoration-none">
+                    <img src="{{ url_for('static', filename='images/showroom.png') }}"
+                         class="img-fluid w-100"
+                         alt="Visit NW Custom Apparel Showroom"
+                         style="max-height: 300px; object-fit: cover;">
+                </a>
             </div>
         </div>
         
@@ -244,11 +238,11 @@
                         <a href="/product/{{ product.style }}" class="text-decoration-none">
                             <div class="position-relative">
                                 <div class="product-image-container">
-                                    <img src="{{ product.image }}"
-                                         class="card-img-top"
-                                         alt="{{ product.name }}"
-                                         style="height: 240px; object-fit: cover; width: 100%;"
-                                         onerror="this.src='https://www.sanmar.com/products/catalog/2022/f1/port_authority/fullsize/{{ product.style }}_Black_Model_Front_2022.jpg'; this.onerror=function(){this.src='https://www.sanmar.com/assets/img/catalog/full/{{ product.style }}.jpg'; this.onerror=function(){this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22240%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20240%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_text%20%7B%20fill%3A%23777%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%3Bfont-size%3A12pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder%22%3E%3Crect%20width%3D%22200%22%20height%3D%22240%22%20fill%3D%22%23f8f9fa%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20id%3D%22holder_text%22%20x%3D%2262%22%20y%3D%22128%22%3E{{ product.style }}%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E'}}';">
+                                        <img src="{{ product.image }}"
+                                             class="card-img-top"
+                                             alt="{{ product.name }}"
+                                             style="height: 240px; object-fit: cover; width: 100%;"
+                                             onerror="this.onerror=null; this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22240%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20240%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_text%20%7B%20fill%3A%23777%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%3Bfont-size%3A12pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder%22%3E%3Crect%20width%3D%22200%22%20height%3D%22240%22%20fill%3D%22%23f8f9fa%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20id%3D%22holder_text%22%20x%3D%2262%22%20y%3D%22128%22%3E{{ product.style }}%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E';">
                                     <!-- Style badge overlay -->
                                     <span class="product-style-badge">
                                         {{ product.style }}
@@ -279,7 +273,8 @@
                                 <img src="{{ product.image }}"
                                      class="card-img-top"
                                      alt="{{ product.name }}"
-                                     style="height: 240px; object-fit: cover;">
+                                     style="height: 240px; object-fit: cover; width: 100%;"
+                                     onerror="this.onerror=null; this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22240%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20240%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_text%20%7B%20fill%3A%23777%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%3Bfont-size%3A12pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder%22%3E%3Crect%20width%3D%22200%22%20height%3D%22240%22%20fill%3D%22%23f8f9fa%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20id%3D%22holder_text%22%20x%3D%2262%22%20y%3D%22128%22%3E{{ product.style }}%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E';">
                                 <!-- Style badge overlay -->
                                 <span class="position-absolute top-0 end-0 bg-primary text-white px-2 py-1 m-2 rounded-1 fw-bold">
                                     {{ product.style }}
@@ -323,7 +318,8 @@
                                 <img src="{{ product.image }}"
                                      class="card-img-top"
                                      alt="{{ product.name }}"
-                                     style="height: 240px; object-fit: cover;">
+                                     style="height: 240px; object-fit: cover; width: 100%;"
+                                     onerror="this.onerror=null; this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22240%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20240%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_text%20%7B%20fill%3A%23777%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%3Bfont-size%3A12pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder%22%3E%3Crect%20width%3D%22200%22%20height%3D%22240%22%20fill%3D%22%23f8f9fa%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20id%3D%22holder_text%22%20x%3D%2262%22%20y%3D%22128%22%3E{{ product.style }}%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E';">
                                 <!-- Style badge overlay -->
                                 <span class="position-absolute top-0 end-0 bg-primary text-white px-2 py-1 m-2 rounded-1 fw-bold">
                                     {{ product.style }}

@@ -106,20 +106,44 @@ def get_products_by_category(category_name):
         # Log the exact category name and check for special characters
         logger.info(f"Category name: '{category_name}', Length: {len(category_name)}, ASCII: {[ord(c) for c in category_name]}")
         
+        # Map common category names to SanMar API category names
+        category_mapping = {
+            "T-SHIRTS": "T-Shirts",
+            "POLOS": "Polos/Knits",
+            "SWEATSHIRTS": "Sweatshirts/Fleece",
+            "FLEECE": "Sweatshirts/Fleece",
+            "OUTERWEAR": "Outerwear",
+            "WOVEN": "Woven Shirts",
+            "CAPS": "Caps",
+            "BAGS": "Bags",
+            "ACCESSORIES": "Accessories",
+            "WORKWEAR": "Workwear",
+            "LADIES": "Women's",
+            "WOMEN'S": "Women's",
+            "YOUTH": "Youth",
+            "BOTTOMS": "Bottoms",
+            "PROTECTION": "Workwear"  # Map Personal Protection to Workwear as a fallback
+        }
+        
+        # Check if the category is in our mapping
+        if category_name.upper() in category_mapping:
+            mapped_category = category_mapping[category_name.upper()]
+            logger.info(f"Mapped category '{category_name}' to '{mapped_category}'")
+            category_name = mapped_category
         # Check if the category is in the predefined list
-        if category_name not in SANMAR_CATEGORIES:
+        elif category_name not in SANMAR_CATEGORIES:
             logger.warning(f"Category '{category_name}' is not in the predefined list: {SANMAR_CATEGORIES}")
             # Try to find a close match
             close_matches = [c for c in SANMAR_CATEGORIES if c.lower() == category_name.lower()]
             if close_matches:
                 logger.info(f"Found close match for '{category_name}': '{close_matches[0]}'")
                 category_name = close_matches[0]
-        
-        # Normalize category name - replace special characters and ensure uppercase
-        normalized_category = category_name.replace("'", "").replace(""", "").replace(""", "").upper()
-        if normalized_category != category_name:
-            logger.info(f"Normalized category name from '{category_name}' to '{normalized_category}'")
-            category_name = normalized_category
+            else:
+                # If no exact match, try to find a partial match
+                partial_matches = [c for c in SANMAR_CATEGORIES if category_name.lower() in c.lower() or c.lower() in category_name.lower()]
+                if partial_matches:
+                    logger.info(f"Found partial match for '{category_name}': '{partial_matches[0]}'")
+                    category_name = partial_matches[0]
         
         request_data = {
             'arg0': {'category': category_name},
