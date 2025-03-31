@@ -13,7 +13,7 @@
         <h1>SanMar Inventory</h1>
     </header>
 
-    <!-- New header with search bar - SanMar style -->
+    <!-- Simplified header with breadcrumb only - search box removed -->
     <div class="container mb-4">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -21,24 +21,6 @@
                 <li class="breadcrumb-item active" aria-current="page">{{ style }}</li>
             </ol>
         </nav>
-        
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <form class="d-flex" action="/product" method="GET" id="productSearchForm">
-                    <div class="position-relative flex-grow-1 me-2">
-                        <input type="text"
-                               class="form-control"
-                               id="productStyleInput"
-                               name="style"
-                               placeholder="Search by style number..."
-                               autocomplete="off">
-                        <div class="search-loading"></div>
-                        <div class="autocomplete-results" id="productAutocompleteResults"></div>
-                    </div>
-                    <button class="btn btn-primary" type="submit">Search</button>
-                </form>
-            </div>
-        </div>
     </div>
     
     <div class="container bg-white p-4 rounded shadow-sm">
@@ -46,7 +28,6 @@
         <div class="product-header mb-4 pb-3 border-bottom">
             <h2 class="mb-2">{{ product_name }}</h2>
             <p class="text-muted">Style: {{ style }}</p>
-            <!-- No action buttons here -->
         </div>
         
         <!-- Product Content -->
@@ -769,9 +750,6 @@
                         console.error('Error in swatch click handler:', err);
                     }
                 });
-                
-                // No need for hover event handlers for the tooltip
-                // The CSS handles displaying the color name on hover automatically
             });
             
             // Select the first color by default
@@ -784,217 +762,6 @@
             }
         } catch (err) {
             console.error('Error setting up color swatches:', err);
-        }
-        
-        // Set up autocomplete for style search
-        try {
-            // Enhanced autocomplete for product search
-            const styleInput = document.getElementById('productStyleInput');
-            const autocompleteResults = document.getElementById('productAutocompleteResults');
-            const searchForm = document.getElementById('productSearchForm');
-            
-            if (!styleInput || !autocompleteResults || !searchForm) {
-                console.error('Missing required search elements for autocomplete');
-                return;
-            }
-            
-            // Popular styles for instant matching
-            const POPULAR_STYLES = ["PC61", "K500", "PC90H", "J790", "C112", "S600", "L510", "G200", "PC55", "DT6000"];
-            
-            // Cache for autocomplete results
-            const autocompleteCache = {};
-            let activeIndex = -1;
-            let timer = null;
-            const DEBOUNCE_TIME = 150; // ms
-            
-            // Initialize event listeners
-            styleInput.addEventListener('input', handleInput);
-            styleInput.addEventListener('keydown', handleKeyNavigation);
-            document.addEventListener('click', handleProductClickOutside);
-            
-            // Handle input with debouncing and caching
-            function handleInput() {
-                const query = styleInput.value.trim().toUpperCase();
-                
-                // Clear any existing timer
-                if (timer) {
-                    clearTimeout(timer);
-                }
-                
-                // Reset active item
-                activeIndex = -1;
-                
-                // Clear results if query is empty
-                if (query.length === 0) {
-                    autocompleteResults.innerHTML = '';
-                    autocompleteResults.style.display = 'none';
-                    styleInput.classList.remove('loading');
-                    return;
-                }
-                
-                // Fast path: Check popular styles first
-                if (query.length >= 2) {
-                    const directMatches = POPULAR_STYLES.filter(style =>
-                        style.startsWith(query)
-                    );
-                    
-                    if (directMatches.length > 0) {
-                        renderResults(directMatches, query);
-                        return;
-                    }
-                }
-                
-                // Check cache
-                const cacheKey = query.substring(0, 3);
-                if (query.length >= 2 && autocompleteCache[cacheKey]) {
-                    const cachedResults = autocompleteCache[cacheKey].filter(s =>
-                        s.startsWith(query)
-                    );
-                    
-                    if (cachedResults.length > 0) {
-                        renderResults(cachedResults, query);
-                        return;
-                    }
-                }
-                
-                // Show loading indicator
-                styleInput.classList.add('loading');
-                
-                // Clear results if query is too short
-                if (query.length < 2) {
-                    autocompleteResults.innerHTML = '';
-                    autocompleteResults.style.display = 'none';
-                    styleInput.classList.remove('loading');
-                    return;
-                }
-                
-                // Debounce API calls
-                timer = setTimeout(() => {
-                    fetchStyles(query);
-                }, DEBOUNCE_TIME);
-            }
-            
-            // Fetch autocomplete suggestions
-            function fetchStyles(query) {
-                fetch(`/autocomplete?q=${encodeURIComponent(query)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        // Cache the results
-                        if (query.length <= 3) {
-                            autocompleteCache[query] = data;
-                        }
-                        
-                        // Render the results
-                        renderResults(data, query);
-                    })
-                    .catch(error => {
-                        console.error('Error fetching suggestions:', error);
-                        autocompleteResults.innerHTML = `<div class="autocomplete-item error">Error fetching suggestions</div>`;
-                        autocompleteResults.style.display = 'block';
-                    })
-                    .finally(() => {
-                        // Hide loading indicator
-                        styleInput.classList.remove('loading');
-                    });
-            }
-            
-            // Render results with highlighting
-            function renderResults(data, query) {
-                autocompleteResults.innerHTML = '';
-                
-                if (data.length === 0) {
-                    autocompleteResults.style.display = 'none';
-                    return;
-                }
-                
-                // Limit to 8 results for performance
-                const maxToShow = 8;
-                data.slice(0, maxToShow).forEach((style, index) => {
-                    const item = document.createElement('div');
-                    item.className = 'autocomplete-item';
-                    
-                    // Highlight matching part
-                    const regex = new RegExp(`(${query})`, 'gi');
-                    const highlighted = style.replace(regex, '<strong>$1</strong>');
-                    
-                    item.innerHTML = highlighted;
-                    item.dataset.value = style;
-                    
-                    // Add click handler
-                    item.addEventListener('click', () => {
-                        styleInput.value = style;
-                        autocompleteResults.style.display = 'none';
-                        searchForm.submit();
-                    });
-                    
-                    autocompleteResults.appendChild(item);
-                });
-                
-                // Show results
-                autocompleteResults.style.display = 'block';
-            }
-            
-            // Handle keyboard navigation
-            function handleKeyNavigation(e) {
-                const items = autocompleteResults.querySelectorAll('.autocomplete-item');
-                
-                if (items.length === 0 || autocompleteResults.style.display === 'none') {
-                    return;
-                }
-                
-                switch (e.key) {
-                    case 'ArrowDown':
-                        e.preventDefault();
-                        activeIndex = Math.min(activeIndex + 1, items.length - 1);
-                        updateActiveItem(items);
-                        break;
-                        
-                    case 'ArrowUp':
-                        e.preventDefault();
-                        activeIndex = Math.max(activeIndex - 1, -1);
-                        updateActiveItem(items);
-                        break;
-                        
-                    case 'Enter':
-                        if (activeIndex >= 0) {
-                            e.preventDefault();
-                            styleInput.value = items[activeIndex].dataset.value;
-                            autocompleteResults.style.display = 'none';
-                            searchForm.submit();
-                        }
-                        break;
-                        
-                    case 'Escape':
-                        autocompleteResults.style.display = 'none';
-                        activeIndex = -1;
-                        break;
-                }
-            }
-            
-            // Update active item highlighting
-            function updateActiveItem(items) {
-                items.forEach((item, index) => {
-                    if (index === activeIndex) {
-                        item.classList.add('active');
-                        item.scrollIntoView({ block: 'nearest' });
-                    } else {
-                        item.classList.remove('active');
-                    }
-                });
-                
-                if (activeIndex >= 0) {
-                    styleInput.value = items[activeIndex].dataset.value;
-                }
-            }
-            
-            // Close autocomplete when clicking outside
-            function handleProductClickOutside(e) {
-                if (!autocompleteResults.contains(e.target) && e.target !== styleInput) {
-                    autocompleteResults.style.display = 'none';
-                }
-            }
-        } catch (err) {
-            console.error('Error setting up autocomplete:', err);
         }
     });
 </script>
