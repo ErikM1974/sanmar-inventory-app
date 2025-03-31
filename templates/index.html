@@ -5,542 +5,592 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SanMar Inventory Lookup</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/home-style.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .search-container {
-            max-width: 600px;
-            margin: 4rem auto;
-            padding: 2rem;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        .search-btn {
-            margin-top: 1.5rem;
-        }
-        .test-styles {
-            margin-top: 3rem;
-            padding: 1.5rem;
-            background-color: #e9ecef;
-            border-radius: 10px;
-        }
-        /* New styles for autocomplete dropdown */
-        .autocomplete-container {
-            position: relative;
-        }
-        .autocomplete-results {
-            position: absolute;
-            z-index: 1000;
+        /* Loading spinner overlay */
+        #loading-spinner {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-height: 250px;
-            overflow-y: auto;
-            background: white;
-            border: 1px solid #ced4da;
-            border-radius: 0 0 0.25rem 0.25rem;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
             display: none;
-        }
-        .autocomplete-item {
-            padding: 0.75rem 1rem;
-            cursor: pointer;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        .autocomplete-item:hover,
-        .autocomplete-item:focus {
-            background-color: #f8f9fa;
-        }
-        .autocomplete-loading {
-            padding: 0.75rem 1rem;
-            color: #6c757d;
-            display: flex;
+            justify-content: center;
             align-items: center;
+            z-index: 9999;
         }
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(0, 0, 0, 0.1);
-            border-top-color: #007bff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 10px;
+        
+        .spinner-container {
+            text-align: center;
         }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+        
+        .spinner-message {
+            margin-top: 1rem;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="search-container">
-            <h1 class="mb-4 text-center">SanMar Inventory Lookup</h1>
-            <p class="lead" data-component-name="<p />">Enter a SanMar style number to view product details, inventory, and pricing information.</p>
-            
-            <form action="/product" method="GET" id="searchForm">
-                <div class="form-group autocomplete-container">
-                    <input type="text"
-                           class="form-control form-control-lg"
-                           id="styleInput"
-                           name="style"
-                           placeholder="Enter style number (e.g. K500)"
-                           autocomplete="off"
-                           required>
-                    <div id="autocompleteResults" class="autocomplete-results"></div>
-                </div>
-                <button type="submit" class="btn btn-primary btn-lg w-100 search-btn">
-                    Search Inventory
-                </button>
-            </form>
-            
-            <script>
-                // Improved autocomplete with debouncing and caching
-                class AutocompleteManager {
-                    constructor(inputSelector, resultsSelector, formSelector) {
-                        this.inputElement = document.querySelector(inputSelector);
-                        this.resultsElement = document.querySelector(resultsSelector);
-                        this.formElement = document.querySelector(formSelector);
-                        this.debounceTimer = null;
-                        this.debounceDelay = 300; // ms
-                        this.minChars = 2;
-                        this.cacheTTL = 24 * 60 * 60 * 1000; // 24 hours
-                        this.setupListeners();
-                    }
-                    
-                    setupListeners() {
-                        // Input event for autocomplete
-                        this.inputElement.addEventListener('input', () => {
-                            this.handleInput();
-                        });
-                        
-                        // Close results when clicking outside
-                        document.addEventListener('click', (e) => {
-                            if (!this.inputElement.contains(e.target) && !this.resultsElement.contains(e.target)) {
-                                this.hideResults();
-                            }
-                        });
-                        
-                        // Handle keyboard navigation
-                        this.inputElement.addEventListener('keydown', (e) => {
-                            if (e.key === 'ArrowDown') {
-                                e.preventDefault();
-                                this.focusNextItem();
-                            } else if (e.key === 'ArrowUp') {
-                                e.preventDefault();
-                                this.focusPreviousItem();
-                            } else if (e.key === 'Enter' && this.resultsElement.querySelector('.autocomplete-item.focused')) {
-                                e.preventDefault();
-                                this.selectFocusedItem();
-                            } else if (e.key === 'Escape') {
-                                this.hideResults();
-                            }
-                        });
-                    }
-                    
-                    handleInput() {
-                        const query = this.inputElement.value.trim();
-                        
-                        // Clear previous timer
-                        if (this.debounceTimer) {
-                            clearTimeout(this.debounceTimer);
-                        }
-                        
-                        // Clear results if query is too short
-                        if (query.length < this.minChars) {
-                            this.hideResults();
-                            return;
-                        }
-                        
-                        // Debounce the API call
-                        this.debounceTimer = setTimeout(() => {
-                            this.getSuggestions(query);
-                        }, this.debounceDelay);
-                    }
-                    
-                    async getSuggestions(query) {
-                        // First check browser cache
-                        const cachedResults = this.getFromCache(query);
-                        if (cachedResults) {
-                            this.showResults(cachedResults, query);
-                            return;
-                        }
-                        
-                        // Show loading indicator
-                        this.showLoading();
-                        
-                        try {
-                            // Set up timeout for fetch
-                            const controller = new AbortController();
-                            const timeoutId = setTimeout(() => controller.abort(), 5000);
-                            
-                            const response = await fetch(`/autocomplete?q=${encodeURIComponent(query)}`, {
-                                signal: controller.signal
-                            });
-                            clearTimeout(timeoutId);
-                            
-                            if (!response.ok) {
-                                throw new Error(`API error: ${response.status}`);
-                            }
-                            
-                            const results = await response.json();
-                            
-                            // Store in cache
-                            this.storeInCache(query, results);
-                            
-                            // Display results
-                            this.showResults(results, query);
-                            
-                        } catch (error) {
-                            console.error('Error fetching suggestions:', error);
-                            // Show error or use partial results from cache
-                            this.showError(error, query);
-                        }
-                    }
-                    
-                    getFromCache(query) {
-                        query = query.toUpperCase();
-                        const cacheKey = `autocomplete_${query}`;
-                        const cached = localStorage.getItem(cacheKey);
-                        
-                        if (cached) {
-                            try {
-                                const parsedCache = JSON.parse(cached);
-                                // Check if cache is still valid
-                                if (Date.now() - parsedCache.timestamp < this.cacheTTL) {
-                                    return parsedCache.results;
-                                }
-                            } catch (e) {
-                                // Invalid cache format, ignore
-                                console.warn('Invalid cache format:', e);
-                            }
-                        }
-                        
-                        // Check if we have partial matches in cache
-                        if (query.length >= 3) {
-                            const prefix = query.substring(0, 2);
-                            const prefixCacheKey = `autocomplete_${prefix}`;
-                            const prefixCache = localStorage.getItem(prefixCacheKey);
-                            
-                            if (prefixCache) {
-                                try {
-                                    const parsedCache = JSON.parse(prefixCache);
-                                    if (Date.now() - parsedCache.timestamp < this.cacheTTL) {
-                                        // Filter for matching items
-                                        const filteredResults = parsedCache.results.filter(
-                                            style => style.toUpperCase().includes(query)
-                                        );
-                                        if (filteredResults.length > 0) {
-                                            return filteredResults;
-                                        }
-                                    }
-                                } catch (e) {
-                                    console.warn('Invalid prefix cache format:', e);
-                                }
-                            }
-                        }
-                        
-                        return null;
-                    }
-                    
-                    storeInCache(query, results) {
-                        query = query.toUpperCase();
-                        const cacheKey = `autocomplete_${query}`;
-                        const cacheData = {
-                            results: results,
-                            timestamp: Date.now()
-                        };
-                        
-                        try {
-                            localStorage.setItem(cacheKey, JSON.stringify(cacheData));
-                            
-                            // Also cache the prefix for future partial matches
-                            if (query.length >= 3) {
-                                const prefix = query.substring(0, 2);
-                                const prefixCacheKey = `autocomplete_${prefix}`;
-                                if (!localStorage.getItem(prefixCacheKey)) {
-                                    localStorage.setItem(prefixCacheKey, JSON.stringify(cacheData));
-                                }
-                            }
-                        } catch (e) {
-                            console.warn('Failed to cache results:', e);
-                            // Maybe cache storage is full, try to clear old items
-                            this.pruneCache();
-                        }
-                    }
-                    
-                    pruneCache() {
-                        // Remove oldest cache entries
-                        const MAX_CACHE_ENTRIES = 50;
-                        const cacheKeys = [];
-                        
-                        // Collect all autocomplete cache keys
-                        for (let i = 0; i < localStorage.length; i++) {
-                            const key = localStorage.key(i);
-                            if (key && key.startsWith('autocomplete_')) {
-                                try {
-                                    const data = JSON.parse(localStorage.getItem(key));
-                                    cacheKeys.push({
-                                        key: key,
-                                        timestamp: data.timestamp
-                                    });
-                                } catch (e) {
-                                    // Invalid cache entry, remove it
-                                    localStorage.removeItem(key);
-                                }
-                            }
-                        }
-                        
-                        // If we have too many entries, remove the oldest ones
-                        if (cacheKeys.length > MAX_CACHE_ENTRIES) {
-                            // Sort by timestamp (oldest first)
-                            cacheKeys.sort((a, b) => a.timestamp - b.timestamp);
-                            
-                            // Remove oldest entries
-                            const toRemove = cacheKeys.slice(0, cacheKeys.length - MAX_CACHE_ENTRIES);
-                            for (const entry of toRemove) {
-                                localStorage.removeItem(entry.key);
-                            }
-                        }
-                    }
-                    
-                    showResults(results, query) {
-                        // Clear loading state
-                        this.resultsElement.classList.remove('loading');
-                        
-                        // Clear existing results
-                        this.resultsElement.innerHTML = '';
-                        
-                        if (!results || results.length === 0) {
-                            this.hideResults();
-                            return;
-                        }
-                        
-                        // Sort results to prioritize exact matches and starts with matches
-                        const sortedResults = this.sortResults(results, query);
-                        
-                        // Take only top results to prevent overwhelming the user
-                        const topResults = sortedResults.slice(0, 15);
-                        
-                        // Create result items
-                        for (const result of topResults) {
-                            const item = document.createElement('div');
-                            item.classList.add('autocomplete-item');
-                            item.textContent = result;
-                            item.addEventListener('click', () => {
-                                this.selectItem(result);
-                            });
-                            this.resultsElement.appendChild(item);
-                        }
-                        
-                        this.resultsElement.style.display = 'block';
-                    }
-                    
-                    sortResults(results, query) {
-                        // Normalize query for comparison
-                        const queryUpper = query.toUpperCase();
-                        
-                        return results.sort((a, b) => {
-                            const aUpper = a.toUpperCase();
-                            const bUpper = b.toUpperCase();
-                            
-                            // Exact matches come first
-                            if (aUpper === queryUpper && bUpper !== queryUpper) return -1;
-                            if (bUpper === queryUpper && aUpper !== queryUpper) return 1;
-                            
-                            // Then, starts with matches
-                            if (aUpper.startsWith(queryUpper) && !bUpper.startsWith(queryUpper)) return -1;
-                            if (bUpper.startsWith(queryUpper) && !aUpper.startsWith(queryUpper)) return 1;
-                            
-                            // Finally, alphabetical order
-                            return aUpper.localeCompare(bUpper);
-                        });
-                    }
-                    
-                    showLoading() {
-                        this.resultsElement.innerHTML = `
-                            <div class="autocomplete-loading">
-                                <div class="spinner"></div>
-                                <span>Loading suggestions...</span>
-                            </div>
-                        `;
-                        this.resultsElement.style.display = 'block';
-                    }
-                    
-                    showError(error, query) {
-                        this.resultsElement.innerHTML = `
-                            <div class="autocomplete-loading">
-                                <span>No suggestions available</span>
-                            </div>
-                        `;
-                        
-                        // Try to find partial matches in cache
-                        setTimeout(() => {
-                            const partialMatches = this.findPartialMatches(query);
-                            if (partialMatches && partialMatches.length > 0) {
-                                this.showResults(partialMatches, query);
-                            } else {
-                                setTimeout(() => {
-                                    this.hideResults();
-                                }, 2000);
-                            }
-                        }, 1000);
-                    }
-                    
-                    findPartialMatches(query) {
-                        query = query.toUpperCase();
-                        let matches = [];
-                        
-                        // Look for any cached items that might match
-                        for (let i = 0; i < localStorage.length; i++) {
-                            const key = localStorage.key(i);
-                            if (key && key.startsWith('autocomplete_')) {
-                                try {
-                                    const cacheKey = key.replace('autocomplete_', '');
-                                    if (cacheKey.includes(query) || query.includes(cacheKey)) {
-                                        const data = JSON.parse(localStorage.getItem(key));
-                                        // Filter results to match current query
-                                        const filteredMatches = data.results.filter(r => 
-                                            r.toUpperCase().includes(query));
-                                        matches = [...matches, ...filteredMatches];
-                                    }
-                                } catch (e) {
-                                    // Ignore invalid cache entries
-                                }
-                            }
-                        }
-                        
-                        // Deduplicate
-                        return [...new Set(matches)];
-                    }
-                    
-                    hideResults() {
-                        this.resultsElement.style.display = 'none';
-                        // Remove focused class from all items
-                        const focusedItems = this.resultsElement.querySelectorAll('.autocomplete-item.focused');
-                        focusedItems.forEach(item => item.classList.remove('focused'));
-                    }
-                    
-                    selectItem(value) {
-                        this.inputElement.value = value;
-                        this.hideResults();
-                        // Submit the form
-                        this.formElement.submit();
-                    }
-                    
-                    focusNextItem() {
-                        const items = this.resultsElement.querySelectorAll('.autocomplete-item');
-                        if (!items.length) return;
-                        
-                        const focused = this.resultsElement.querySelector('.autocomplete-item.focused');
-                        
-                        if (!focused) {
-                            // No item is focused yet, focus the first one
-                            items[0].classList.add('focused');
-                            this.scrollToItem(items[0]);
-                        } else {
-                            // Find the next item to focus
-                            for (let i = 0; i < items.length - 1; i++) {
-                                if (items[i] === focused) {
-                                    focused.classList.remove('focused');
-                                    items[i + 1].classList.add('focused');
-                                    this.scrollToItem(items[i + 1]);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    
-                    focusPreviousItem() {
-                        const items = this.resultsElement.querySelectorAll('.autocomplete-item');
-                        if (!items.length) return;
-                        
-                        const focused = this.resultsElement.querySelector('.autocomplete-item.focused');
-                        
-                        if (!focused) {
-                            // No item is focused yet, focus the last one
-                            items[items.length - 1].classList.add('focused');
-                            this.scrollToItem(items[items.length - 1]);
-                        } else {
-                            // Find the previous item to focus
-                            for (let i = 1; i < items.length; i++) {
-                                if (items[i] === focused) {
-                                    focused.classList.remove('focused');
-                                    items[i - 1].classList.add('focused');
-                                    this.scrollToItem(items[i - 1]);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    
-                    selectFocusedItem() {
-                        const focused = this.resultsElement.querySelector('.autocomplete-item.focused');
-                        if (focused) {
-                            this.selectItem(focused.textContent);
-                        }
-                    }
-                    
-                    scrollToItem(item) {
-                        if (!item) return;
-                        
-                        const container = this.resultsElement;
-                        const containerTop = container.scrollTop;
-                        const containerBottom = containerTop + container.clientHeight;
-                        
-                        const itemTop = item.offsetTop;
-                        const itemBottom = itemTop + item.clientHeight;
-                        
-                        if (itemTop < containerTop) {
-                            container.scrollTop = itemTop;
-                        } else if (itemBottom > containerBottom) {
-                            container.scrollTop = itemBottom - container.clientHeight;
-                        }
-                    }
-                }
+    <!-- Loading Spinner Overlay -->
+    <div id="loading-spinner">
+        <div class="spinner-container">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="spinner-message">Loading product data...</div>
+        </div>
+    </div>
 
-                // Initialize when DOM is ready
-                document.addEventListener('DOMContentLoaded', () => {
-                    const autocomplete = new AutocompleteManager('#styleInput', '#autocompleteResults', '#searchForm');
-                    
-                    // Preload common searches
-                    const commonPrefixes = ['PC', 'K5', 'J7', 'L1', 'ST', 'EB', 'DM', 'TW'];
-                    for (const prefix of commonPrefixes) {
-                        // Silently preload in the background
-                        setTimeout(() => {
-                            fetch(`/autocomplete?q=${prefix}`).then(res => res.json())
-                                .then(data => {
-                                    // Store in cache
-                                    localStorage.setItem(`autocomplete_${prefix}`, JSON.stringify({
-                                        results: data,
-                                        timestamp: Date.now()
-                                    }));
-                                })
-                                .catch(() => {}); // Ignore errors during preloading
-                        }, Math.random() * 2000); // Stagger requests to avoid overloading
-                    }
-                });
-            </script>
+    <div class="container">
+        <h1 class="text-center mb-4">SanMar Inventory Lookup</h1>
+        
+        <!-- Tab Navigation -->
+        <ul class="nav nav-tabs" id="searchTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="style-search-tab" data-bs-toggle="tab"
+                        data-bs-target="#style-search" type="button" role="tab"
+                        aria-controls="style-search" aria-selected="true">
+                    Style Search
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="category-search-tab" data-bs-toggle="tab"
+                        data-bs-target="#category-search" type="button" role="tab"
+                        aria-controls="category-search" aria-selected="false">
+                    Browse by Category
+                </button>
+            </li>
+        </ul>
+        
+        <!-- Tab Content -->
+        <div class="tab-content" id="searchTabsContent">
+            <!-- Style Number Search Tab -->
+            <div class="tab-pane fade show active" id="style-search" role="tabpanel" aria-labelledby="style-search-tab">
+                <div id="caspio-search">
+                    <script type="text/javascript" src="https://c3eku948.caspio.com/dp/a0e15000e3632c747ef34c07afea/emb"></script>
+                </div>
+            </div>
             
-            <!-- Test Styles Section -->
-            <div class="test-styles">
-                <h4>Test Styles</h4>
-                <p>Click any of these styles to quickly view test data:</p>
-                <div class="list-group">
-                    <a href="/product/K500" class="list-group-item list-group-item-action">
-                        Port Authority K500 Silk Touch™ Polo
-                    </a>
-                    <a href="/product/C112" class="list-group-item list-group-item-action">
-                        Port Authority Core Blend Pique Polo
-                    </a>
-                    <a href="/product/PC61" class="list-group-item list-group-item-action">
-                        Port & Company Essential T-Shirt
-                    </a>
-                    <a href="/product/PC90H" class="list-group-item list-group-item-action">
-                        Port & Company® Essential Fleece Pullover Hooded Sweatshirt
-                    </a>
+            <!-- Category Search Tab -->
+            <div class="tab-pane fade" id="category-search" role="tabpanel" aria-labelledby="category-search-tab">
+                <div id="category-browser">
+                    <!-- We need to modify the HTML to insert our JavaScript after the Caspio embed -->
+                    <script type="text/javascript" src="https://c3eku948.caspio.com/dp/a0e15000033ab36e846e42e998d9/emb"></script>
                 </div>
             </div>
         </div>
+
+        <!-- Bootstrap JS for tabs -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        
+        <!-- Enhanced JavaScript for making gallery images clickable -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+            // Function to show the loading spinner
+            function showLoadingSpinner(message = 'Loading product data...') {
+                const spinner = document.getElementById('loading-spinner');
+                if (spinner) {
+                    // Update the spinner message
+                    const messageElement = spinner.querySelector('.spinner-message');
+                    if (messageElement) {
+                        messageElement.textContent = message;
+                    }
+                    spinner.style.display = 'flex';
+                    
+                    // Auto-hide spinner after 10 seconds as a safety measure
+                    // This is a fallback in case navigation or other issues prevent proper hiding
+                    setTimeout(() => {
+                        const spinnerElement = document.getElementById('loading-spinner');
+                        if (spinnerElement) {
+                            spinnerElement.style.display = 'none';
+                        }
+                    }, 10000);
+                }
+            }
+            
+            // Set a global safety timeout to ensure all spinners eventually hide
+            // This helps with transitions between pages
+            setTimeout(function() {
+                const spinner = document.getElementById('loading-spinner');
+                if (spinner && spinner.style.display === 'flex') {
+                    spinner.style.display = 'none';
+                }
+            }, 5000);
+            
+            // Function to hide the loading spinner
+            function hideLoadingSpinner() {
+                const spinner = document.getElementById('loading-spinner');
+                if (spinner) {
+                    spinner.style.display = 'none';
+                }
+            }
+            
+            // Add event listeners to the search button on the home page
+            const searchButton = document.querySelector('#style-search .btn-primary');
+            if (searchButton) {
+                searchButton.addEventListener('click', function() {
+                    showLoadingSpinner('Searching inventory...');
+                    // Force immediate display via stylesheet modification
+                    var style = document.createElement('style');
+                    style.textContent = '#loading-spinner{display:flex !important;}';
+                    document.head.appendChild(style);
+                });
+            }
+            
+            // Add event listeners to the style input field for Enter key press
+            const styleInput = document.querySelector('#style-search input[type="text"]');
+            if (styleInput) {
+                styleInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        showLoadingSpinner('Searching inventory...');
+                        // Force immediate display via stylesheet modification
+                        var style = document.createElement('style');
+                        style.textContent = '#loading-spinner{display:flex !important;}';
+                        document.head.appendChild(style);
+                    }
+                });
+            }
+            
+            // Override the default form submission to show spinner immediately
+            const styleForm = document.querySelector('#style-search form');
+            if (styleForm) {
+                styleForm.addEventListener('submit', function() {
+                    // Force immediate display via stylesheet modification
+                    var style = document.createElement('style');
+                    style.textContent = '#loading-spinner{display:flex !important;}';
+                    document.head.appendChild(style);
+                    return true;
+                });
+            }
+            
+            // Show spinner when "Browse by Category" tab is clicked
+            const categoryTab = document.querySelector('#category-search-tab');
+            if (categoryTab) {
+                categoryTab.addEventListener('click', function() {
+                    showLoadingSpinner('Loading categories...');
+                    
+                    // Hide spinner after Caspio loads (3 second delay as fallback)
+                    setTimeout(function() {
+                        hideLoadingSpinner();
+                    }, 3000);
+                });
+            }
+            
+            // Handle clicks on the SEARCH INVENTORY button
+            document.addEventListener('click', function(e) {
+                if (e.target && (
+                    e.target.id === 'search-inventory-button' ||
+                    e.target.value === 'SEARCH INVENTORY' ||
+                    (e.target.tagName === 'BUTTON' && e.target.textContent.includes('SEARCH INVENTORY'))
+                )) {
+                    showLoadingSpinner('Searching styles...');
+                }
+            });
+            
+            // Function to initialize Caspio iframe monitoring
+            function setupCaspioMonitoring() {
+                // Monitor for Caspio iframe loads
+                const observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                            mutation.addedNodes.forEach(function(node) {
+                                // Check for new iframes
+                                if (node.tagName === 'IFRAME' || (node.querySelectorAll && node.querySelectorAll('iframe').length > 0)) {
+                                    let iframes = node.tagName === 'IFRAME' ? [node] : Array.from(node.querySelectorAll('iframe'));
+                                    
+                                    iframes.forEach(function(iframe) {
+                                        // Wait for iframe to load
+                                        if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
+                                            setupCaspioIframeEvents(iframe);
+                                        } else {
+                                            iframe.addEventListener('load', function() {
+                                                setupCaspioIframeEvents(iframe);
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                });
+                
+                // Start observing the document body for Caspio containers
+                observer.observe(document.body, { childList: true, subtree: true });
+                
+                // Also check for any existing iframes
+                document.querySelectorAll('iframe').forEach(function(iframe) {
+                    if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
+                        setupCaspioIframeEvents(iframe);
+                    } else {
+                        iframe.addEventListener('load', function() {
+                            setupCaspioIframeEvents(iframe);
+                        });
+                    }
+                });
+                
+                // Direct monitoring for Caspio search form
+                // Watch for search button in the main page as fallback
+                const searchInterval = setInterval(() => {
+                    // Find submit inputs with the value "SEARCH INVENTORY"
+                    const searchInputs = document.querySelectorAll('input[type="submit"][value="SEARCH INVENTORY"]');
+                    
+                    // Find buttons that have text "SEARCH INVENTORY" (using standard JS)
+                    const allButtons = document.querySelectorAll('button');
+                    const searchButtons = Array.from(allButtons).filter(button =>
+                        button.textContent.trim() === 'SEARCH INVENTORY');
+                    
+                    // Combine both result sets
+                    const allSearchElements = [...searchInputs, ...searchButtons];
+                    
+                    if (allSearchElements.length > 0) {
+                        clearInterval(searchInterval);
+                        allSearchElements.forEach(button => {
+                            button.addEventListener('click', function() {
+                                showLoadingSpinner('Searching styles...');
+                            });
+                        });
+                    }
+                }, 1000);
+                
+                // Monitor URL changes which indicate navigation
+                let lastUrl = location.href;
+                new MutationObserver(() => {
+                    const url = location.href;
+                    if (url !== lastUrl) {
+                        lastUrl = url;
+                        hideLoadingSpinner(); // Hide any existing spinner
+                        // If navigated to a product page, show spinner
+                        if (url.includes('/product/')) {
+                            showLoadingSpinner('Loading product details...');
+                        }
+                    }
+                }).observe(document, {subtree: true, childList: true});
+            }
+            
+            // Function to set up event listeners for Caspio iframe
+            function setupCaspioIframeEvents(iframe) {
+                try {
+                    // Try to access iframe content (may fail due to cross-origin restrictions)
+                    const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+                    
+                    // Listen for form submissions in the Caspio iframe
+                    const forms = iframeDocument.querySelectorAll('form');
+                    forms.forEach(function(form) {
+                        form.addEventListener('submit', function() {
+                            showLoadingSpinner('Searching styles...');
+                        });
+                    });
+                    
+                    // Listen for button clicks in the Caspio iframe
+                    const buttons = iframeDocument.querySelectorAll('input[type="submit"], button[type="submit"]');
+                    buttons.forEach(function(button) {
+                        button.addEventListener('click', function() {
+                            showLoadingSpinner('Searching styles...');
+                        });
+                    });
+                    
+                    // Set up click event delegation for the iframe document
+                    iframeDocument.addEventListener('click', function(e) {
+                        // Check if clicked element is an image or contained in a link
+                        if (e.target.tagName === 'IMG' || e.target.closest('a')) {
+                            showLoadingSpinner('Loading product details...');
+                        }
+                    });
+                    
+                    console.log('Successfully set up Caspio iframe monitoring');
+                } catch (err) {
+                    console.log('Unable to directly access iframe due to cross-origin policy, using fallback method');
+                    
+                    // Fallback method: add event listeners to the parent document that can capture events
+                    // that bubble up from the iframe
+                    
+                    // Monitor the parent document for clicks that might be coming from the iframe
+                    document.addEventListener('click', function(e) {
+                        // Check if the click is within the iframe container
+                        if (iframe.parentElement && iframe.parentElement.contains(e.target)) {
+                            // If we're clicking inside the iframe container, it might be a product selection
+                            showLoadingSpinner('Loading product details...');
+                        }
+                    });
+                    
+                    // Also monitor for iframe load events
+                    iframe.addEventListener('load', function() {
+                        // Hide the spinner after iframe loads (may indicate navigation completed)
+                        hideLoadingSpinner();
+                    });
+                    
+                    // Add a special listener for the Caspio form within the parent document
+                    document.querySelectorAll('form').forEach(function(form) {
+                        if (form.closest('#caspio-search') || form.closest('#category-browser')) {
+                            form.addEventListener('submit', function() {
+                                showLoadingSpinner('Searching styles...');
+                            });
+                        }
+                    });
+                }
+            }
+            
+            // Call the setup function
+            setupCaspioMonitoring();
+                
+                // Function for style search form submission
+                setTimeout(function() {
+                    const caspioForm = document.querySelector('#caspio-search form');
+                    if (caspioForm) {
+                        caspioForm.addEventListener('submit', function(e) {
+                            e.preventDefault();
+                            const styleInput = caspioForm.querySelector('input[type="text"]');
+                            if (styleInput && styleInput.value.trim()) {
+                                showLoadingSpinner();
+                                window.location.href = '/product/' + styleInput.value.trim();
+                            }
+                        });
+                    }
+                }, 1000);
+                
+                // Function to extract style numbers from text
+                function findStyleNumber(text) {
+                    if (!text) return null;
+                    const match = text.match(/STYLE#?\s*([A-Z0-9]+)/i);
+                    return match ? match[1].trim() : null;
+                }
+                
+                // Function to make gallery images clickable
+                function makeImagesClickable() {
+                    console.log("Processing gallery images...");
+                    
+                    // Direct selector for images in document
+                    document.querySelectorAll('img').forEach(img => {
+                        // Skip small images (icons)
+                        if (img.width < 50 || img.height < 50) return;
+                        
+                        // Find parent element that might contain style info
+                        const row = img.closest('tr') || img.closest('td') || img.parentElement;
+                        if (!row) return;
+                        
+                        // Look for style number in text content
+                        let styleNumber = null;
+                        
+                        // First check if already tagged
+                        styleNumber = img.getAttribute('data-style');
+                        
+                        if (!styleNumber) {
+                            // Try all elements in row
+                            const cells = row.querySelectorAll('td');
+                            for (const cell of cells) {
+                                if (cell.textContent) {
+                                    styleNumber = findStyleNumber(cell.textContent);
+                                    if (styleNumber) break;
+                                }
+                            }
+                            
+                            // If still not found, check overall row text
+                            if (!styleNumber && row.textContent) {
+                                styleNumber = findStyleNumber(row.textContent);
+                            }
+                            
+                            // Last attempt: look for text starting with "STYLE#"
+                            if (!styleNumber) {
+                                const allTexts = row.innerText || row.textContent;
+                                const styleMatch = allTexts && allTexts.match(/STYLE#?\s*([A-Z0-9]+)/i);
+                                styleNumber = styleMatch ? styleMatch[1].trim() : null;
+                            }
+                        }
+                        
+                        // If we found a style number, make image clickable
+                        if (styleNumber) {
+                            console.log(`Found style ${styleNumber} for image`);
+                            
+                            // Save style number to data attribute
+                            img.setAttribute('data-style', styleNumber);
+                            img.title = `View inventory for ${styleNumber}`;
+                            
+                            // Add style and click handler
+                            img.style.cursor = 'pointer';
+                            img.classList.add('product-image');
+                            
+                            // Add click handler
+                            img.onclick = function(e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                console.log(`Navigating to: /product/${styleNumber}`);
+                                // Show loading spinner before navigating
+                                const spinner = document.getElementById('loading-spinner');
+                                if (spinner) {
+                                    spinner.style.display = 'flex';
+                                }
+                                window.location.href = `/product/${styleNumber}`;
+                                return false;
+                            };
+                        }
+                    });
+                    
+                    // Process all iframe contents
+                    try {
+                        document.querySelectorAll('iframe').forEach(iframe => {
+                            try {
+                                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                                const iframeImages = iframeDoc.querySelectorAll('img');
+                                
+                                iframeImages.forEach(img => {
+                                    // Skip small images
+                                    if (img.width < 50 || img.height < 50) return;
+                                    
+                                    // Find parent row or cell
+                                    const row = img.closest('tr');
+                                    if (!row) return;
+                                    
+                                    // Look for style number
+                                    let styleNumber = null;
+                                    const cells = row.querySelectorAll('td');
+                                    
+                                    for (const cell of cells) {
+                                        if (cell.textContent) {
+                                            styleNumber = findStyleNumber(cell.textContent);
+                                            if (styleNumber) break;
+                                        }
+                                    }
+                                    
+                                    if (styleNumber) {
+                                        // Make image clickable
+                                        img.setAttribute('data-style', styleNumber);
+                                        img.title = `View inventory for ${styleNumber}`;
+                                        img.style.cursor = 'pointer';
+                                        img.style.transition = 'transform 0.2s, box-shadow 0.2s';
+                                        
+                                        // Add click handler
+                                        img.onclick = function(e) {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            // Show loading spinner before navigating
+                                            const spinner = window.top.document.getElementById('loading-spinner');
+                                            if (spinner) {
+                                                spinner.style.display = 'flex';
+                                            }
+                                            window.top.location.href = `/product/${styleNumber}`;
+                                            return false;
+                                        };
+                                    }
+                                });
+                            } catch (err) {
+                                console.log('Cannot access iframe content due to security restrictions');
+                            }
+                        });
+                    } catch (err) {
+                        console.log('Error processing iframes:', err);
+                    }
+                }
+                
+                // Process existing images
+                makeImagesClickable();
+                
+                // Watch for changes in the DOM
+                const observer = new MutationObserver(function(mutations) {
+                    let hasNewContent = false;
+                    
+                    mutations.forEach(function(mutation) {
+                        if (mutation.addedNodes.length > 0) {
+                            hasNewContent = true;
+                        }
+                    });
+                    
+                    if (hasNewContent) {
+                        setTimeout(makeImagesClickable, 500);
+                    }
+                });
+                
+                // Start observing the document
+                observer.observe(document.body, {
+                    childList: true,
+                    subtree: true
+                });
+                
+                // Also attach to category-search-tab click
+                document.getElementById('category-search-tab').addEventListener('click', function() {
+                    setTimeout(makeImagesClickable, 500);
+                    setTimeout(makeImagesClickable, 1500);
+                });
+                
+                // Click handler for document
+                document.addEventListener('click', function(e) {
+                    if (e.target.tagName === 'IMG' && e.target.dataset.style) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        // Show loading spinner before navigating
+                        const spinner = document.getElementById('loading-spinner');
+                        if (spinner) {
+                            spinner.style.display = 'flex';
+                        }
+                        window.location.href = `/product/${e.target.dataset.style}`;
+                    }
+                });
+                
+                // Run periodically
+                setInterval(makeImagesClickable, 3000);
+            });
+            
+            // Apply custom styling for Caspio content
+            window.addEventListener('load', function() {
+                const style = document.createElement('style');
+                style.textContent = `
+                    /* Caspio table styling */
+                    .cbResultSetTable {
+                        width: 100% !important;
+                        max-width: 1100px !important;
+                        margin: 0 auto !important;
+                        border-collapse: separate !important;
+                        border-spacing: 15px !important;
+                    }
+                    
+                    /* Product display styling */
+                    .cbResultSetTable td {
+                        vertical-align: top !important;
+                        text-align: center !important;
+                        padding: 10px !important;
+                        background-color: white !important;
+                        border-radius: 8px !important;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+                        transition: transform 0.2s, box-shadow 0.2s !important;
+                    }
+                    
+                    .cbResultSetTable td:hover {
+                        transform: translateY(-5px) !important;
+                        box-shadow: 0 5px 15px rgba(0,0,0,0.15) !important;
+                    }
+                    
+                    /* Image styling */
+                    .cbResultSetTable img {
+                        max-width: 100% !important;
+                        height: auto !important;
+                        max-height: 250px !important;
+                        object-fit: contain !important;
+                        margin-bottom: 10px !important;
+                        cursor: pointer !important;
+                        transition: transform 0.2s, box-shadow 0.2s !important;
+                    }
+                    
+                    .cbResultSetTable img:hover {
+                        transform: scale(1.05) !important;
+                        box-shadow: 0 0 10px rgba(14, 83, 149, 0.5) !important;
+                    }
+                    
+                    /* Center pagination and search form */
+                    .cbSearchForm, .cbResultSetNavigationCell {
+                        text-align: center !important;
+                        width: 100% !important;
+                        max-width: 800px !important;
+                        margin: 0 auto 20px !important;
+                    }
+                `;
+                document.head.appendChild(style);
+            });
+        </script>
     </div>
 </body>
 </html>

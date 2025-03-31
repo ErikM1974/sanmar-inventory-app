@@ -6,8 +6,86 @@
     <title>{{ style }} - SanMar Inventory</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Loading spinner overlay */
+        #loading-spinner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        
+        .spinner-container {
+            text-align: center;
+        }
+        
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+        
+        .spinner-message {
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+    </style>
+    <!-- Add script to show and hide spinner -->
+    <script>
+        // Show spinner immediately
+        (function() {
+            // Add style element to force spinner display
+            var style = document.createElement('style');
+            style.textContent = '#loading-spinner{display:flex !important;}';
+            document.head.appendChild(style);
+            
+            // Set a backup timeout to ensure spinner is hidden after 10 seconds max
+            // This prevents it from getting stuck forever
+            setTimeout(function() {
+                var spinner = document.getElementById('loading-spinner');
+                if (spinner) {
+                    spinner.style.display = 'none';
+                }
+            }, 10000);
+            
+            // Normal spinner hide logic on page load
+            function hideSpinner() {
+                setTimeout(function() {
+                    var spinner = document.getElementById('loading-spinner');
+                    if (spinner) {
+                        spinner.style.display = 'none';
+                    }
+                }, 500);
+            }
+            
+            // Attach to both DOMContentLoaded and load events
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                // Page already loaded
+                hideSpinner();
+            } else {
+                window.addEventListener('DOMContentLoaded', function() {
+                    window.addEventListener('load', hideSpinner);
+                });
+                window.addEventListener('load', hideSpinner);
+            }
+        })();
+    </script>
 </head>
 <body>
+    <!-- Loading Spinner Overlay -->
+    <div id="loading-spinner">
+        <div class="spinner-container">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="spinner-message">Loading product data...</div>
+        </div>
+    </div>
     <!-- Main Header -->
     <header class="py-3 mb-3 text-center">
         <h1>SanMar Inventory</h1>
@@ -254,6 +332,13 @@
             const loadingElement = document.getElementById(loadingElementId);
             if (loadingElement) {
                 loadingElement.style.display = 'block';
+                
+                // Set a safety timeout to hide the loading indicator if fetch takes too long
+                setTimeout(() => {
+                    if (loadingElement) {
+                        loadingElement.style.display = 'none';
+                    }
+                }, 10000); // 10 second timeout
             }
             
             // Hide error message if visible
@@ -670,9 +755,25 @@
                             const style = path.includes('/') ? path.split('/').pop() : path;
                             
                             if (style) {
+                                // Show main loading spinner for color change
+                                const spinner = document.getElementById('loading-spinner');
+                                if (spinner) {
+                                    spinner.querySelector('.spinner-message').textContent = 'Loading color data...';
+                                    spinner.style.display = 'flex';
+                                    
+                                    // Safety timeout - force hide spinner after 8 seconds
+                                    setTimeout(() => {
+                                        spinner.style.display = 'none';
+                                    }, 8000);
+                                }
+                                
                                 console.log(`Fetching pricing data for style: ${style}, color: ${catalogColor}`);
                                 fetchColorPricing(style, catalogColor)
                                     .then(data => {
+                                        // Hide main loading spinner
+                                        if (spinner) {
+                                            spinner.style.display = 'none';
+                                        }
                                         if (data && !data.error) {
                                             console.log(`Successfully retrieved pricing data for ${displayColor}`, data);
                                             updatePricingDisplay(data, table.id);
@@ -695,6 +796,12 @@
                                     })
                                     .catch(error => {
                                         console.error(`Error updating pricing: ${error.message}`);
+                                        
+                                        // Hide loading spinner if there's an error
+                                        const spinner = document.getElementById('loading-spinner');
+                                        if (spinner) {
+                                            spinner.style.display = 'none';
+                                        }
                                         
                                         // Show error message
                                         const errorElement = table.querySelector('.price-error');
@@ -760,6 +867,21 @@
                     firstSwatch.click();
                 }, 100);
             }
+            
+            // GLOBAL SAFETY - Force hide any stuck spinners after page load
+            setTimeout(function() {
+                console.log("Safety timeout - hiding any stuck spinners");
+                // Force hide all spinners and loading indicators
+                const allSpinners = document.querySelectorAll('.spinner-border, .spinner-grow, #loading-spinner, [id^="loading-"]');
+                allSpinners.forEach(function(spinner) {
+                    spinner.style.display = 'none';
+                });
+                
+                // Also add a style tag for extra safety
+                const style = document.createElement('style');
+                style.textContent = '.spinner-border, .spinner-grow, #loading-spinner, [id^="loading-"] { display: none !important; }';
+                document.head.appendChild(style);
+            }, 10000); // 10 second timeout as a last resort
         } catch (err) {
             console.error('Error setting up color swatches:', err);
         }
