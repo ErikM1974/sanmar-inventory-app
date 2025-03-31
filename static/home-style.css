@@ -1,0 +1,237 @@
+/* SanMar Inventory App - Home Page Styling */
+
+/* Base styling */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+/* Header styling */
+h1 {
+    color: #0e5395;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* Tab styling */
+.nav-tabs {
+    border-bottom: 1px solid #0e5395;
+    margin-bottom: 1.5rem;
+}
+
+.nav-tabs .nav-link {
+    color: #555;
+    border: 1px solid transparent;
+    margin-bottom: -1px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+}
+
+.nav-tabs .nav-link.active {
+    color: #0e5395;
+    background-color: #fff;
+    border-color: #0e5395 #0e5395 #fff;
+}
+
+.nav-tabs .nav-link:hover:not(.active) {
+    border-color: #e9ecef #e9ecef #dee2e6;
+    background-color: #f8f9fa;
+}
+
+/* Caspio content centering and styling */
+#category-browser, 
+#caspio-search {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1100px;
+}
+
+/* Caspio embedded iframe centering */
+iframe {
+    display: block !important;
+    margin: 0 auto !important;
+    max-width: 100% !important;
+}
+
+/* Product gallery styling */
+.cbResultSetTable {
+    width: 100% !important;
+    max-width: 1100px !important;
+    margin: 0 auto !important;
+    border-collapse: separate !important;
+    border-spacing: 15px !important;
+}
+
+.cbResultSetTable td {
+    vertical-align: top !important;
+    text-align: center !important;
+}
+
+/* Product card styling */
+.product-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+    margin-bottom: 20px;
+    padding: 15px;
+    text-align: center;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+/* Product image styling */
+.product-image {
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(14, 83, 149, 0.5);
+}
+
+/* Product details styling */
+.product-title {
+    font-weight: bold;
+    margin: 10px 0 5px;
+    color: #0e5395;
+}
+
+.product-style {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.product-price {
+    color: #d12027;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Search form styling */
+.cbSearchForm {
+    background-color: #f8f9fa !important;
+    padding: 15px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05) !important;
+    max-width: 800px !important;
+    margin: 0 auto 20px !important;
+}
+
+.cbSearchForm input[type="text"],
+.cbSearchForm select {
+    padding: 8px 12px !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 4px !important;
+    width: 100% !important;
+    margin-bottom: 10px !important;
+}
+
+.cbSearchForm input[type="submit"],
+.cbSearchForm button,
+.cbSearchButton {
+    background-color: #0e5395 !important;
+    color: white !important;
+    border: none !important;
+    padding: 8px 16px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    font-weight: bold !important;
+    transition: background-color 0.2s !important;
+}
+
+.cbSearchForm input[type="submit"]:hover,
+.cbSearchForm button:hover,
+.cbSearchButton:hover {
+    background-color: #0a3f72 !important;
+}
+
+/* Pagination styling */
+.cbResultSetNavigationCell {
+    text-align: center !important;
+    padding: 15px 0 !important;
+}
+
+.cbResultSetNavigationCell a {
+    color: #0e5395 !important;
+    padding: 5px 10px !important;
+    margin: 0 2px !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 4px !important;
+    text-decoration: none !important;
+}
+
+.cbResultSetNavigationCell a:hover {
+    background-color: #e9ecef !important;
+}
+
+/* Sort by styling */
+.sort-container {
+    text-align: right;
+    margin-bottom: 15px;
+}
+
+.sort-label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.sort-select {
+    padding: 5px 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+/* Media queries for responsive design */
+@media (max-width: 992px) {
+    .container {
+        max-width: 95%;
+    }
+    
+    .cbResultSetTable {
+        border-spacing: 10px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .cbResultSetTable {
+        border-spacing: 5px !important;
+    }
+    
+    .product-card {
+        padding: 10px;
+    }
+    
+    .nav-tabs .nav-link {
+        padding: 0.5rem 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .cbResultSetTable td {
+        display: block !important;
+        width: 100% !important;
+    }
+    
+    .product-image {
+        max-height: 200px;
+    }
+}
