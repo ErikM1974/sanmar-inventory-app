@@ -28,24 +28,42 @@ def get_cache_key(style=None, color=None, size=None, inventory_key=None, size_in
         else:
             return ""
 
+# In-memory cache for faster lookups
+_memory_cache = {}
+
 def get_from_cache(key):
     """Retrieve data from cache if available and not expired"""
-    # Default cache directory in the project
+    # First check in-memory cache (fastest)
+    if key in _memory_cache:
+        cache_entry = _memory_cache[key]
+        cache_age = time.time() - cache_entry['timestamp']
+        
+        # If cache is less than 48 hours old (extended from 24)
+        if cache_age < 48 * 60 * 60:  # 48 hours in seconds
+            return cache_entry['data']
+    
+    # If not in memory cache, check disk cache
     cache_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cache', 'pricing')
     os.makedirs(cache_dir, exist_ok=True)
     
     cache_file = os.path.join(cache_dir, f"{key}.json")
     
     if os.path.exists(cache_file):
-        # Check if cache is not expired (24 hour cache)
+        # Check if cache is not expired (48 hour cache)
         last_modified = os.path.getmtime(cache_file)
         cache_age = time.time() - last_modified
         
-        # If cache is less than 24 hours old
-        if cache_age < 24 * 60 * 60:  # 24 hours in seconds
+        # If cache is less than 48 hours old
+        if cache_age < 48 * 60 * 60:  # 48 hours in seconds
             try:
                 with open(cache_file, 'r') as f:
-                    return json.load(f)
+                    data = json.load(f)
+                    # Store in memory cache for faster future access
+                    _memory_cache[key] = {
+                        'data': data,
+                        'timestamp': last_modified
+                    }
+                    return data
             except Exception as e:
                 logger.error(f"Error reading cache file {cache_file}: {e}")
     
@@ -56,7 +74,13 @@ def save_to_cache(key, data):
     if not key:
         return
     
-    # Default cache directory in the project
+    # First save to in-memory cache for immediate access
+    _memory_cache[key] = {
+        'data': data,
+        'timestamp': time.time()
+    }
+    
+    # Then save to disk cache for persistence
     cache_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cache', 'pricing')
     os.makedirs(cache_dir, exist_ok=True)
     
