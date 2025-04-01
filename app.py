@@ -697,7 +697,7 @@ def get_product_data(style, preserve_size_format=True):
             catalog_colors = list(catalog_colors)
             
             # Define standard size order
-            standard_size_order = ["XS", "S", "S/M", "M", "M/L", "L", "L/XL", "XL", "2XL", "3XL", "4XL", "5XL", "6XL"]
+            standard_size_order = ["XS", "S", "S/M", "M", "M/L", "L", "L/XL", "XL", "XXL", "2XL", "3XL", "4XL", "5XL", "6XL"]
             
             # Sort sizes with standard sizes first, then any other sizes alphabetically
             standard_sizes = [size for size in sizes if size in standard_size_order]
