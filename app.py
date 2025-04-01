@@ -197,8 +197,8 @@ def product_page(style):
         if HAS_CREDENTIALS:
             logger.info(f"Attempting to fetch data from SanMar API for style: {style}")
             try:
-                # Get product data
-                product_data = get_product_data(style)
+                # Get product data with size format preserved
+                product_data = get_product_data(style, preserve_size_format=True)
                 if product_data:
                     logger.info(f"Successfully retrieved product data for {style}")
                     
@@ -494,6 +494,7 @@ def product_page(style):
                                             selected_color=selected_color,  # Pass selected color to template
                                             images=product_data.get('images', {}),
                                             swatch_images=product_data.get('swatch_images', {}),
+                                            preserve_size_format=True,  # Use original SanMar API size format (XXL instead of 2XL)
                                             timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
             except Exception as e:
                 logger.error(f"Error fetching data from SanMar API: {str(e)}")
@@ -529,6 +530,7 @@ def product_page(style):
                                 pricing=pricing_data,
                                 color_pricing=mock_color_pricing,
                                 selected_color=request.args.get('color', mock_data.get('colors', ['Black'])[0]),
+                                preserve_size_format=True,  # Use original SanMar API size format (XXL instead of 2XL)
                                 timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         except Exception as e:
             logger.error(f"Error using mock data: {str(e)}")
@@ -564,9 +566,15 @@ def product_page(style):
                             error_message=str(e),
                             timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
-def get_product_data(style):
-    """Get product data from SanMar API for a given style."""
-    logger.info(f"Fetching product data for style: {style}")
+def get_product_data(style, preserve_size_format=True):
+    """
+    Get product data from SanMar API for a given style.
+    
+    Args:
+        style (str): Product style number
+        preserve_size_format (bool): If True, keep original SanMar size format (XXL instead of 2XL)
+    """
+    logger.info(f"Fetching product data for style: {style}, preserve_size_format: {preserve_size_format}")
     
     request_data = {
         "arg0": {"style": style, "color": "", "size": ""},
@@ -639,18 +647,27 @@ def get_product_data(style):
                     if hasattr(basic_info, 'catalogColor') and hasattr(basic_info, 'size'):
                         catalog_color = basic_info.catalogColor  # CATALOGCOLOR (e.g., "RED")
                         display_color = basic_info.color if hasattr(basic_info, 'color') else catalog_color  # COLOR_NAME (e.g., "Red")
-                        
-                        # Normalize the size format (convert XXL -> 2XL, etc.)
+                        # Get the raw size from the API response
                         raw_size = basic_info.size
-                        try:
-                            # Import color_mapper here to avoid circular imports
-                            from color_mapper import color_mapper
-                            normalized_size = color_mapper.normalize_size(raw_size)
-                            logger.info(f"Size normalization: '{raw_size}' -> '{normalized_size}'")
-                            size = normalized_size
-                        except ImportError:
-                            # Fallback if color_mapper is not available
-                            logger.warning(f"color_mapper module not available, using raw size: {raw_size}")
+                        
+                        # Check if we should preserve the original size format (XXL vs 2XL)
+                        # The preserve_size_format flag is passed to the template
+                        if preserve_size_format:
+                            # Keep the original size format from SanMar API
+                            logger.info(f"Preserving original size format from API: '{raw_size}'")
+                            size = raw_size
+                        else:
+                            # Normalize the size format (convert XXL -> 2XL, etc.)
+                            try:
+                                # Import color_mapper here to avoid circular imports
+                                from color_mapper import color_mapper
+                                normalized_size = color_mapper.normalize_size(raw_size)
+                                logger.info(f"Size normalization: '{raw_size}' -> '{normalized_size}'")
+                                size = normalized_size
+                            except ImportError:
+                                # Fallback if color_mapper is not available
+                                logger.warning(f"color_mapper module not available, using raw size: {raw_size}")
+                                size = raw_size
                             size = raw_size
                         
                         catalog_colors.add(catalog_color)
@@ -664,7 +681,7 @@ def get_product_data(style):
                             if catalog_color not in part_id_map:
                                 part_id_map[catalog_color] = {}
                             
-                            # Make sure to use the normalized size for the part ID mapping
+                            # Use the raw size from API for part ID mapping
                             part_id_map[catalog_color][size] = part_id
                         # Extract images
                         if hasattr(item, 'productImageInfo') and catalog_color not in images:
