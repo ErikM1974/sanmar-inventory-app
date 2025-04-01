@@ -639,7 +639,19 @@ def get_product_data(style):
                     if hasattr(basic_info, 'catalogColor') and hasattr(basic_info, 'size'):
                         catalog_color = basic_info.catalogColor  # CATALOGCOLOR (e.g., "RED")
                         display_color = basic_info.color if hasattr(basic_info, 'color') else catalog_color  # COLOR_NAME (e.g., "Red")
-                        size = basic_info.size
+                        
+                        # Normalize the size format (convert XXL -> 2XL, etc.)
+                        raw_size = basic_info.size
+                        try:
+                            # Import color_mapper here to avoid circular imports
+                            from color_mapper import color_mapper
+                            normalized_size = color_mapper.normalize_size(raw_size)
+                            logger.info(f"Size normalization: '{raw_size}' -> '{normalized_size}'")
+                            size = normalized_size
+                        except ImportError:
+                            # Fallback if color_mapper is not available
+                            logger.warning(f"color_mapper module not available, using raw size: {raw_size}")
+                            size = raw_size
                         
                         catalog_colors.add(catalog_color)
                         display_colors[catalog_color] = display_color
@@ -652,6 +664,7 @@ def get_product_data(style):
                             if catalog_color not in part_id_map:
                                 part_id_map[catalog_color] = {}
                             
+                            # Make sure to use the normalized size for the part ID mapping
                             part_id_map[catalog_color][size] = part_id
                         # Extract images
                         if hasattr(item, 'productImageInfo') and catalog_color not in images:
