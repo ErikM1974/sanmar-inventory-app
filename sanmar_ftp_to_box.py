@@ -10,9 +10,11 @@ import csv
 import ftplib
 import logging
 import tempfile
+import requests
 from datetime import datetime
 from dotenv import load_dotenv
-from boxsdk import Client, OAuth2, JWTAuth
+from boxsdk import Client, OAuth2
+import base64
 
 # Set up logging
 logging.basicConfig(
@@ -38,7 +40,8 @@ SANMAR_FTP_FILENAME = os.getenv('SANMAR_FTP_FILENAME', 'sanmar_dip.txt')
 # Box.com credentials
 BOX_CLIENT_ID = os.getenv('BOX_CLIENT_ID', 'bapez65e9mnc3yg0yop17wy646pq57rs')
 BOX_CLIENT_SECRET = os.getenv('BOX_CLIENT_SECRET', 'wAZDgCAmVKOJH7PRbw1h74mDEs30uUZN')
-BOX_FOLDER_ID = os.getenv('BOX_FOLDER_ID', '314832680593')
+BOX_FOLDER_ID = os.getenv('BOX_FOLDER_ID', '0')  # Use '0' for the root folder
+BOX_ENTERPRISE_ID = os.getenv('BOX_ENTERPRISE_ID', '73197563')
 
 def download_from_ftp(local_path):
     """Download the inventory file from SanMar FTP server."""
@@ -95,19 +98,39 @@ def convert_to_csv(input_path, output_path):
 def upload_to_box(file_path, file_name):
     """Upload the CSV file to Box.com."""
     try:
-        logger.info(f"Authenticating with Box.com")
+        logger.info(f"Authenticating with Box.com using Client Credentials Grant")
         
-        # Set up OAuth2 for Box using Client Credentials Grant
-        oauth = OAuth2(
+        # Get access token using Client Credentials Grant
+        auth_url = "https://api.box.com/oauth2/token"
+        
+        data = {
+            'grant_type': 'client_credentials',
+            'client_id': BOX_CLIENT_ID,
+            'client_secret': BOX_CLIENT_SECRET,
+            'box_subject_type': 'enterprise',
+            'box_subject_id': BOX_ENTERPRISE_ID
+        }
+        
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+        
+        logger.info("Requesting access token from Box.com")
+        response = requests.post(auth_url, data=data, headers=headers)
+        
+        if response.status_code != 200:
+            raise Exception(f"Failed to get access token: {response.text}")
+        
+        access_token = response.json().get('access_token')
+        logger.info("Successfully obtained access token")
+        
+        # Create Box client with the access token
+        auth = OAuth2(
             client_id=BOX_CLIENT_ID,
             client_secret=BOX_CLIENT_SECRET,
-            store_tokens=lambda access_token, refresh_token: None
+            access_token=access_token
         )
-        
-        # Get the access token using Client Credentials Grant
-        access_token = oauth.authenticate_instance()
-        
-        client = Client(oauth)
+        client = Client(auth)
         
         # Get the folder
         folder = client.folder(folder_id=BOX_FOLDER_ID).get()
