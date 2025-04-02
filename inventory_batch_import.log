@@ -1,0 +1,20 @@
+2025-04-02 11:15:40,428 - __main__ - INFO - Starting SanMar inventory import in batches...
+2025-04-02 11:15:41,693 - __main__ - INFO - Retrieved 13 unique styles from Caspio Sanmar_Bulk table.
+2025-04-02 11:15:41,695 - __main__ - INFO - No checkpoint file found. Starting from scratch.
+2025-04-02 11:15:48,987 - __main__ - INFO - Clearing existing inventory data from Caspio...
+2025-04-02 11:15:49,612 - __main__ - INFO - Cleared existing inventory data from Caspio. Response: {"RecordsAffected":155}
+2025-04-02 11:15:49,615 - __main__ - INFO - Processing 13 styles in batches of 10...
+2025-04-02 11:15:49,615 - __main__ - INFO - Processing batch 1/2: 10 styles
+2025-04-02 11:15:50,659 - __main__ - INFO - Retrieved 126 inventory records for style 102699.
+2025-04-02 11:15:51,859 - __main__ - INFO - Retrieved 9 inventory records for style 108090.
+2025-04-02 11:15:53,318 - __main__ - INFO - Retrieved 522 inventory records for style 12000.
+2025-04-02 11:15:54,551 - __main__ - INFO - Retrieved 27 inventory records for style 108089.
+2025-04-02 11:15:55,775 - __main__ - INFO - Retrieved 9 inventory records for style 108087C.
+2025-04-02 11:15:57,019 - __main__ - INFO - Retrieved 18 inventory records for style 108091.
+2025-04-02 11:15:58,225 - __main__ - INFO - Retrieved 36 inventory records for style 108085.
+2025-04-02 11:15:59,730 - __main__ - INFO - Retrieved 648 inventory records for style 054X.
+2025-04-02 11:16:00,980 - __main__ - INFO - Retrieved 27 inventory records for style 108084.
+2025-04-02 11:16:02,196 - __main__ - INFO - Retrieved 9 inventory records for style 108105.
+2025-04-02 11:17:29,197 - __main__ - INFO - Imported 100 of 1431 inventory records (7.0%).
+2025-04-02 11:18:48,637 - __main__ - INFO - Imported 200 of 1431 inventory records (14.0%).
+2025-04-02 11:20:39,992 - __main__ - INFO - Imported 300 of 1431 inventory records (21.0%).

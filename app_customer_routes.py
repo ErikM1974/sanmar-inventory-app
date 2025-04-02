@@ -60,46 +60,37 @@ def product_detail(style):
     }
     
     return render_template('product.html', **context)
-
 @customer_bp.route('/category/<category_name>')
 def category_view(category_name):
-    """Category page view"""
-    # Get the products for this category from mock or API
-    # In a real implementation, you'd filter products by category
-    # Here we'll just use mock data for demonstration
+    """Category page view with Caspio gallery integration"""
+    from caspio_embed_helper import generate_category_gallery_embed
     
-    # Default to our test styles
-    test_styles = ["PC61", "J790", "K500", "L500"]
-    products = []
-    
-    for style in test_styles:
-        product_data = get_mock_product_data(style)
-        if product_data:
-            # Add style to the product data
-            product_data['style'] = style
-            
-            # Add a default image URL
-            if 'images' in product_data and len(product_data['images']) > 0:
-                first_color = next(iter(product_data['images']))
-                product_data['image_url'] = product_data['images'][first_color]
-            else:
-                product_data['image_url'] = get_mock_image_url(style)
-                
-            # Add pricing
-            pricing = get_mock_pricing(style)
-            if pricing and 'original_price' in pricing and 'M' in pricing['original_price']:
-                # Use medium size price as default
-                product_data['price'] = pricing['original_price']['M']
-            else:
-                product_data['price'] = 0.00
-                
-            products.append(product_data)
+    # Get the Caspio embed code for the category gallery
+    caspio_embed = generate_category_gallery_embed(category=category_name)
     
     # Prepare context for template
     context = {
         'category_name': category_name,
-        'products': products,
+        'caspio_embed': caspio_embed,
         'page_title': f"{category_name} - Product Category"
+    }
+    
+    return render_template('category.html', **context)
+
+@customer_bp.route('/category/<category_name>/<subcategory_name>')
+def subcategory_view(category_name, subcategory_name):
+    """Subcategory page view with Caspio gallery integration"""
+    from caspio_embed_helper import generate_category_gallery_embed
+    
+    # Get the Caspio embed code for the subcategory gallery
+    caspio_embed = generate_category_gallery_embed(category=category_name, subcategory=subcategory_name)
+    
+    # Prepare context for template
+    context = {
+        'category_name': category_name,
+        'subcategory_name': subcategory_name,
+        'caspio_embed': caspio_embed,
+        'page_title': f"{subcategory_name} - {category_name} Products"
     }
     
     return render_template('category.html', **context)
@@ -232,19 +223,41 @@ def api_product_quick_view(style):
 def api_caspio_categories():
     """API endpoint to get product categories from Caspio"""
     try:
-        # In a real implementation, you'd fetch from Caspio
-        # Here we'll use mock data for demonstration
-        categories = [
-            { "name": "T-Shirts", "count": 354, "url": "/customer/category/T-Shirts" },
-            { "name": "Polos", "count": 187, "url": "/customer/category/Polos" },
-            { "name": "Sweatshirts & Fleece", "count": 213, "url": "/customer/category/Sweatshirts" },
-            { "name": "Jackets & Outerwear", "count": 178, "url": "/customer/category/Jackets" },
-            { "name": "Activewear", "count": 145, "url": "/customer/category/Activewear" },
-            { "name": "Workwear", "count": 92, "url": "/customer/category/Workwear" },
-            { "name": "Bags", "count": 76, "url": "/customer/category/Bags" },
-            { "name": "Hats & Caps", "count": 81, "url": "/customer/category/Hats" },
-            { "name": "Ladies", "count": 198, "url": "/customer/category/Ladies" }
-        ]
+        # Import the Caspio client
+        from caspio_client import caspio_api
+        
+        # Get categories from Caspio
+        categories_response = caspio_api.get_categories()
+        
+        if not categories_response:
+            logger.error("Failed to get categories from Caspio API")
+            # Fall back to mock data
+            categories = [
+                { "name": "T-Shirts", "count": 354, "url": "/customer/category/T-Shirts" },
+                { "name": "Polos", "count": 187, "url": "/customer/category/Polos" },
+                { "name": "Sweatshirts & Fleece", "count": 213, "url": "/customer/category/Sweatshirts" },
+                { "name": "Jackets & Outerwear", "count": 178, "url": "/customer/category/Jackets" },
+                { "name": "Activewear", "count": 145, "url": "/customer/category/Activewear" },
+                { "name": "Workwear", "count": 92, "url": "/customer/category/Workwear" },
+                { "name": "Bags", "count": 76, "url": "/customer/category/Bags" },
+                { "name": "Hats & Caps", "count": 81, "url": "/customer/category/Hats" },
+                { "name": "Ladies", "count": 198, "url": "/customer/category/Ladies" }
+            ]
+        else:
+            # Process the Caspio API response
+            categories = []
+            for item in categories_response.get('Result', []):
+                category_name = item.get('category', '')
+                if category_name:
+                    # Get subcategories for this category
+                    subcategories_response = caspio_api.get_subcategories(category_name)
+                    subcategory_count = len(subcategories_response.get('Result', [])) if subcategories_response else 0
+                    
+                    categories.append({
+                        "name": category_name,
+                        "count": subcategory_count,
+                        "url": f"/customer/category/{category_name}"
+                    })
         
         return jsonify({
             'success': True,
@@ -256,6 +269,44 @@ def api_caspio_categories():
         return jsonify({
             'success': False,
             'message': f"Error retrieving categories: {str(e)}"
+        })
+
+@customer_bp.route('/api/caspio-subcategories/<category>')
+def api_caspio_subcategories(category):
+    """API endpoint to get subcategories for a specific category from Caspio"""
+    try:
+        # Import the Caspio client
+        from caspio_client import caspio_api
+        
+        # Get subcategories from Caspio
+        subcategories_response = caspio_api.get_subcategories(category)
+        
+        if not subcategories_response:
+            logger.error(f"Failed to get subcategories for {category} from Caspio API")
+            # Return empty list
+            subcategories = []
+        else:
+            # Process the Caspio API response
+            subcategories = []
+            for item in subcategories_response.get('Result', []):
+                subcategory_name = item.get('subcategory', '')
+                if subcategory_name:
+                    subcategories.append({
+                        "name": subcategory_name,
+                        "url": f"/customer/category/{category}/{subcategory_name}"
+                    })
+        
+        return jsonify({
+            'success': True,
+            'category': category,
+            'subcategories': subcategories
+        })
+        
+    except Exception as e:
+        logger.error(f"Error in Caspio subcategories API: {str(e)}")
+        return jsonify({
+            'success': False,
+            'message': f"Error retrieving subcategories: {str(e)}"
         })
 
 @customer_bp.route('/api/product-inventory/<style>')

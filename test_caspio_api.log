@@ -1,0 +1,29 @@
+2025-04-02 05:12:43,588 - __main__ - INFO - Successfully imported caspio_api
+2025-04-02 05:12:43,588 - __main__ - INFO - Starting Caspio API tests...
+2025-04-02 05:12:43,588 - __main__ - INFO - Testing Caspio API connection...
+2025-04-02 05:12:43,593 - caspio_client - INFO - Caspio access token expired or missing. Attempting to refresh/obtain.
+2025-04-02 05:12:43,593 - caspio_client - INFO - Attempting to refresh Caspio token.
+2025-04-02 05:12:44,144 - caspio_client - INFO - Successfully refreshed Caspio API access token.
+2025-04-02 05:12:44,145 - __main__ - INFO - Successfully obtained access token
+2025-04-02 05:12:44,147 - __main__ - INFO - Testing get_categories...
+2025-04-02 05:12:44,696 - caspio_client - ERROR - Invalid method GET for Caspio API request
+2025-04-02 05:12:44,696 - __main__ - ERROR - Failed to get categories
+2025-04-02 05:12:44,698 - __main__ - ERROR - test_get_categories failed
+2025-04-02 05:12:44,698 - __main__ - INFO - Testing get_subcategories...
+2025-04-02 05:12:45,229 - caspio_client - ERROR - Invalid method GET for Caspio API request
+2025-04-02 05:12:45,229 - __main__ - ERROR - No categories found to test subcategories
+2025-04-02 05:12:45,229 - __main__ - ERROR - test_get_subcategories failed
+2025-04-02 05:12:45,229 - __main__ - INFO - Testing get_products_by_category...
+2025-04-02 05:12:45,789 - caspio_client - ERROR - Invalid method GET for Caspio API request
+2025-04-02 05:12:45,793 - __main__ - ERROR - No categories found to test products
+2025-04-02 05:12:45,795 - __main__ - ERROR - test_get_products_by_category failed
+2025-04-02 05:12:45,795 - __main__ - INFO - Testing get_product_by_style...
+2025-04-02 05:12:45,796 - __main__ - INFO - Testing product retrieval for style: PC61
+2025-04-02 05:12:46,273 - caspio_client - ERROR - Invalid method GET for Caspio API request
+2025-04-02 05:12:46,276 - __main__ - ERROR - Failed to get product for style PC61
+2025-04-02 05:12:46,277 - __main__ - ERROR - test_get_product_by_style failed
+2025-04-02 05:12:46,277 - __main__ - INFO - Testing get_brands...
+2025-04-02 05:12:46,762 - caspio_client - ERROR - Invalid method GET for Caspio API request
+2025-04-02 05:12:46,762 - __main__ - ERROR - Failed to get brands
+2025-04-02 05:12:46,762 - __main__ - ERROR - test_get_brands failed
+2025-04-02 05:12:46,767 - __main__ - INFO - Tests completed: 0/5 passed

@@ -13,6 +13,7 @@
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='home-style.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='product-styles.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='caspio-styles.css') }}" rel="stylesheet">
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
@@ -230,63 +231,28 @@
                         <h3>Quick Style Search</h3>
                     </div>
                     <div class="sidebar-content">
-                        <form id="style-search-form" class="mb-3">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Enter style #" id="style-search-input">
-                                <button class="btn btn-primary" type="submit">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                        </form>
+                        <!-- Caspio Style Search DataPage -->
+                        <div id="caspio-style-search">
+                            <form id="style-search-form" class="mb-3">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Enter style #" id="style-search-input">
+                                    <button class="btn btn-primary" type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Product Grid -->
+            <!-- Product Grid with Caspio DataPage -->
             <div class="col-lg-9">
                 <div class="product-grid">
-                    {% if products %}
-                        <div class="row">
-                            {% for product in products %}
-                                <div class="col-md-4 mb-4">
-                                    <div class="product-card h-100">
-                                        <div class="product-image-container">
-                                            <img src="{{ product.image_url }}" alt="{{ product.product_name }}" class="product-image">
-                                        </div>
-                                        <div class="product-info">
-                                            <h5 class="product-title">{{ product.product_name }}</h5>
-                                            <p class="product-style">{{ product.style }}</p>
-                                            <div class="product-colors">
-                                                {% for color in product.catalog_colors[:5] %}
-                                                    <div class="color-dot" title="{{ color }}"></div>
-                                                {% endfor %}
-                                                {% if product.catalog_colors|length > 5 %}
-                                                    <div class="color-dot-more">+{{ product.catalog_colors|length - 5 }}</div>
-                                                {% endif %}
-                                            </div>
-                                            <p class="product-price">${{ "%.2f"|format(product.price) }}</p>
-                                            <div class="product-actions">
-                                                <a href="/product/{{ product.style }}" class="btn btn-primary btn-sm">View Details</a>
-                                                <button class="btn btn-outline-primary btn-sm add-to-quote" 
-                                                        data-style="{{ product.style }}"
-                                                        data-name="{{ product.product_name }}"
-                                                        data-price="{{ product.price }}">
-                                                    Add to Quote
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <div class="no-products-found">
-                            <div class="alert alert-info">
-                                <h4 class="alert-heading">No products found!</h4>
-                                <p>We couldn't find any products in the {{ category_name }} category. Please try another category or search term.</p>
-                            </div>
-                        </div>
-                    {% endif %}
+                    <!-- Caspio Product Gallery DataPage -->
+                    <div id="caspio-product-gallery">
+                        {{ caspio_embed|safe }}
+                    </div>
                 </div>
 
                 <!-- Pagination -->
@@ -366,6 +332,7 @@
 
     <!-- Bootstrap and Required JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='caspio-integration.js') }}"></script>
     
     <!-- Custom Scripts -->
     <script src="{{ url_for('static', filename='quote-cart.js') }}"></script>
@@ -379,24 +346,33 @@
             }
         });
         
-        // Create color dots with appropriate colors
-        document.querySelectorAll('.product-card .color-dot').forEach(function(dot, index) {
-            const colors = [
-                '#000000', // Black
-                '#0000ff', // Blue
-                '#ff0000', // Red
-                '#ffffff', // White
-                '#008000', // Green
-                '#4169e1', // Royal
-                '#000080', // Navy
-                '#808080', // Grey
-                '#ffa500', // Orange
-                '#800080'  // Purple
-            ];
-            dot.style.backgroundColor = colors[index % colors.length];
-            if (colors[index % colors.length] === '#ffffff') {
-                dot.style.border = '1px solid #dee2e6';
-            }
+        // Initialize Caspio DataPages
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add any custom JavaScript for Caspio DataPages here
+            
+            // Example: Add event listeners for Caspio elements
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.addedNodes && mutation.addedNodes.length > 0) {
+                        // Check for Caspio elements that might be dynamically added
+                        const caspioButtons = document.querySelectorAll('.caspio-button');
+                        if (caspioButtons.length > 0) {
+                            caspioButtons.forEach(function(button) {
+                                if (!button.hasAttribute('data-event-added')) {
+                                    button.setAttribute('data-event-added', 'true');
+                                    button.addEventListener('click', function(e) {
+                                        // Custom handling for Caspio buttons if needed
+                                        console.log('Caspio button clicked:', this);
+                                    });
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+            
+            // Start observing the document body for changes
+            observer.observe(document.body, { childList: true, subtree: true });
         });
     </script>
 </body>

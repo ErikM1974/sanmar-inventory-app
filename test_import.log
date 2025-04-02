@@ -1,0 +1,119 @@
+2025-04-02 09:20:35,707 - __main__ - INFO - Starting import test...
+2025-04-02 09:20:35,707 - __main__ - INFO - Getting styles from Sanmar_Bulk_251816_Feb2024 table...
+2025-04-02 09:20:35,707 - __main__ - INFO - Using existing access token.
+2025-04-02 09:20:36,330 - __main__ - INFO - Retrieved 10 styles from Sanmar_Bulk_251816_Feb2024 table.
+2025-04-02 09:20:36,331 - __main__ - INFO - Styles found:
+2025-04-02 09:20:36,331 - __main__ - INFO - - 054X
+2025-04-02 09:20:36,333 - __main__ - INFO - - 054X
+2025-04-02 09:20:36,333 - __main__ - INFO - - 054X
+2025-04-02 09:20:36,334 - __main__ - INFO - - 054X
+2025-04-02 09:20:36,339 - __main__ - INFO - - 054X
+2025-04-02 09:20:36,339 - __main__ - INFO - - 054X
+2025-04-02 09:20:36,339 - __main__ - INFO - - 054X
+2025-04-02 09:20:36,339 - __main__ - INFO - - 054X
+2025-04-02 09:20:36,339 - __main__ - INFO - - 054X
+2025-04-02 09:20:36,339 - __main__ - INFO - - 054X
+2025-04-02 09:20:36,340 - __main__ - INFO - Testing insert into Inventory table...
+2025-04-02 09:20:36,340 - __main__ - INFO - Using existing access token.
+2025-04-02 09:20:36,993 - __main__ - INFO - Successfully inserted test record into Inventory table.
+2025-04-02 09:20:36,994 - __main__ - INFO - Testing insert into Pricing table...
+2025-04-02 09:20:36,995 - __main__ - INFO - Using existing access token.
+2025-04-02 09:20:37,539 - __main__ - ERROR - Error inserting test record: 400 Client Error: Bad Request for url: https://c3eku948.caspio.com/rest/v2/tables/Pricing/records
+2025-04-02 09:20:37,540 - __main__ - ERROR - Response content: {"Code":"AlterReadOnlyData","Message":"Cannot perform operation because one or more fields are read-only.","Resource":"https://c3eku948.caspio.com/rest/v2/tables/Pricing/records","RequestId":"0094A55E-83BC-466B-B69F-AB1EDC7C8454"}
+2025-04-02 09:20:37,540 - __main__ - ERROR - Failed to insert test record into Pricing table.
+2025-04-02 09:21:52,477 - __main__ - INFO - Starting import test...
+2025-04-02 09:21:52,477 - __main__ - INFO - Getting styles from Sanmar_Bulk_251816_Feb2024 table...
+2025-04-02 09:21:52,477 - __main__ - INFO - Using existing access token.
+2025-04-02 09:21:53,050 - __main__ - INFO - Retrieved 10 styles from Sanmar_Bulk_251816_Feb2024 table.
+2025-04-02 09:21:53,050 - __main__ - INFO - Styles found:
+2025-04-02 09:21:53,050 - __main__ - INFO - - 054X
+2025-04-02 09:21:53,050 - __main__ - INFO - - 054X
+2025-04-02 09:21:53,050 - __main__ - INFO - - 054X
+2025-04-02 09:21:53,050 - __main__ - INFO - - 054X
+2025-04-02 09:21:53,050 - __main__ - INFO - - 054X
+2025-04-02 09:21:53,050 - __main__ - INFO - - 054X
+2025-04-02 09:21:53,050 - __main__ - INFO - - 054X
+2025-04-02 09:21:53,050 - __main__ - INFO - - 054X
+2025-04-02 09:21:53,050 - __main__ - INFO - - 054X
+2025-04-02 09:21:53,050 - __main__ - INFO - - 054X
+2025-04-02 09:21:53,050 - __main__ - INFO - Testing insert into Inventory table...
+2025-04-02 09:21:53,050 - __main__ - INFO - Using existing access token.
+2025-04-02 09:21:53,690 - __main__ - INFO - Successfully inserted test record into Inventory table.
+2025-04-02 09:21:53,691 - __main__ - INFO - Testing insert into Pricing table...
+2025-04-02 09:21:53,691 - __main__ - INFO - Using existing access token.
+2025-04-02 09:21:54,193 - __main__ - ERROR - Error inserting test record: 400 Client Error: Bad Request for url: https://c3eku948.caspio.com/rest/v2/tables/Pricing/records
+2025-04-02 09:21:54,193 - __main__ - ERROR - Response content: {"Code":"AlterReadOnlyData","Message":"Cannot perform operation because one or more fields are read-only.","Resource":"https://c3eku948.caspio.com/rest/v2/tables/Pricing/records","RequestId":"50A12D90-9652-4A02-B5DE-5860FE0D5105"}
+2025-04-02 09:21:54,198 - __main__ - ERROR - Failed to insert test record into Pricing table.
+2025-04-02 09:23:37,946 - __main__ - INFO - Starting import test...
+2025-04-02 09:23:37,946 - __main__ - INFO - Checking Pricing table fields...
+2025-04-02 09:23:37,946 - __main__ - INFO - Getting fields for Pricing table...
+2025-04-02 09:23:37,946 - __main__ - INFO - Using existing access token.
+2025-04-02 09:23:38,712 - __main__ - INFO - Retrieved 9 fields from Pricing table.
+2025-04-02 09:23:38,712 - __main__ - INFO - Fields in Pricing table:
+2025-04-02 09:23:38,712 - __main__ - INFO - - PRICING_ID (AUTONUMBER): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:23:38,712 - __main__ - INFO - - STYLE (STRING): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:23:38,712 - __main__ - INFO - - COLOR_NAME (STRING): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:23:38,720 - __main__ - INFO - - SIZE (STRING): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:23:38,720 - __main__ - INFO - - PIECE_PRICE (CURRENCY): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:23:38,720 - __main__ - INFO - - CASE_PRICE (CURRENCY): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:23:38,720 - __main__ - INFO - - CASE_SIZE (NUMBER): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:23:38,720 - __main__ - INFO - - PROGRAM_PRICE (CURRENCY): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:23:38,720 - __main__ - INFO - - LAST_UPDATED (TIMESTAMP): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:23:38,723 - __main__ - INFO - Getting styles from Sanmar_Bulk_251816_Feb2024 table...
+2025-04-02 09:23:38,723 - __main__ - INFO - Using existing access token.
+2025-04-02 09:23:39,276 - __main__ - INFO - Retrieved 10 styles from Sanmar_Bulk_251816_Feb2024 table.
+2025-04-02 09:23:39,277 - __main__ - INFO - Styles found:
+2025-04-02 09:23:39,277 - __main__ - INFO - - 054X
+2025-04-02 09:23:39,278 - __main__ - INFO - - 054X
+2025-04-02 09:23:39,278 - __main__ - INFO - - 054X
+2025-04-02 09:23:39,278 - __main__ - INFO - - 054X
+2025-04-02 09:23:39,278 - __main__ - INFO - - 054X
+2025-04-02 09:23:39,278 - __main__ - INFO - - 054X
+2025-04-02 09:23:39,278 - __main__ - INFO - - 054X
+2025-04-02 09:23:39,278 - __main__ - INFO - - 054X
+2025-04-02 09:23:39,278 - __main__ - INFO - - 054X
+2025-04-02 09:23:39,278 - __main__ - INFO - - 054X
+2025-04-02 09:23:39,279 - __main__ - INFO - Testing insert into Inventory table...
+2025-04-02 09:23:39,279 - __main__ - INFO - Using existing access token.
+2025-04-02 09:23:39,935 - __main__ - INFO - Successfully inserted test record into Inventory table.
+2025-04-02 09:23:39,941 - __main__ - INFO - Testing insert into Pricing table...
+2025-04-02 09:23:39,941 - __main__ - INFO - Using existing access token.
+2025-04-02 09:23:40,510 - __main__ - ERROR - Error inserting test record: 400 Client Error: Bad Request for url: https://c3eku948.caspio.com/rest/v2/tables/Pricing/records
+2025-04-02 09:23:40,512 - __main__ - ERROR - Response content: {"Code":"AlterReadOnlyData","Message":"Cannot perform operation because one or more fields are read-only.","Resource":"https://c3eku948.caspio.com/rest/v2/tables/Pricing/records","RequestId":"7441B98D-6D5B-4080-8B73-3AC88FD58D24"}
+2025-04-02 09:23:40,513 - __main__ - ERROR - Failed to insert test record into Pricing table.
+2025-04-02 09:24:27,069 - __main__ - INFO - Starting import test...
+2025-04-02 09:24:27,069 - __main__ - INFO - Checking Pricing table fields...
+2025-04-02 09:24:27,070 - __main__ - INFO - Getting fields for Pricing table...
+2025-04-02 09:24:27,070 - __main__ - INFO - Using existing access token.
+2025-04-02 09:24:27,615 - __main__ - INFO - Retrieved 9 fields from Pricing table.
+2025-04-02 09:24:27,615 - __main__ - INFO - Fields in Pricing table:
+2025-04-02 09:24:27,615 - __main__ - INFO - - PRICING_ID (AUTONUMBER): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:24:27,615 - __main__ - INFO - - STYLE (STRING): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:24:27,615 - __main__ - INFO - - COLOR_NAME (STRING): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:24:27,615 - __main__ - INFO - - SIZE (STRING): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:24:27,615 - __main__ - INFO - - PIECE_PRICE (CURRENCY): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:24:27,615 - __main__ - INFO - - CASE_PRICE (CURRENCY): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:24:27,615 - __main__ - INFO - - CASE_SIZE (NUMBER): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:24:27,615 - __main__ - INFO - - PROGRAM_PRICE (CURRENCY): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:24:27,615 - __main__ - INFO - - LAST_UPDATED (TIMESTAMP): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:24:27,620 - __main__ - INFO - Getting styles from Sanmar_Bulk_251816_Feb2024 table...
+2025-04-02 09:24:27,620 - __main__ - INFO - Using existing access token.
+2025-04-02 09:24:28,167 - __main__ - INFO - Retrieved 10 styles from Sanmar_Bulk_251816_Feb2024 table.
+2025-04-02 09:24:28,170 - __main__ - INFO - Styles found:
+2025-04-02 09:24:28,172 - __main__ - INFO - - 054X
+2025-04-02 09:24:28,172 - __main__ - INFO - - 054X
+2025-04-02 09:24:28,172 - __main__ - INFO - - 054X
+2025-04-02 09:24:28,173 - __main__ - INFO - - 054X
+2025-04-02 09:24:28,173 - __main__ - INFO - - 054X
+2025-04-02 09:24:28,174 - __main__ - INFO - - 054X
+2025-04-02 09:24:28,174 - __main__ - INFO - - 054X
+2025-04-02 09:24:28,174 - __main__ - INFO - - 054X
+2025-04-02 09:24:28,174 - __main__ - INFO - - 054X
+2025-04-02 09:24:28,174 - __main__ - INFO - - 054X
+2025-04-02 09:24:28,174 - __main__ - INFO - Testing insert into Inventory table...
+2025-04-02 09:24:28,174 - __main__ - INFO - Using existing access token.
+2025-04-02 09:24:28,882 - __main__ - INFO - Successfully inserted test record into Inventory table.
+2025-04-02 09:24:28,885 - __main__ - INFO - Testing insert into Pricing table...
+2025-04-02 09:24:28,885 - __main__ - INFO - Using existing access token.
+2025-04-02 09:24:29,700 - __main__ - INFO - Successfully inserted test record into Pricing table.
+2025-04-02 09:24:29,703 - __main__ - INFO - Import test completed successfully.

@@ -1,103 +1,107 @@
+#!/usr/bin/env python
 """
-Caspio API Client for accessing product data from Caspio Database
+Caspio API client for interacting with Caspio tables.
 """
+
+import os
 import json
 import logging
 import requests
-import time
-from urllib.parse import urljoin
+from datetime import datetime, timedelta
 
-# Set up logging
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class CaspioClient:
-    """Client for accessing the Caspio REST API"""
+    """Client for interacting with the Caspio API."""
     
-    def __init__(self):
-        # Caspio API configuration
-        self.base_url = "https://c3eku948.caspio.com/"
-        self.token_endpoint = "oauth/token"
-        self.swagger_url = "rest/swagger"
-        self.client_id = "25bea36404d34215e23255861c370d0fc417444f0af8e8477c"
-        self.client_secret = "5316be27cadd4b56a235a544c9018aa54feb64d90805430011"
-        
-        # Caspio table name
-        self.products_table = "Sanmar_Bulk_251816_Feb2024"
-        
-        # Pre-configured access token
-        self._access_token = "OGi_Ibkp7GlHv-upuNAIJlWpLm3v8aNZDU2iaUcq_buZaGGfBKMfEx4Vd3DRBjGNK1Izse50dACFVZXanB0002LU8hZCU6mP-lVHLAZRovCKFRy3z3W-mWEa-LqBQve2UwNfZJTWO1epgm_XYd8TfQ5gu7XeGzBATzK7ktH_4GOm0QJYWpM3ncJNaDNE0fUn3bFGypzFVTozbtesT1gj1I7cwywZCbqXOIEHvxtvcEaldDx-MvDYCC4BdZPxtxzMEo5aWpfccuQFApWqKZ8hcagzB424Mbw5GFflr6AAD2SpH6Qrl88DOgHMn9xW_j_TekNBCwYQGD51vszE-AeOPXxdq0fnXJ1naNFIU-8JusnSBCY76M7fBe-4EgcEyHF-pgn0OeAHHK-Kb9XmtHaFFF262Q4wHamXtga0O0-hLa0"
-        self._token_type = "bearer"
-        self._refresh_token = "620fca784a99481b990e1a65663872f61c03c2c3821041d6a0a1688615ff7da4"
-        self._token_expiry = time.time() + 86399  # Set expiry to ~24 hours from now
-        
-        # Cache for API responses
-        self.cache = {}
-        self.cache_ttl = 3600  # 1 hour cache TTL
+    def __init__(self, base_url, client_id=None, client_secret=None, access_token=None, refresh_token=None):
+        """Initialize the Caspio API client."""
+        self.base_url = base_url
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.access_token = access_token
+        self.refresh_token = refresh_token
+        self.token_expiry = None
     
-    def _get_access_token(self):
-        """Get a new access token or return cached one if still valid"""
-        current_time = time.time()
+    def get_access_token(self):
+        """Get an access token from the Caspio API."""
+        # If we already have an access token, use it
+        if self.access_token:
+            return self.access_token
         
-        # If token exists and is not expired, return it
-        if self._access_token and current_time < self._token_expiry:
-            return self._access_token
+        # If we don't have an access token but have client credentials, get a new token
+        if self.client_id and self.client_secret:
+            auth_url = f"{self.base_url}/oauth/token"
+            payload = {
+                'grant_type': 'client_credentials',
+                'client_id': self.client_id,
+                'client_secret': self.client_secret
+            }
+            
+            try:
+                response = requests.post(auth_url, data=payload)
+                response.raise_for_status()
+                
+                token_data = response.json()
+                self.access_token = token_data.get('access_token')
+                expires_in = token_data.get('expires_in', 3600)
+                self.token_expiry = datetime.now() + timedelta(seconds=expires_in)
+                
+                return self.access_token
+            except requests.exceptions.RequestException as e:
+                logger.error(f"Error getting authentication token: {str(e)}")
+                if hasattr(e, 'response') and e.response is not None:
+                    logger.error(f"Response content: {e.response.text}")
+                return None
         
-        # Otherwise, get a new token
-        token_url = urljoin(self.base_url, self.token_endpoint)
-        
-        try:
-            response = requests.post(
-                token_url,
-                data={
-                    "grant_type": "client_credentials",
-                    "client_id": self.client_id,
-                    "client_secret": self.client_secret
-                }
-            )
-            
-            response.raise_for_status()
-            token_data = response.json()
-            
-            self._access_token = token_data.get("access_token")
-            # Set expiry time with a small buffer to avoid edge cases
-            expires_in = token_data.get("expires_in", 3600)
-            self._token_expiry = current_time + expires_in - 60
-            
-            logger.info("Successfully obtained new Caspio API access token")
-            return self._access_token
-            
-        except Exception as e:
-            logger.error(f"Error obtaining Caspio API access token: {str(e)}")
-            return None
+        logger.error("No valid authentication method available.")
+        return None
     
-    def _make_api_request(self, endpoint, method="GET", params=None, data=None):
-        """Make a request to the Caspio API with authentication"""
-        # Get a valid access token
-        access_token = self._get_access_token()
-        if not access_token:
-            logger.error("Unable to obtain access token for Caspio API")
-            return None
+    def refresh_access_token(self):
+        """Refresh the access token using the refresh token."""
+        if not self.refresh_token:
+            logger.error("No refresh token available.")
+            return False
         
-        # Create cache key if this is a GET request
-        cache_key = None
-        if method == "GET":
-            cache_key = f"{endpoint}:{json.dumps(params or {})}"
-            if cache_key in self.cache:
-                cache_entry = self.cache[cache_key]
-                if time.time() < cache_entry['expiry']:
-                    logger.info(f"Using cached response for {endpoint}")
-                    return cache_entry['data']
-        
-        # Make the API request
-        url = urljoin(self.base_url, endpoint)
-        headers = {
-            "Authorization": f"Bearer {access_token}",
-            "Content-Type": "application/json"
+        auth_url = f"{self.base_url}/oauth/token"
+        payload = {
+            'grant_type': 'refresh_token',
+            'refresh_token': self.refresh_token
         }
         
         try:
-            response = None
+            response = requests.post(auth_url, data=payload)
+            response.raise_for_status()
+            
+            token_data = response.json()
+            self.access_token = token_data.get('access_token')
+            self.refresh_token = token_data.get('refresh_token')
+            expires_in = token_data.get('expires_in', 3600)
+            self.token_expiry = datetime.now() + timedelta(seconds=expires_in)
+            
+            logger.info("Successfully refreshed access token.")
+            return True
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Error refreshing access token: {str(e)}")
+            if hasattr(e, 'response') and e.response is not None:
+                logger.error(f"Response content: {e.response.text}")
+            return False
+    
+    def make_api_request(self, endpoint, method="GET", data=None, params=None):
+        """Make a request to the Caspio API."""
+        # Ensure we don't have double slashes in the URL
+        if self.base_url.endswith('/') and endpoint.startswith('/'):
+            endpoint = endpoint[1:]
+        elif not self.base_url.endswith('/') and not endpoint.startswith('/'):
+            endpoint = f"/{endpoint}"
+        
+        url = f"{self.base_url}{endpoint}"
+        headers = {
+            'Authorization': f'Bearer {self.get_access_token()}',
+            'Content-Type': 'application/json'
+        }
+        
+        try:
             if method == "GET":
                 response = requests.get(url, headers=headers, params=params)
             elif method == "POST":
@@ -105,88 +109,91 @@ class CaspioClient:
             elif method == "PUT":
                 response = requests.put(url, headers=headers, json=data)
             elif method == "DELETE":
-                response = requests.delete(url, headers=headers)
-            
-            if not response:
-                logger.error(f"Invalid method {method} for Caspio API request")
+                response = requests.delete(url, headers=headers, params=params)
+            else:
+                logger.error(f"Unsupported HTTP method: {method}")
                 return None
-                
+            
             response.raise_for_status()
-            result = response.json()
             
-            # Cache the result for GET requests
-            if method == "GET" and cache_key:
-                self.cache[cache_key] = {
-                    'data': result,
-                    'expiry': time.time() + self.cache_ttl
-                }
+            if response.status_code == 204:  # No content
+                return {}
             
-            return result
-            
-        except Exception as e:
-            logger.error(f"Error making Caspio API request to {endpoint}: {str(e)}")
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            logger.error(f"API request error: {str(e)}")
+            if hasattr(e, 'response') and e.response is not None:
+                logger.error(f"Response content: {e.response.text}")
             return None
     
-    def get_categories(self):
-        """Get distinct categories from SanMar Bulk Data"""
-        endpoint = f"rest/v2/tables/{self.products_table}/records"
-        params = {
-            "q.select": "DISTINCT category",
-            "q.where": "category IS NOT NULL",
-            "q.orderBy": "category ASC"
-        }
-        return self._make_api_request(endpoint, "GET", params=params)
+    def get_tables(self):
+        """Get a list of all tables in the Caspio account."""
+        endpoint = "rest/v2/tables"
+        response = self.make_api_request(endpoint)
         
-    def get_subcategories(self, category):
-        """Get distinct subcategories for a specific category"""
-        endpoint = f"rest/v2/tables/{self.products_table}/records"
-        params = {
-            "q.select": "DISTINCT subcategory",
-            "q.where": f"category = '{category}' AND subcategory IS NOT NULL",
-            "q.orderBy": "subcategory ASC"
-        }
-        return self._make_api_request(endpoint, "GET", params=params)
+        if response and 'Result' in response:
+            return response['Result']
+        
+        return []
     
-    def get_products_by_category(self, category, page=1, page_size=50):
-        """Get products filtered by category"""
-        endpoint = f"rest/v2/tables/{self.products_table}/records"
-        params = {
-            "q.pageSize": page_size,
-            "q.pageNumber": page,
-            "q.where": f"category = '{category}'",
-            "q.orderBy": "style ASC"
-        }
-        return self._make_api_request(endpoint, "GET", params=params)
+    def get_table_fields(self, table_name):
+        """Get a list of all fields in a table."""
+        endpoint = f"rest/v2/tables/{table_name}/fields"
+        response = self.make_api_request(endpoint)
+        
+        if response and 'Result' in response:
+            return response['Result']
+        
+        return []
     
-    def get_products_by_style_search(self, style_term, page=1, page_size=50):
-        """Get products matching a style search term"""
-        endpoint = f"rest/v2/tables/{self.products_table}/records"
-        params = {
-            "q.pageSize": page_size,
-            "q.pageNumber": page,
-            "q.where": f"style LIKE '{style_term}%'",
-            "q.orderBy": "style ASC"
-        }
-        return self._make_api_request(endpoint, "GET", params=params)
+    def query_records(self, table_name, fields=None, where=None, order_by=None, limit=None, offset=None):
+        """Query records from a table."""
+        endpoint = f"rest/v2/tables/{table_name}/records"
+        params = {}
+        
+        if fields:
+            params['select'] = ','.join(fields)
+        
+        if where:
+            params['where'] = where
+        
+        if order_by:
+            params['sort'] = order_by
+        
+        if limit:
+            params['limit'] = limit
+        
+        if offset:
+            params['offset'] = offset
+        
+        response = self.make_api_request(endpoint, params=params)
+        
+        if response and 'Result' in response:
+            return response['Result']
+        
+        return []
     
-    def get_product_by_style(self, style):
-        """Get product information by exact style number"""
-        endpoint = f"rest/v2/tables/{self.products_table}/records"
-        params = {
-            "q.where": f"style = '{style}'",
-            "q.orderBy": "color ASC, size ASC"
-        }
-        return self._make_api_request(endpoint, "GET", params=params)
+    def get_record(self, table_name, record_id):
+        """Get a record from a table by ID."""
+        endpoint = f"rest/v2/tables/{table_name}/records/{record_id}"
+        return self.make_api_request(endpoint)
     
-    def get_brands(self):
-        """Get distinct brands from SanMar Bulk Data"""
-        endpoint = f"rest/v2/tables/{self.products_table}/records"
-        params = {
-            "q.select": "DISTINCT brandName",
-            "q.where": "brandName IS NOT NULL",
-            "q.orderBy": "brandName ASC"
-        }
-        return self._make_api_request(endpoint, "GET", params=params)
-
-# Create a singleton instance
-caspio_api = CaspioClient()
+    def insert_record(self, table_name, record_data):
+        """Insert a record into a table."""
+        endpoint = f"rest/v2/tables/{table_name}/records"
+        return self.make_api_request(endpoint, method="POST", data=record_data)
+    
+    def update_record(self, table_name, record_id, record_data):
+        """Update a record in a table."""
+        endpoint = f"rest/v2/tables/{table_name}/records/{record_id}"
+        return self.make_api_request(endpoint, method="PUT", data=record_data)
+    
+    def delete_record(self, table_name, record_id):
+        """Delete a record from a table."""
+        endpoint = f"rest/v2/tables/{table_name}/records/{record_id}"
+        return self.make_api_request(endpoint, method="DELETE")
+    
+    def delete_all_records(self, table_name):
+        """Delete all records from a table."""
+        endpoint = f"rest/v2/tables/{table_name}/records"
+        return self.make_api_request(endpoint, method="DELETE")

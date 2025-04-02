@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('caspio_direct.categories') }}">Categories</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('caspio_direct.subcategories', category_name=product.CATEGORY_NAME) }}">{{ product.CATEGORY_NAME }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.PRODUCT_TITLE }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-8">
+            <h1>{{ product.PRODUCT_TITLE }}</h1>
+            <p class="lead">Style: {{ product.STYLE }}</p>
+            
+            {% if product.PRODUCT_DESCRIPTION %}
+            <div class="product-description mb-4">
+                {{ product.PRODUCT_DESCRIPTION|safe }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="col-md-4">
+            {% if product.BRAND_NAME %}
+            <div class="brand-info text-end">
+                <p>{{ product.BRAND_NAME }}</p>
+                {% if product.BRAND_LOGO_IMAGE %}
+                <img src="{{ product.BRAND_LOGO_IMAGE }}" alt="{{ product.BRAND_NAME }}" class="img-fluid brand-logo">
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="product-details mt-4">
+        <!-- Color Tabs -->
+        <ul class="nav nav-tabs" id="colorTabs" role="tablist">
+            {% for color_name, color_data in colors.items() %}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link {% if loop.first %}active{% endif %}" 
+                        id="color-{{ color_name|replace(' ', '-')|lower }}-tab" 
+                        data-bs-toggle="tab" 
+                        data-bs-target="#color-{{ color_name|replace(' ', '-')|lower }}" 
+                        type="button" 
+                        role="tab" 
+                        aria-controls="color-{{ color_name|replace(' ', '-')|lower }}" 
+                        aria-selected="{% if loop.first %}true{% else %}false{% endif %}">
+                    {% if color_data.image %}
+                    <img src="{{ color_data.image }}" alt="{{ color_name }}" class="color-swatch me-2">
+                    {% endif %}
+                    {{ color_name }}
+                </button>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <!-- Color Content -->
+        <div class="tab-content p-3 border border-top-0 rounded-bottom" id="colorTabsContent">
+            {% for color_name, color_data in colors.items() %}
+            <div class="tab-pane fade {% if loop.first %}show active{% endif %}" 
+                 id="color-{{ color_name|replace(' ', '-')|lower }}" 
+                 role="tabpanel" 
+                 aria-labelledby="color-{{ color_name|replace(' ', '-')|lower }}-tab">
+                
+                <div class="row">
+                    <!-- Product Image -->
+                    <div class="col-md-6">
+                        {% if color_data.front_model %}
+                        <img src="{{ color_data.front_model }}" alt="{{ product.PRODUCT_TITLE }} in {{ color_name }}" class="img-fluid product-image">
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Size and Pricing Information -->
+                    <div class="col-md-6">
+                        <h3>Available Sizes</h3>
+                        
+                        <div class="size-selection mb-4">
+                            {% for size in color_data.sizes %}
+                            <button class="btn btn-outline-secondary size-btn me-2 mb-2" 
+                                    data-style="{{ product.STYLE }}" 
+                                    data-color="{{ color_name }}" 
+                                    data-size="{{ size.name }}">
+                                {{ size.name }}
+                            </button>
+                            {% endfor %}
+                        </div>
+                        
+                        <div id="pricing-inventory-details" class="mt-4">
+                            <!-- This section will be populated via JavaScript when a size is selected -->
+                            <div class="alert alert-info">
+                                Please select a size to see pricing and inventory information.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle size button clicks
+    const sizeBtns = document.querySelectorAll('.size-btn');
+    sizeBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Remove active class from all size buttons
+            sizeBtns.forEach(b => b.classList.remove('active'));
+            
+            // Add active class to clicked button
+            this.classList.add('active');
+            
+            // Get product details
+            const style = this.dataset.style;
+            const color = this.dataset.color;
+            const size = this.dataset.size;
+            
+            // Fetch inventory and pricing data
+            fetch(`/api/inventory/${style}/${color}/${size}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update the pricing and inventory details
+                    const detailsContainer = document.getElementById('pricing-inventory-details');
+                    
+                    let html = '<div class="card">';
+                    
+                    // Pricing section
+                    html += '<div class="card-header"><h4>Pricing</h4></div>';
+                    html += '<div class="card-body">';
+                    
+                    if (data.pricing && Object.keys(data.pricing).length > 0) {
+                        html += `<p><strong>Piece Price:</strong> $${data.pricing.piece_price.toFixed(2)}</p>`;
+                        
+                        if (data.pricing.case_size > 1) {
+                            html += `<p><strong>Case Price:</strong> $${data.pricing.case_price.toFixed(2)} (${data.pricing.case_size} pieces)</p>`;
+                        }
+                        
+                        html += `<p><strong>Program Price:</strong> $${data.pricing.program_price.toFixed(2)}</p>`;
+                    } else {
+                        html += '<p>Pricing information not available.</p>';
+                    }
+                    
+                    html += '</div>';
+                    
+                    // Inventory section
+                    html += '<div class="card-header"><h4>Inventory</h4></div>';
+                    html += '<div class="card-body">';
+                    
+                    if (data.total_inventory > 0) {
+                        html += `<p class="text-success"><strong>In Stock:</strong> ${data.total_inventory} available</p>`;
+                        
+                        // Warehouse breakdown
+                        if (data.inventory && Object.keys(data.inventory).length > 0) {
+                            html += '<h5>Warehouse Availability:</h5>';
+                            html += '<ul>';
+                            
+                            for (const [warehouseId, quantity] of Object.entries(data.inventory)) {
+                                html += `<li>Warehouse ${warehouseId}: ${quantity}</li>`;
+                            }
+                            
+                            html += '</ul>';
+                        }
+                    } else {
+                        html += '<p class="text-danger"><strong>Out of Stock</strong></p>';
+                    }
+                    
+                    html += '</div>';
+                    html += '</div>';
+                    
+                    detailsContainer.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error fetching inventory and pricing data:', error);
+                    document.getElementById('pricing-inventory-details').innerHTML = `
+                        <div class="alert alert-danger">
+                            Error loading pricing and inventory information. Please try again.
+                        </div>
+                    `;
+                });
+        });
+    });
+    
+    // Select the first size by default
+    const firstSizeBtn = document.querySelector('.size-btn');
+    if (firstSizeBtn) {
+        firstSizeBtn.click();
+    }
+});
+</script>
+
+<style>
+.color-swatch {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.product-image {
+    max-height: 400px;
+    object-fit: contain;
+}
+
+.brand-logo {
+    max-height: 60px;
+    max-width: 200px;
+}
+
+.size-btn.active {
+    background-color: #007bff;
+    color: white;
+}
+</style>
+{% endblock %}

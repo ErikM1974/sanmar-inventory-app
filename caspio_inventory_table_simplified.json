@@ -1,0 +1,44 @@
+{
+  "Name": "Inventory",
+  "Columns": [
+    {
+      "Name": "INVENTORY_ID",
+      "Type": "AutoNumber",
+      "Label": "Inventory ID"
+    },
+    {
+      "Name": "STYLE",
+      "Type": "Text",
+      "Length": 50,
+      "Label": "Style"
+    },
+    {
+      "Name": "COLOR_NAME",
+      "Type": "Text",
+      "Length": 100,
+      "Label": "Color Name"
+    },
+    {
+      "Name": "SIZE",
+      "Type": "Text",
+      "Length": 20,
+      "Label": "Size"
+    },
+    {
+      "Name": "WAREHOUSE_ID",
+      "Type": "Text",
+      "Length": 20,
+      "Label": "Warehouse ID"
+    },
+    {
+      "Name": "QUANTITY",
+      "Type": "Number",
+      "Label": "Quantity"
+    },
+    {
+      "Name": "LAST_UPDATED",
+      "Type": "DateTime",
+      "Label": "Last Updated"
+    }
+  ]
+}

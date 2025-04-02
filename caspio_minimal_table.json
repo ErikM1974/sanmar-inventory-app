@@ -1,0 +1,10 @@
+{
+  "Name": "TestTable",
+  "Columns": [
+    {
+      "Name": "ID",
+      "Type": "AutoNumber",
+      "Label": "ID"
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+2025-04-02 08:50:43,031 - __main__ - INFO - Starting Sanmar_Bulk_251816_Feb2024 table access test...
+2025-04-02 08:50:43,031 - __main__ - INFO - Testing access to Sanmar_Bulk_251816_Feb2024 table...
+2025-04-02 08:50:43,031 - __main__ - INFO - Checking if Sanmar_Bulk_251816_Feb2024 table exists...
+2025-04-02 08:50:43,733 - __main__ - INFO - Sanmar_Bulk_251816_Feb2024 table exists.
+2025-04-02 08:50:43,733 - __main__ - INFO - Getting fields for Sanmar_Bulk_251816_Feb2024 table...
+2025-04-02 08:50:44,307 - __main__ - INFO - Found 60 fields in Sanmar_Bulk_251816_Feb2024 table.
+2025-04-02 08:50:44,307 - __main__ - INFO - Field 1: UNIQUE_KEY (INTEGER)
+2025-04-02 08:50:44,307 - __main__ - INFO - Field 2: STYLE (STRING)
+2025-04-02 08:50:44,307 - __main__ - INFO - Field 3: PRODUCT_TITLE (STRING)
+2025-04-02 08:50:44,308 - __main__ - INFO - Field 4: PRODUCT_DESCRIPTION (TEXT)
+2025-04-02 08:50:44,308 - __main__ - INFO - Field 5: AVAILABLE_SIZES (STRING)
+2025-04-02 08:50:44,308 - __main__ - INFO - Field 6: BRAND_LOGO_IMAGE (STRING)
+2025-04-02 08:50:44,308 - __main__ - INFO - Field 7: THUMBNAIL_IMAGE (STRING)
+2025-04-02 08:50:44,309 - __main__ - INFO - Field 8: COLOR_SWATCH_IMAGE (STRING)
+2025-04-02 08:50:44,309 - __main__ - INFO - Field 9: PRODUCT_IMAGE (STRING)
+2025-04-02 08:50:44,309 - __main__ - INFO - Field 10: SPEC_SHEET (STRING)
+2025-04-02 08:50:44,309 - __main__ - INFO - Querying records from Sanmar_Bulk_251816_Feb2024 table...
+2025-04-02 08:50:44,984 - __main__ - INFO - Successfully retrieved 5 records from Sanmar_Bulk_251816_Feb2024 table.
+2025-04-02 08:50:44,984 - __main__ - INFO - First record:
+2025-04-02 08:50:44,984 - __main__ - INFO - {
+  "PK_ID": 1,
+  "UNIQUE_KEY": 584042,
+  "PRODUCT_TITLE": "OGIO - Glam Polo. LOG105",
+  "PRODUCT_DESCRIPTION": "Designed to handle the curves  the Glam has a contoured fit and unique open hem cuffs with O debossed metal snaps.     4.6-ounce  100% double knit poly mesh with stay-cool wicking technology     Self-fabric collar     OGIO jacquard neck tape     OGIO heat transfer label for tag-free comfort     3-snap y-placket with O debossed metal snaps     OGIO badge at hem",
+  "STYLE": "LOG105",
+  "AVAILABLE_SIZES": "Ladies Sizes: XS-4XL",
+  "BRAND_LOGO_IMAGE": "https://cdnm.sanmar.com/catalog/images/ogioheader.jpg",
+  "THUMBNAIL_IMAGE": "https://cdnm.sanmar.com/catalog/images/LOG105TN.jpg",
+  "COLOR_SWATCH_IMAGE": "https://cdnm.sanmar.com/catalog/images/LOG105sw.jpg",
+  "PRODUCT_IMAGE": "https://cdnm.sanmar.com/catalog/images/LOG105.jpg",
+  "SPEC_SHEET": "https://www.apparelvideos.com/images/specsheet/pdf/specsheet/LOG105_specsheet.pdf",
+  "PRICE_TEXT": "Price applies to XS-XL",
+  "SUGGESTED_PRICE": 45.0,
+  "CATEGORY_NAME": "Polos/Knits",
+  "SUBCATEGORY_NAME": "Ladies",
+  "COLOR_NAME": "Shock Green",
+  "COLOR_SQUARE_IMAGE": "https://cdnm.sanmar.com/swatch/gifs/ogio_shockgreen.gif",
+  "COLOR_PRODUCT_IMAGE": "https://cdnm.sanmar.com/catalog/images/imglib/catl/2015/f5/LOG105_shockgreen_model_front_022015.jpg",
+  "COLOR_PRODUCT_IMAGE_THUMBNAIL": "https://cdnm.sanmar.com/cache/altview/imglib/catl/2015/f5/LOG105_shockgreen_model_front_022015.jpg",
+  "SIZE": "S",
+  "QTY": 22,
+  "PIECE_WEIGHT": 0.44,
+  "PIECE_PRICE": 21.99,
+  "DOZENS_PRICE": 21.99,
+  "CASE_PRICE": 21.99,
+  "PRICE_GROUP": "BR",
+  "CASE_SIZE": 36,
+  "INVENTORY_KEY": 58404,
+  "SIZE_INDEX": 2,
+  "SANMAR_MAINFRAME_COLOR": "Shock Green",
+  "MILL": "OGIO",
+  "PRODUCT_STATUS": "Discontinued",
+  "COMPANION_STYLES": "LOG105",
+  "MSRP": 43.98,
+  "MAP_PRICING": "39.58",
+  "FRONT_MODEL_IMAGE_URL": "https://cdnm.sanmar.com/imglib/mresjpg/2015/f5/LOG105_shockgreen_model_front_022015.jpg",
+  "BACK_MODEL_IMAGE": "LOG105_shockgreen_model_back_022015.jpg",
+  "FRONT_FLAT_IMAGE": "LOG105_shockgreen_flat_front.jpg",
+  "BACK_FLAT_IMAGE": "LOG105_shockgreen_flat_back.jpg",
+  "PRODUCT_MEASUREMENTS": "LOG105_productmeasurement.pdf",
+  "PMS_COLOR": "382 C",
+  "GTIN": null,
+  "DECORATION_SPEC_SHEET": "https://www.sanmar.com/p/4113/decorationSpecSheet",
+  "FRONT_FLAT": "https://cdnm.sanmar.com/imglib/mresjpg/2015/f5/LOG105_shockgreen_flat_front.jpg",
+  "BACK_FLAT": "https://cdnm.sanmar.com/imglib/mresjpg/2015/f5/LOG105_shockgreen_flat_back.jpg",
+  "FRONT_MODEL": "https://cdnm.sanmar.com/imglib/mresjpg/2015/f5/LOG105_shockgreen_model_front_022015.jpg",
+  "BACK_MODEL": "https://cdnm.sanmar.com/imglib/mresjpg/2015/f5/LOG105_shockgreen_model_back_022015.jpg",
+  "SIDE_MODEL": "https://cdnm.sanmar.com/imglib/mresjpg/2015/f5/LOG105_shockgreen_model_side_022015.jpg",
+  "THREE_Q_MODEL": "https://cdnm.sanmar.com/imglib/mresjpg/2015/f5/LOG105_shockgreen_model_3q_022015.jpg",
+  "DOZEN_PRICE": 21.99,
+  "PIECE_SALE_PRICE": 13.17,
+  "DOZEN_SALE_PRICE": 13.17,
+  "CASE_SALE_PRICE": 13.17,
+  "SALE_START_DATE": "2020-04-30T00:00:00",
+  "SALE_END_DATE": "2050-08-30T00:00:00",
+  "CATALOG_COLOR": "Shock Green",
+  "PRICE_CODE": "A/P",
+  "TITLE_IMAGE": "",
+  "BRAND_NAME": "OGIO",
+  "KEYWORDS": "ladies polos/knits  ogio  glam polo  polo  polos  Short sleeve  short sleeves  short sleeved  shortsleeve  shortsleeves  shortsleeved  short-sleeve  short-sleeves  short-sleeved  ladies  lady  women  women's  100% poly  polyester  double knit  knit  mesh  wick  wicking  wicked  sport  sport shirt  sports  sport-shirt  sport-shirts  sport shirts  active  athletic   tagless  embroidery  embroider  embroidering  screen printing  screenprinting  screen-printing  screenprint  screen-print  screen print  heat transfer  heat transfering  heat-transfering  heat seal  heat sealing  heat-sealing  heattransfer  heatseal  heat-transfer  heat-seal  emboss  deboss  embossing  debossing  laser  laser etching  laser etch  pad print  pad-print  padprint  pad printing  pad-printing  padprinting ",
+  "CATEGORY": "Ladies  Polos/Knits"
+}
+2025-04-02 08:50:44,988 - __main__ - INFO - All required fields are present in the records.
+2025-04-02 08:50:44,989 - __main__ - INFO - Testing a specific query on Sanmar_Bulk_251816_Feb2024 table...
+2025-04-02 08:50:46,708 - __main__ - INFO - Found 1 unique categories in Sanmar_Bulk_251816_Feb2024 table.
+2025-04-02 08:50:46,709 - __main__ - INFO - Categories: ...
+2025-04-02 08:50:46,709 - __main__ - INFO - All tests completed successfully.
+2025-04-02 08:50:46,709 - __main__ - INFO - Successfully accessed Sanmar_Bulk_251816_Feb2024 table.

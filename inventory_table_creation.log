@@ -1,0 +1,106 @@
+2025-04-02 06:19:54,867 - __main__ - INFO - Starting Inventory table creation...
+2025-04-02 06:19:54,867 - __main__ - INFO - Testing Caspio API connection...
+2025-04-02 06:19:55,454 - __main__ - INFO - Successfully connected to Caspio API.
+2025-04-02 06:19:55,963 - __main__ - INFO - Creating table with definition: {
+  "Name": "Inventory",
+  "Columns": [
+    {
+      "Name": "INVENTORY_ID",
+      "Type": "AutoNumber",
+      "Unique": true,
+      "Label": "Inventory ID"
+    },
+    {
+      "Name": "STYLE",
+      "Type": "Text (255)",
+      "Length": 50,
+      "Label": "Style"
+    },
+    {
+      "Name": "COLOR_NAME",
+      "Type": "Text (255)",
+      "Length": 100,
+      "Label": "Color Name"
+    },
+    {
+      "Name": "SIZE",
+      "Type": "Text (255)",
+      "Length": 20,
+      "Label": "Size"
+    },
+    {
+      "Name": "WAREHOUSE_ID",
+      "Type": "Text (255)",
+      "Length": 20,
+      "Label": "Warehouse ID"
+    },
+    {
+      "Name": "QUANTITY",
+      "Type": "Number",
+      "Label": "Quantity"
+    },
+    {
+      "Name": "LAST_UPDATED",
+      "Type": "Date/Time",
+      "Label": "Last Updated"
+    }
+  ]
+}
+2025-04-02 06:19:56,470 - __main__ - INFO - Response status code: 400
+2025-04-02 06:19:56,470 - __main__ - INFO - Response content: {"Code":"IncorrectBodyParameter","Message":"Cannot perform operation because the body parameter is absent or invalid.","Resource":"https://c3eku948.caspio.com/rest/v2/tables","RequestId":"0E30F228-B3F6-4FFF-8305-C37CCF00887E"}
+2025-04-02 06:19:56,471 - __main__ - ERROR - Error creating Inventory table: 400 Client Error: Bad Request for url: https://c3eku948.caspio.com//rest/v2/tables
+2025-04-02 06:19:56,471 - __main__ - ERROR - Response content: {"Code":"IncorrectBodyParameter","Message":"Cannot perform operation because the body parameter is absent or invalid.","Resource":"https://c3eku948.caspio.com/rest/v2/tables","RequestId":"0E30F228-B3F6-4FFF-8305-C37CCF00887E"}
+2025-04-02 06:19:56,472 - __main__ - INFO - Inventory table creation completed.
+2025-04-02 06:20:37,657 - __main__ - INFO - Starting Inventory table creation...
+2025-04-02 06:20:37,657 - __main__ - INFO - Testing Caspio API connection...
+2025-04-02 06:20:38,224 - __main__ - INFO - Successfully connected to Caspio API.
+2025-04-02 06:20:38,736 - __main__ - INFO - Creating table with definition: {
+  "Name": "Inventory",
+  "Columns": [
+    {
+      "Name": "INVENTORY_ID",
+      "Type": "AutoNumber",
+      "Unique": true,
+      "Label": "Inventory ID"
+    },
+    {
+      "Name": "STYLE",
+      "Type": "Text",
+      "Length": 50,
+      "Label": "Style"
+    },
+    {
+      "Name": "COLOR_NAME",
+      "Type": "Text",
+      "Length": 100,
+      "Label": "Color Name"
+    },
+    {
+      "Name": "SIZE",
+      "Type": "Text",
+      "Length": 20,
+      "Label": "Size"
+    },
+    {
+      "Name": "WAREHOUSE_ID",
+      "Type": "Text",
+      "Length": 20,
+      "Label": "Warehouse ID"
+    },
+    {
+      "Name": "QUANTITY",
+      "Type": "Number",
+      "Label": "Quantity"
+    },
+    {
+      "Name": "LAST_UPDATED",
+      "Type": "DateTime",
+      "Label": "Last Updated"
+    }
+  ]
+}
+2025-04-02 06:20:39,328 - __main__ - INFO - Response status code: 400
+2025-04-02 06:20:39,328 - __main__ - INFO - Response content: {"Code":"IncorrectBodyParameter","Message":"Cannot perform operation because the body parameter is absent or invalid.","Resource":"https://c3eku948.caspio.com/rest/v2/tables","RequestId":"69BF196D-F7D9-4B8D-9437-CCC03F8E0013"}
+2025-04-02 06:20:39,328 - __main__ - ERROR - Error creating Inventory table: 400 Client Error: Bad Request for url: https://c3eku948.caspio.com/rest/v2/tables
+2025-04-02 06:20:39,328 - __main__ - ERROR - Response content: {"Code":"IncorrectBodyParameter","Message":"Cannot perform operation because the body parameter is absent or invalid.","Resource":"https://c3eku948.caspio.com/rest/v2/tables","RequestId":"69BF196D-F7D9-4B8D-9437-CCC03F8E0013"}
+2025-04-02 06:20:39,332 - __main__ - INFO - Inventory table creation completed.

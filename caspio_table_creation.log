@@ -1,0 +1,685 @@
+2025-04-02 06:00:19,577 - __main__ - INFO - Starting Caspio table creation...
+2025-04-02 06:00:19,577 - __main__ - INFO - Testing Caspio API connection...
+2025-04-02 06:00:20,146 - __main__ - INFO - Successfully connected to Caspio API.
+2025-04-02 06:00:51,558 - __main__ - INFO - Starting Caspio table creation...
+2025-04-02 06:00:51,558 - __main__ - INFO - Testing Caspio API connection...
+2025-04-02 06:00:52,217 - __main__ - INFO - Successfully connected to Caspio API.
+2025-04-02 06:00:52,878 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:00:57,957 - __main__ - ERROR - API request error: Expecting value: line 1 column 1 (char 0)
+2025-04-02 06:00:57,958 - __main__ - ERROR - Failed to create table 'Categories'.
+2025-04-02 06:00:58,527 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:01:02,335 - __main__ - ERROR - API request error: Expecting value: line 1 column 1 (char 0)
+2025-04-02 06:01:02,338 - __main__ - ERROR - Failed to create table 'Products'.
+2025-04-02 06:01:02,911 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:01:03,964 - __main__ - ERROR - API request error: 400 Client Error: Bad Request for url: https://c3eku948.caspio.com//rest/v2/tables
+2025-04-02 06:01:03,964 - __main__ - ERROR - Response content: {"Code":"IncorrectBodyParameter","Message":"Cannot perform operation because the body parameter is absent or invalid.","Resource":"https://c3eku948.caspio.com/rest/v2/tables","RequestId":"4542E179-3E7D-4580-A55F-BAFEEBE4807D"}
+2025-04-02 06:01:03,966 - __main__ - ERROR - Failed to create table 'Inventory'.
+2025-04-02 06:01:03,966 - __main__ - ERROR - Failed to create all tables.
+2025-04-02 06:01:03,966 - __main__ - INFO - Caspio table creation completed.
+2025-04-02 06:02:51,169 - __main__ - INFO - Starting Caspio table creation...
+2025-04-02 06:02:51,170 - __main__ - INFO - Testing Caspio API connection...
+2025-04-02 06:02:51,732 - __main__ - INFO - Successfully connected to Caspio API.
+2025-04-02 06:02:52,235 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:02:52,235 - __main__ - INFO - Table 'Categories' already exists.
+2025-04-02 06:02:52,710 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:02:52,718 - __main__ - INFO - Table 'Products' already exists.
+2025-04-02 06:02:53,224 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:02:53,924 - __main__ - ERROR - API request error: 400 Client Error: Bad Request for url: https://c3eku948.caspio.com//rest/v2/tables
+2025-04-02 06:02:53,925 - __main__ - ERROR - Response content: {"Code":"IncorrectBodyParameter","Message":"Cannot perform operation because the body parameter is absent or invalid.","Resource":"https://c3eku948.caspio.com/rest/v2/tables","RequestId":"7C40CB64-235A-4A8A-8595-36E7FA58D024"}
+2025-04-02 06:02:53,927 - __main__ - ERROR - Failed to create table 'Inventory'.
+2025-04-02 06:02:53,927 - __main__ - ERROR - Failed to create all tables.
+2025-04-02 06:02:53,927 - __main__ - INFO - Caspio table creation completed.
+2025-04-02 06:04:02,543 - __main__ - INFO - Starting Caspio table creation...
+2025-04-02 06:04:02,543 - __main__ - INFO - Testing Caspio API connection...
+2025-04-02 06:04:03,110 - __main__ - INFO - Successfully connected to Caspio API.
+2025-04-02 06:04:03,723 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:04:03,726 - __main__ - INFO - Table 'Categories' already exists.
+2025-04-02 06:04:04,396 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:04:04,396 - __main__ - INFO - Table 'Products' already exists.
+2025-04-02 06:04:04,960 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:04:05,674 - __main__ - ERROR - API request error: 400 Client Error: Bad Request for url: https://c3eku948.caspio.com//rest/v2/tables
+2025-04-02 06:04:05,674 - __main__ - ERROR - Response content: {"Code":"IncorrectBodyParameter","Message":"Cannot perform operation because the body parameter is absent or invalid.","Resource":"https://c3eku948.caspio.com/rest/v2/tables","RequestId":"3CAFE98A-344F-4E8F-AE64-69954439842D"}
+2025-04-02 06:04:05,674 - __main__ - ERROR - Failed to create table 'Inventory'. No error message returned.
+2025-04-02 06:04:05,674 - __main__ - ERROR - Failed to create all tables.
+2025-04-02 06:04:05,674 - __main__ - INFO - Caspio table creation completed.
+2025-04-02 06:05:28,888 - __main__ - INFO - Starting Caspio table creation...
+2025-04-02 06:05:28,888 - __main__ - INFO - Testing Caspio API connection...
+2025-04-02 06:05:29,507 - __main__ - INFO - Successfully connected to Caspio API.
+2025-04-02 06:05:30,158 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:05:30,158 - __main__ - INFO - Table 'Categories' already exists.
+2025-04-02 06:05:30,750 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:05:30,750 - __main__ - INFO - Table 'Products' already exists.
+2025-04-02 06:05:31,259 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:05:31,926 - __main__ - ERROR - API request error: 400 Client Error: Bad Request for url: https://c3eku948.caspio.com/rest/v2/tables
+2025-04-02 06:05:31,926 - __main__ - ERROR - Response content: {"Code":"IncorrectBodyParameter","Message":"Cannot perform operation because the body parameter is absent or invalid.","Resource":"https://c3eku948.caspio.com/rest/v2/tables","RequestId":"CF346E9F-22DA-4789-8B3C-CF7F82263738"}
+2025-04-02 06:05:31,926 - __main__ - ERROR - Failed to create table 'Inventory'. No error message returned.
+2025-04-02 06:05:31,926 - __main__ - ERROR - Failed to create all tables.
+2025-04-02 06:05:31,926 - __main__ - INFO - Caspio table creation completed.
+2025-04-02 06:09:51,653 - __main__ - INFO - Starting Caspio table creation...
+2025-04-02 06:09:51,653 - __main__ - INFO - Testing Caspio API connection...
+2025-04-02 06:09:52,196 - __main__ - INFO - Successfully connected to Caspio API.
+2025-04-02 06:09:52,732 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:09:52,732 - __main__ - INFO - Table 'Categories' already exists.
+2025-04-02 06:09:53,258 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:09:53,258 - __main__ - INFO - Table 'Products' already exists.
+2025-04-02 06:09:53,773 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:09:54,347 - __main__ - ERROR - API request error: 400 Client Error: Bad Request for url: https://c3eku948.caspio.com/rest/v2/tables
+2025-04-02 06:09:54,349 - __main__ - ERROR - Response content: {"Code":"IncorrectBodyParameter","Message":"Cannot perform operation because the body parameter is absent or invalid.","Resource":"https://c3eku948.caspio.com/rest/v2/tables","RequestId":"F13B799F-27D9-4447-A6AA-C6205EE5CA9C"}
+2025-04-02 06:09:54,349 - __main__ - ERROR - Failed to create table 'Inventory'. No error message returned.
+2025-04-02 06:09:54,350 - __main__ - ERROR - Failed to create all tables.
+2025-04-02 06:09:54,350 - __main__ - INFO - Caspio table creation completed.
+2025-04-02 06:13:15,637 - __main__ - INFO - Starting Caspio table creation...
+2025-04-02 06:13:15,637 - __main__ - INFO - Testing Caspio API connection...
+2025-04-02 06:13:16,188 - __main__ - INFO - Successfully connected to Caspio API.
+2025-04-02 06:13:16,682 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:13:16,682 - __main__ - INFO - Table 'Categories' already exists.
+2025-04-02 06:13:17,178 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:13:17,178 - __main__ - INFO - Table 'Products' already exists.
+2025-04-02 06:13:17,701 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:13:18,357 - __main__ - ERROR - API request error: 400 Client Error: Bad Request for url: https://c3eku948.caspio.com/rest/v2/tables
+2025-04-02 06:13:18,357 - __main__ - ERROR - Response content: {"Code":"IncorrectBodyParameter","Message":"Cannot perform operation because the body parameter is absent or invalid.","Resource":"https://c3eku948.caspio.com/rest/v2/tables","RequestId":"923534A9-396D-4652-837F-96C0C490EFF4"}
+2025-04-02 06:13:18,362 - __main__ - ERROR - Failed to create table 'Inventory'. No error message returned.
+2025-04-02 06:13:18,364 - __main__ - ERROR - Failed to create all tables.
+2025-04-02 06:13:18,364 - __main__ - INFO - Caspio table creation completed.
+2025-04-02 06:13:38,841 - __main__ - INFO - Starting Caspio table creation...
+2025-04-02 06:13:38,841 - __main__ - INFO - Testing Caspio API connection...
+2025-04-02 06:13:39,420 - __main__ - INFO - Successfully connected to Caspio API.
+2025-04-02 06:13:39,929 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:13:39,929 - __main__ - INFO - Table 'Categories' already exists.
+2025-04-02 06:13:40,418 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:13:40,418 - __main__ - INFO - Table 'Products' already exists.
+2025-04-02 06:13:40,983 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:13:40,983 - __main__ - INFO - Creating table with definition: {
+  "Name": "Inventory",
+  "Columns": [
+    {
+      "Name": "INVENTORY_ID",
+      "Type": "AutoNumber",
+      "Unique": true,
+      "UniqueAllowNulls": false,
+      "Label": "Inventory ID",
+      "Description": "Primary key for inventory record",
+      "DisplayOrder": 1,
+      "OnInsert": true,
+      "OnUpdate": false
+    },
+    {
+      "Name": "STYLE",
+      "Type": "String",
+      "Length": 50,
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Style",
+      "Description": "SanMar style number",
+      "DisplayOrder": 2,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    },
+    {
+      "Name": "COLOR_NAME",
+      "Type": "String",
+      "Length": 100,
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Color Name",
+      "Description": "Color name",
+      "DisplayOrder": 3,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    },
+    {
+      "Name": "SIZE",
+      "Type": "String",
+      "Length": 20,
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Size",
+      "Description": "Size name",
+      "DisplayOrder": 4,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    },
+    {
+      "Name": "WAREHOUSE_ID",
+      "Type": "String",
+      "Length": 20,
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Warehouse ID",
+      "Description": "Warehouse ID",
+      "DisplayOrder": 5,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    },
+    {
+      "Name": "QUANTITY",
+      "Type": "Number",
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Quantity",
+      "Description": "Quantity available",
+      "DisplayOrder": 6,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    },
+    {
+      "Name": "LAST_UPDATED",
+      "Type": "DateTime",
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Last Updated",
+      "Description": "Last update timestamp",
+      "DisplayOrder": 7,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    }
+  ]
+}
+2025-04-02 06:13:41,551 - __main__ - ERROR - API request error: 400 Client Error: Bad Request for url: https://c3eku948.caspio.com/rest/v2/tables
+2025-04-02 06:13:41,551 - __main__ - ERROR - Response content: {"Code":"IncorrectBodyParameter","Message":"Cannot perform operation because the body parameter is absent or invalid.","Resource":"https://c3eku948.caspio.com/rest/v2/tables","RequestId":"4CE9FB4A-7686-4A31-BAA6-A998048C7353"}
+2025-04-02 06:13:41,553 - __main__ - ERROR - Failed to create table 'Inventory'. No error message returned.
+2025-04-02 06:13:41,554 - __main__ - ERROR - Failed to create all tables.
+2025-04-02 06:13:41,554 - __main__ - INFO - Caspio table creation completed.
+2025-04-02 06:14:33,737 - __main__ - INFO - Starting Caspio table creation...
+2025-04-02 06:14:33,737 - __main__ - INFO - Testing Caspio API connection...
+2025-04-02 06:14:34,355 - __main__ - INFO - Successfully connected to Caspio API.
+2025-04-02 06:14:34,870 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:14:34,871 - __main__ - INFO - Table 'Categories' already exists.
+2025-04-02 06:14:35,388 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:14:35,390 - __main__ - INFO - Table 'Products' already exists.
+2025-04-02 06:14:35,957 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:14:35,957 - __main__ - INFO - Creating table with definition: {
+  "Name": "Inventory",
+  "Columns": [
+    {
+      "Name": "INVENTORY_ID",
+      "Type": "AutoNumber",
+      "Label": "Inventory ID"
+    },
+    {
+      "Name": "STYLE",
+      "Type": "String",
+      "Length": 50,
+      "Label": "Style"
+    },
+    {
+      "Name": "COLOR_NAME",
+      "Type": "String",
+      "Length": 100,
+      "Label": "Color Name"
+    },
+    {
+      "Name": "SIZE",
+      "Type": "String",
+      "Length": 20,
+      "Label": "Size"
+    },
+    {
+      "Name": "WAREHOUSE_ID",
+      "Type": "String",
+      "Length": 20,
+      "Label": "Warehouse ID"
+    },
+    {
+      "Name": "QUANTITY",
+      "Type": "Number",
+      "Label": "Quantity"
+    },
+    {
+      "Name": "LAST_UPDATED",
+      "Type": "DateTime",
+      "Label": "Last Updated"
+    }
+  ]
+}
+2025-04-02 06:14:36,504 - __main__ - ERROR - API request error: 400 Client Error: Bad Request for url: https://c3eku948.caspio.com/rest/v2/tables
+2025-04-02 06:14:36,506 - __main__ - ERROR - Response content: {"Code":"IncorrectBodyParameter","Message":"Cannot perform operation because the body parameter is absent or invalid.","Resource":"https://c3eku948.caspio.com/rest/v2/tables","RequestId":"AB75C6B2-F53C-4193-8B57-EC69320B90F9"}
+2025-04-02 06:14:36,507 - __main__ - ERROR - Failed to create table 'Inventory'. No error message returned.
+2025-04-02 06:14:36,507 - __main__ - ERROR - Failed to create all tables.
+2025-04-02 06:14:36,508 - __main__ - INFO - Caspio table creation completed.
+2025-04-02 06:14:55,938 - __main__ - INFO - Starting Caspio table creation...
+2025-04-02 06:14:55,939 - __main__ - INFO - Testing Caspio API connection...
+2025-04-02 06:14:56,457 - __main__ - INFO - Successfully connected to Caspio API.
+2025-04-02 06:14:56,457 - __main__ - INFO - Making API request to: https://c3eku948.caspio.com/rest/v2/tables
+2025-04-02 06:14:56,457 - __main__ - INFO - Method: GET
+2025-04-02 06:14:56,457 - __main__ - INFO - Headers: {'Authorization': 'Bearer 9-oYAbYK0jFC7H_g_eqrzxULCPMn6ZavFnNQ6V56eD2Xk-Q20uo6NW713a-DHzx7FOyPhMeArZexJcQW0TU__79N79MiTGIGb-hSu2pFblfQ9_KInfQnYKVExwXSlJTscZc4Z37DBuX-RJO7tXNnw7Bzf0mfFJXknOvHedjOAgaAsMh0prGLytrQO0E3BJcz9ViseC9idnVdesD3HOrvNxoc41lJhXNi4bpdSXzcPV0jm2P22bu4uXiW1o53MYGQHaZBdkYekEnzomGVcUAAyucak8sUPngjYEEECJ_XmFppiaZfd2rJLjqzXsbqPAHj6qYJw7_jGJ3Lw1YZIsMYFzfVFyDAujrZa-HMYBIxDEddsi5I6N-dUAj-Wb_4-OcJMpCgi_nD4tPhWJWdMO4JFDN_JPnpOJFFrm5V9Umlhwk', 'Content-Type': 'application/json'}
+2025-04-02 06:14:56,957 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:14:56,957 - __main__ - INFO - Table 'Categories' already exists.
+2025-04-02 06:14:56,957 - __main__ - INFO - Making API request to: https://c3eku948.caspio.com/rest/v2/tables
+2025-04-02 06:14:56,957 - __main__ - INFO - Method: GET
+2025-04-02 06:14:56,957 - __main__ - INFO - Headers: {'Authorization': 'Bearer 9-oYAbYK0jFC7H_g_eqrzxULCPMn6ZavFnNQ6V56eD2Xk-Q20uo6NW713a-DHzx7FOyPhMeArZexJcQW0TU__79N79MiTGIGb-hSu2pFblfQ9_KInfQnYKVExwXSlJTscZc4Z37DBuX-RJO7tXNnw7Bzf0mfFJXknOvHedjOAgaAsMh0prGLytrQO0E3BJcz9ViseC9idnVdesD3HOrvNxoc41lJhXNi4bpdSXzcPV0jm2P22bu4uXiW1o53MYGQHaZBdkYekEnzomGVcUAAyucak8sUPngjYEEECJ_XmFppiaZfd2rJLjqzXsbqPAHj6qYJw7_jGJ3Lw1YZIsMYFzfVFyDAujrZa-HMYBIxDEddsi5I6N-dUAj-Wb_4-OcJMpCgi_nD4tPhWJWdMO4JFDN_JPnpOJFFrm5V9Umlhwk', 'Content-Type': 'application/json'}
+2025-04-02 06:14:57,470 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:14:57,474 - __main__ - INFO - Table 'Products' already exists.
+2025-04-02 06:14:57,474 - __main__ - INFO - Making API request to: https://c3eku948.caspio.com/rest/v2/tables
+2025-04-02 06:14:57,474 - __main__ - INFO - Method: GET
+2025-04-02 06:14:57,475 - __main__ - INFO - Headers: {'Authorization': 'Bearer 9-oYAbYK0jFC7H_g_eqrzxULCPMn6ZavFnNQ6V56eD2Xk-Q20uo6NW713a-DHzx7FOyPhMeArZexJcQW0TU__79N79MiTGIGb-hSu2pFblfQ9_KInfQnYKVExwXSlJTscZc4Z37DBuX-RJO7tXNnw7Bzf0mfFJXknOvHedjOAgaAsMh0prGLytrQO0E3BJcz9ViseC9idnVdesD3HOrvNxoc41lJhXNi4bpdSXzcPV0jm2P22bu4uXiW1o53MYGQHaZBdkYekEnzomGVcUAAyucak8sUPngjYEEECJ_XmFppiaZfd2rJLjqzXsbqPAHj6qYJw7_jGJ3Lw1YZIsMYFzfVFyDAujrZa-HMYBIxDEddsi5I6N-dUAj-Wb_4-OcJMpCgi_nD4tPhWJWdMO4JFDN_JPnpOJFFrm5V9Umlhwk', 'Content-Type': 'application/json'}
+2025-04-02 06:14:57,945 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:14:57,949 - __main__ - INFO - Creating table with definition: {
+  "Name": "Inventory",
+  "Columns": [
+    {
+      "Name": "INVENTORY_ID",
+      "Type": "AutoNumber",
+      "Label": "Inventory ID"
+    },
+    {
+      "Name": "STYLE",
+      "Type": "String",
+      "Length": 50,
+      "Label": "Style"
+    },
+    {
+      "Name": "COLOR_NAME",
+      "Type": "String",
+      "Length": 100,
+      "Label": "Color Name"
+    },
+    {
+      "Name": "SIZE",
+      "Type": "String",
+      "Length": 20,
+      "Label": "Size"
+    },
+    {
+      "Name": "WAREHOUSE_ID",
+      "Type": "String",
+      "Length": 20,
+      "Label": "Warehouse ID"
+    },
+    {
+      "Name": "QUANTITY",
+      "Type": "Number",
+      "Label": "Quantity"
+    },
+    {
+      "Name": "LAST_UPDATED",
+      "Type": "DateTime",
+      "Label": "Last Updated"
+    }
+  ]
+}
+2025-04-02 06:14:57,949 - __main__ - INFO - Making API request to: https://c3eku948.caspio.com/rest/v2/tables
+2025-04-02 06:14:57,949 - __main__ - INFO - Method: POST
+2025-04-02 06:14:57,949 - __main__ - INFO - Headers: {'Authorization': 'Bearer 9-oYAbYK0jFC7H_g_eqrzxULCPMn6ZavFnNQ6V56eD2Xk-Q20uo6NW713a-DHzx7FOyPhMeArZexJcQW0TU__79N79MiTGIGb-hSu2pFblfQ9_KInfQnYKVExwXSlJTscZc4Z37DBuX-RJO7tXNnw7Bzf0mfFJXknOvHedjOAgaAsMh0prGLytrQO0E3BJcz9ViseC9idnVdesD3HOrvNxoc41lJhXNi4bpdSXzcPV0jm2P22bu4uXiW1o53MYGQHaZBdkYekEnzomGVcUAAyucak8sUPngjYEEECJ_XmFppiaZfd2rJLjqzXsbqPAHj6qYJw7_jGJ3Lw1YZIsMYFzfVFyDAujrZa-HMYBIxDEddsi5I6N-dUAj-Wb_4-OcJMpCgi_nD4tPhWJWdMO4JFDN_JPnpOJFFrm5V9Umlhwk', 'Content-Type': 'application/json'}
+2025-04-02 06:14:57,949 - __main__ - INFO - Data: {
+  "Name": "Inventory",
+  "Columns": [
+    {
+      "Name": "INVENTORY_ID",
+      "Type": "AutoNumber",
+      "Label": "Inventory ID"
+    },
+    {
+      "Name": "STYLE",
+      "Type": "String",
+      "Length": 50,
+      "Label": "Style"
+    },
+    {
+      "Name": "COLOR_NAME",
+      "Type": "String",
+      "Length": 100,
+      "Label": "Color Name"
+    },
+    {
+      "Name": "SIZE",
+      "Type": "String",
+      "Length": 20,
+      "Label": "Size"
+    },
+    {
+      "Name": "WAREHOUSE_ID",
+      "Type": "String",
+      "Length": 20,
+      "Label": "Warehouse ID"
+    },
+    {
+      "Name": "QUANTITY",
+      "Type": "Number",
+      "Label": "Quantity"
+    },
+    {
+      "Name": "LAST_UPDATED",
+      "Type": "DateTime",
+      "Label": "Last Updated"
+    }
+  ]
+}
+2025-04-02 06:14:57,949 - __main__ - INFO - Sending POST request with data
+2025-04-02 06:14:58,490 - __main__ - ERROR - API request error: 400 Client Error: Bad Request for url: https://c3eku948.caspio.com/rest/v2/tables
+2025-04-02 06:14:58,490 - __main__ - ERROR - Response content: {"Code":"IncorrectBodyParameter","Message":"Cannot perform operation because the body parameter is absent or invalid.","Resource":"https://c3eku948.caspio.com/rest/v2/tables","RequestId":"7BA561B9-8E63-46D2-B63F-386D6350B4DB"}
+2025-04-02 06:14:58,491 - __main__ - ERROR - Failed to create table 'Inventory'. No error message returned.
+2025-04-02 06:14:58,492 - __main__ - ERROR - Failed to create all tables.
+2025-04-02 06:14:58,492 - __main__ - INFO - Caspio table creation completed.
+2025-04-02 06:16:40,455 - __main__ - INFO - Starting Caspio table creation...
+2025-04-02 06:16:40,456 - __main__ - INFO - Testing Caspio API connection...
+2025-04-02 06:16:41,003 - __main__ - INFO - Successfully connected to Caspio API.
+2025-04-02 06:16:41,003 - __main__ - INFO - Making API request to: https://c3eku948.caspio.com/rest/v2/tables
+2025-04-02 06:16:41,004 - __main__ - INFO - Method: GET
+2025-04-02 06:16:41,004 - __main__ - INFO - Headers: {'Authorization': 'Bearer orXad7XPzBb8rQeyIKhw_Om5eGbBxauKMKWFtsk8HvtwXvGunCbEyt8jYO4DaqWRnbowV5P1TRcenw0en0a02lKpjcEC3Ch24OnRC5sV6yn5tvDjNMsQikobMw87DaVsOlI1Kn6S6ACrxjKzWGklblquiX10PuMGAT45UmdHW2nb04WwAJ3-9u9TjFYZRAJrSPwO0hjRSleZau1NJ8WAlR_iSCmmSvZXHEw5x5J3Qe_xaCXpkaOePEuIuT-4kcMSARYgGnJI-bYKekRG2Yg90vwpu_Dl6_w2NonuUwHdNwWuuK55Z8-6iWQbHguN78mJlKxqp8s6TmSrmjx-wZVpvWVNv31infJIhZur6FYv2pPoVG6-nevAK7lEW22DWf-SSFkKxSVvQaFjfFzbCFEbm9u49T2-z3bax2lyJa4bmkY', 'Content-Type': 'application/json'}
+2025-04-02 06:16:41,506 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:16:41,506 - __main__ - INFO - Table 'Categories' already exists.
+2025-04-02 06:16:41,506 - __main__ - INFO - Making API request to: https://c3eku948.caspio.com/rest/v2/tables
+2025-04-02 06:16:41,506 - __main__ - INFO - Method: GET
+2025-04-02 06:16:41,506 - __main__ - INFO - Headers: {'Authorization': 'Bearer orXad7XPzBb8rQeyIKhw_Om5eGbBxauKMKWFtsk8HvtwXvGunCbEyt8jYO4DaqWRnbowV5P1TRcenw0en0a02lKpjcEC3Ch24OnRC5sV6yn5tvDjNMsQikobMw87DaVsOlI1Kn6S6ACrxjKzWGklblquiX10PuMGAT45UmdHW2nb04WwAJ3-9u9TjFYZRAJrSPwO0hjRSleZau1NJ8WAlR_iSCmmSvZXHEw5x5J3Qe_xaCXpkaOePEuIuT-4kcMSARYgGnJI-bYKekRG2Yg90vwpu_Dl6_w2NonuUwHdNwWuuK55Z8-6iWQbHguN78mJlKxqp8s6TmSrmjx-wZVpvWVNv31infJIhZur6FYv2pPoVG6-nevAK7lEW22DWf-SSFkKxSVvQaFjfFzbCFEbm9u49T2-z3bax2lyJa4bmkY', 'Content-Type': 'application/json'}
+2025-04-02 06:16:42,004 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:16:42,006 - __main__ - INFO - Table 'Products' already exists.
+2025-04-02 06:16:42,006 - __main__ - INFO - Making API request to: https://c3eku948.caspio.com/rest/v2/tables
+2025-04-02 06:16:42,006 - __main__ - INFO - Method: GET
+2025-04-02 06:16:42,006 - __main__ - INFO - Headers: {'Authorization': 'Bearer orXad7XPzBb8rQeyIKhw_Om5eGbBxauKMKWFtsk8HvtwXvGunCbEyt8jYO4DaqWRnbowV5P1TRcenw0en0a02lKpjcEC3Ch24OnRC5sV6yn5tvDjNMsQikobMw87DaVsOlI1Kn6S6ACrxjKzWGklblquiX10PuMGAT45UmdHW2nb04WwAJ3-9u9TjFYZRAJrSPwO0hjRSleZau1NJ8WAlR_iSCmmSvZXHEw5x5J3Qe_xaCXpkaOePEuIuT-4kcMSARYgGnJI-bYKekRG2Yg90vwpu_Dl6_w2NonuUwHdNwWuuK55Z8-6iWQbHguN78mJlKxqp8s6TmSrmjx-wZVpvWVNv31infJIhZur6FYv2pPoVG6-nevAK7lEW22DWf-SSFkKxSVvQaFjfFzbCFEbm9u49T2-z3bax2lyJa4bmkY', 'Content-Type': 'application/json'}
+2025-04-02 06:16:42,513 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:16:42,514 - __main__ - INFO - Creating table with definition: {
+  "Name": "Inventory",
+  "Columns": [
+    {
+      "Name": "INVENTORY_ID",
+      "Type": "AutoNumber",
+      "Unique": true,
+      "Label": "Inventory ID"
+    },
+    {
+      "Name": "STYLE",
+      "Type": "Text",
+      "Length": 255,
+      "Label": "Style"
+    },
+    {
+      "Name": "COLOR_NAME",
+      "Type": "Text",
+      "Length": 255,
+      "Label": "Color Name"
+    },
+    {
+      "Name": "SIZE",
+      "Type": "Text",
+      "Length": 255,
+      "Label": "Size"
+    },
+    {
+      "Name": "WAREHOUSE_ID",
+      "Type": "Text",
+      "Length": 255,
+      "Label": "Warehouse ID"
+    },
+    {
+      "Name": "QUANTITY",
+      "Type": "Number",
+      "Label": "Quantity"
+    },
+    {
+      "Name": "LAST_UPDATED",
+      "Type": "DateTime",
+      "Label": "Last Updated"
+    }
+  ]
+}
+2025-04-02 06:16:42,514 - __main__ - INFO - Making API request to: https://c3eku948.caspio.com/rest/v2/tables
+2025-04-02 06:16:42,514 - __main__ - INFO - Method: POST
+2025-04-02 06:16:42,516 - __main__ - INFO - Headers: {'Authorization': 'Bearer orXad7XPzBb8rQeyIKhw_Om5eGbBxauKMKWFtsk8HvtwXvGunCbEyt8jYO4DaqWRnbowV5P1TRcenw0en0a02lKpjcEC3Ch24OnRC5sV6yn5tvDjNMsQikobMw87DaVsOlI1Kn6S6ACrxjKzWGklblquiX10PuMGAT45UmdHW2nb04WwAJ3-9u9TjFYZRAJrSPwO0hjRSleZau1NJ8WAlR_iSCmmSvZXHEw5x5J3Qe_xaCXpkaOePEuIuT-4kcMSARYgGnJI-bYKekRG2Yg90vwpu_Dl6_w2NonuUwHdNwWuuK55Z8-6iWQbHguN78mJlKxqp8s6TmSrmjx-wZVpvWVNv31infJIhZur6FYv2pPoVG6-nevAK7lEW22DWf-SSFkKxSVvQaFjfFzbCFEbm9u49T2-z3bax2lyJa4bmkY', 'Content-Type': 'application/json'}
+2025-04-02 06:16:42,516 - __main__ - INFO - Data: {
+  "Name": "Inventory",
+  "Columns": [
+    {
+      "Name": "INVENTORY_ID",
+      "Type": "AutoNumber",
+      "Unique": true,
+      "Label": "Inventory ID"
+    },
+    {
+      "Name": "STYLE",
+      "Type": "Text",
+      "Length": 255,
+      "Label": "Style"
+    },
+    {
+      "Name": "COLOR_NAME",
+      "Type": "Text",
+      "Length": 255,
+      "Label": "Color Name"
+    },
+    {
+      "Name": "SIZE",
+      "Type": "Text",
+      "Length": 255,
+      "Label": "Size"
+    },
+    {
+      "Name": "WAREHOUSE_ID",
+      "Type": "Text",
+      "Length": 255,
+      "Label": "Warehouse ID"
+    },
+    {
+      "Name": "QUANTITY",
+      "Type": "Number",
+      "Label": "Quantity"
+    },
+    {
+      "Name": "LAST_UPDATED",
+      "Type": "DateTime",
+      "Label": "Last Updated"
+    }
+  ]
+}
+2025-04-02 06:16:42,518 - __main__ - INFO - Sending POST request with data
+2025-04-02 06:16:43,067 - __main__ - ERROR - API request error: 400 Client Error: Bad Request for url: https://c3eku948.caspio.com/rest/v2/tables
+2025-04-02 06:16:43,069 - __main__ - ERROR - Response content: {"Code":"IncorrectBodyParameter","Message":"Cannot perform operation because the body parameter is absent or invalid.","Resource":"https://c3eku948.caspio.com/rest/v2/tables","RequestId":"9026FCCD-FB8E-4F72-A266-8061DA123B9B"}
+2025-04-02 06:16:43,070 - __main__ - ERROR - Failed to create table 'Inventory'. No error message returned.
+2025-04-02 06:16:43,070 - __main__ - ERROR - Failed to create all tables.
+2025-04-02 06:16:43,071 - __main__ - INFO - Caspio table creation completed.
+2025-04-02 06:18:10,370 - __main__ - INFO - Starting Caspio table creation...
+2025-04-02 06:18:10,370 - __main__ - INFO - Testing Caspio API connection...
+2025-04-02 06:18:11,028 - __main__ - INFO - Successfully connected to Caspio API.
+2025-04-02 06:18:11,030 - __main__ - INFO - Making API request to: https://c3eku948.caspio.com/rest/v2/tables
+2025-04-02 06:18:11,030 - __main__ - INFO - Method: GET
+2025-04-02 06:18:11,030 - __main__ - INFO - Headers: {'Authorization': 'Bearer F1ZXX3tOiC3wN2nnCnzyUjY_1vY_ot-NtPkEJcfC-S1PgKGoqJD4ibwOt2Bx5wjT5DpPxD4zibrYPw6CivvX9rXavEgNAiCIrpFfVh2T12G1Y-mjbX1yz_IPw142-cf5YGOh-qmmt26zhpzyL30kAiCq203nNFagpzXZrzn-11vJqSp9MwAOJWGEzI51t365Dc85h-SVofBEn_eCbsrRcqx2uwieg8sE_RNwc0719yVjcO1rXipKLddYsgVIYXKrYsPlWwZYLe3NFRaQ2E-nhITyL5ZQfrU7OkNEXQleIY3-XuYAq9J1RqhXztxZEb3CSVgdMSKYzHMF_2ctLddbKZihBdHROs6Z1d6RCm9tgwq3gw2Dn9w6aE9xJa4wVhz55mXNKAKNLzR8xw23ky_4VPDk_T1S0W39-VTu6xRH3mE', 'Content-Type': 'application/json'}
+2025-04-02 06:18:11,546 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:18:11,549 - __main__ - INFO - Table 'Categories' already exists.
+2025-04-02 06:18:11,549 - __main__ - INFO - Making API request to: https://c3eku948.caspio.com/rest/v2/tables
+2025-04-02 06:18:11,550 - __main__ - INFO - Method: GET
+2025-04-02 06:18:11,551 - __main__ - INFO - Headers: {'Authorization': 'Bearer F1ZXX3tOiC3wN2nnCnzyUjY_1vY_ot-NtPkEJcfC-S1PgKGoqJD4ibwOt2Bx5wjT5DpPxD4zibrYPw6CivvX9rXavEgNAiCIrpFfVh2T12G1Y-mjbX1yz_IPw142-cf5YGOh-qmmt26zhpzyL30kAiCq203nNFagpzXZrzn-11vJqSp9MwAOJWGEzI51t365Dc85h-SVofBEn_eCbsrRcqx2uwieg8sE_RNwc0719yVjcO1rXipKLddYsgVIYXKrYsPlWwZYLe3NFRaQ2E-nhITyL5ZQfrU7OkNEXQleIY3-XuYAq9J1RqhXztxZEb3CSVgdMSKYzHMF_2ctLddbKZihBdHROs6Z1d6RCm9tgwq3gw2Dn9w6aE9xJa4wVhz55mXNKAKNLzR8xw23ky_4VPDk_T1S0W39-VTu6xRH3mE', 'Content-Type': 'application/json'}
+2025-04-02 06:18:12,040 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:18:12,040 - __main__ - INFO - Table 'Products' already exists.
+2025-04-02 06:18:12,043 - __main__ - INFO - Making API request to: https://c3eku948.caspio.com/rest/v2/tables
+2025-04-02 06:18:12,043 - __main__ - INFO - Method: GET
+2025-04-02 06:18:12,043 - __main__ - INFO - Headers: {'Authorization': 'Bearer F1ZXX3tOiC3wN2nnCnzyUjY_1vY_ot-NtPkEJcfC-S1PgKGoqJD4ibwOt2Bx5wjT5DpPxD4zibrYPw6CivvX9rXavEgNAiCIrpFfVh2T12G1Y-mjbX1yz_IPw142-cf5YGOh-qmmt26zhpzyL30kAiCq203nNFagpzXZrzn-11vJqSp9MwAOJWGEzI51t365Dc85h-SVofBEn_eCbsrRcqx2uwieg8sE_RNwc0719yVjcO1rXipKLddYsgVIYXKrYsPlWwZYLe3NFRaQ2E-nhITyL5ZQfrU7OkNEXQleIY3-XuYAq9J1RqhXztxZEb3CSVgdMSKYzHMF_2ctLddbKZihBdHROs6Z1d6RCm9tgwq3gw2Dn9w6aE9xJa4wVhz55mXNKAKNLzR8xw23ky_4VPDk_T1S0W39-VTu6xRH3mE', 'Content-Type': 'application/json'}
+2025-04-02 06:18:12,522 - __main__ - INFO - Tables response: {'Result': ['All_Staff', 'Art_CustomerInfo_2024', 'ArtRequests', 'ArtRequests_copy', 'Awards_XMAS_2024', 'BD_Admins', 'Box_Link_Sanmar_Credits_2024', 'Box_Link_Sanmar_Invoices', 'C_Files', 'Categories', 'Comments', 'Company_Contacts_Merge_ODBC', 'CreditCard_NWCA_Erik', 'CreditCard_NWCA_Erik_copy', 'Customer', 'Customers_Orders', 'DailySalesReport', 'Designs_ODBC_2025', 'Dfiles', 'DrainProXmasBundles', 'DTG_Garment_Rating', 'DTGOrderItems', 'DTGOrderPrintLocations', 'DTGPricingMultipliers', 'DTGPrintLocationOptions', 'DTGPrintLocationPricing', 'DTGPrintOptionsReference', 'DTGPrintPricing', 'Email_to_Parsar_ChatGPT', 'EmeraldFireXmasBundles', 'Employee_Reviews', 'EmployeeDirectoryTEST', 'Employees', 'Garment_Details', 'GiftBox', 'Image_Uploads_Data_Basae', 'Inksoft_Deposits', 'jdesigns', 'Kanha_Nai_Production_Log', 'LeadTracking', 'Lfiles', 'Log_Date_LastOrdered', 'MasterOrderTable', 'MasterPricing_April_2023_Final', 'MaterialsTestingXmasBundle', 'mdesigns', 'Mega_File_One', 'Mega_File_Two', 'Monogram_Details', 'Nika_Taylar_4th_QTR', 'Old_Designs_All', 'ORDER_ODBC', 'Orders', 'Pay_Periods', 'Payroll_Bradley_2023', 'Payroll_Bradley_API_2025', 'pfiles', 'PO_ODBC', 'Production_Schedules', 'Products', 'Rdesigns', 'RESPONSES', 'Richardson_Pricing_23', 'SafetyStripeOrder', 'Sanmar_Bulk_251816_Feb2024', 'Sanmar_Pricing_2024_copy', 'Sanmar_Pricing_2025', 'Screenprinting_Costs_6_color', 'ShopifyOrders', 'ShowroomInventory', 'slu_CATEGORY_NAME', 'Staff', 'StyleSearche', 'tbl_B_of_A_Statement', 'tbl_B_of_A_Statement_copy', 'tbl_BOX_Invoices_SM', 'tbl_Invoices_Sanmar', 'tbl_mailing_zapier', 'tbl_sanmar_invoices_MASTER', 'tbl_vendor_basics', 'tdesigns', 'ThreadColors', 'Time_Off_Request', 'Users', 'XmasBox_Label']}
+2025-04-02 06:18:12,524 - __main__ - INFO - Creating table with definition: {
+  "Name": "Inventory",
+  "Columns": [
+    {
+      "Name": "INVENTORY_ID",
+      "Type": "AutoNumber",
+      "Unique": true,
+      "UniqueAllowNulls": false,
+      "Label": "Inventory ID",
+      "Description": "Primary key for inventory record",
+      "DisplayOrder": 1,
+      "OnInsert": true,
+      "OnUpdate": false
+    },
+    {
+      "Name": "STYLE",
+      "Type": "String",
+      "Length": 255,
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Style",
+      "Description": "SanMar style number",
+      "DisplayOrder": 2,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    },
+    {
+      "Name": "COLOR_NAME",
+      "Type": "String",
+      "Length": 255,
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Color Name",
+      "Description": "Color name",
+      "DisplayOrder": 3,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    },
+    {
+      "Name": "SIZE",
+      "Type": "String",
+      "Length": 255,
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Size",
+      "Description": "Size name",
+      "DisplayOrder": 4,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    },
+    {
+      "Name": "WAREHOUSE_ID",
+      "Type": "String",
+      "Length": 255,
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Warehouse ID",
+      "Description": "Warehouse ID",
+      "DisplayOrder": 5,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    },
+    {
+      "Name": "QUANTITY",
+      "Type": "Number",
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Quantity",
+      "Description": "Quantity available",
+      "DisplayOrder": 6,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    },
+    {
+      "Name": "LAST_UPDATED",
+      "Type": "DateTime",
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Last Updated",
+      "Description": "Last update timestamp",
+      "DisplayOrder": 7,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    }
+  ]
+}
+2025-04-02 06:18:12,526 - __main__ - INFO - Making API request to: https://c3eku948.caspio.com/rest/v2/tables
+2025-04-02 06:18:12,526 - __main__ - INFO - Method: POST
+2025-04-02 06:18:12,527 - __main__ - INFO - Headers: {'Authorization': 'Bearer F1ZXX3tOiC3wN2nnCnzyUjY_1vY_ot-NtPkEJcfC-S1PgKGoqJD4ibwOt2Bx5wjT5DpPxD4zibrYPw6CivvX9rXavEgNAiCIrpFfVh2T12G1Y-mjbX1yz_IPw142-cf5YGOh-qmmt26zhpzyL30kAiCq203nNFagpzXZrzn-11vJqSp9MwAOJWGEzI51t365Dc85h-SVofBEn_eCbsrRcqx2uwieg8sE_RNwc0719yVjcO1rXipKLddYsgVIYXKrYsPlWwZYLe3NFRaQ2E-nhITyL5ZQfrU7OkNEXQleIY3-XuYAq9J1RqhXztxZEb3CSVgdMSKYzHMF_2ctLddbKZihBdHROs6Z1d6RCm9tgwq3gw2Dn9w6aE9xJa4wVhz55mXNKAKNLzR8xw23ky_4VPDk_T1S0W39-VTu6xRH3mE', 'Content-Type': 'application/json'}
+2025-04-02 06:18:12,528 - __main__ - INFO - Data: {
+  "Name": "Inventory",
+  "Columns": [
+    {
+      "Name": "INVENTORY_ID",
+      "Type": "AutoNumber",
+      "Unique": true,
+      "UniqueAllowNulls": false,
+      "Label": "Inventory ID",
+      "Description": "Primary key for inventory record",
+      "DisplayOrder": 1,
+      "OnInsert": true,
+      "OnUpdate": false
+    },
+    {
+      "Name": "STYLE",
+      "Type": "String",
+      "Length": 255,
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Style",
+      "Description": "SanMar style number",
+      "DisplayOrder": 2,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    },
+    {
+      "Name": "COLOR_NAME",
+      "Type": "String",
+      "Length": 255,
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Color Name",
+      "Description": "Color name",
+      "DisplayOrder": 3,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    },
+    {
+      "Name": "SIZE",
+      "Type": "String",
+      "Length": 255,
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Size",
+      "Description": "Size name",
+      "DisplayOrder": 4,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    },
+    {
+      "Name": "WAREHOUSE_ID",
+      "Type": "String",
+      "Length": 255,
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Warehouse ID",
+      "Description": "Warehouse ID",
+      "DisplayOrder": 5,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    },
+    {
+      "Name": "QUANTITY",
+      "Type": "Number",
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Quantity",
+      "Description": "Quantity available",
+      "DisplayOrder": 6,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    },
+    {
+      "Name": "LAST_UPDATED",
+      "Type": "DateTime",
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Last Updated",
+      "Description": "Last update timestamp",
+      "DisplayOrder": 7,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    }
+  ]
+}
+2025-04-02 06:18:12,530 - __main__ - INFO - Sending POST request with data
+2025-04-02 06:18:13,149 - __main__ - ERROR - API request error: 400 Client Error: Bad Request for url: https://c3eku948.caspio.com/rest/v2/tables
+2025-04-02 06:18:13,149 - __main__ - ERROR - Response content: {"Code":"IncorrectBodyParameter","Message":"Cannot perform operation because the body parameter is absent or invalid.","Resource":"https://c3eku948.caspio.com/rest/v2/tables","RequestId":"10A96AFF-72A8-4010-82CC-845AAAD3CB09"}
+2025-04-02 06:18:13,149 - __main__ - ERROR - Failed to create table 'Inventory'. No error message returned.
+2025-04-02 06:18:13,149 - __main__ - ERROR - Failed to create all tables.
+2025-04-02 06:18:13,149 - __main__ - INFO - Caspio table creation completed.

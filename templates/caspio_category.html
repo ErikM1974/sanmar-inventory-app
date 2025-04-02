@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block title %}{{ category }} - SanMar Inventory{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('caspio.index') }}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ category }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{{ category }}</h1>
+            <p class="lead">Browse {{ category }} products with inventory and pricing information</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Categories Sidebar -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2>Categories</h2>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <a href="{{ url_for('caspio.category', category='T-Shirts') }}" class="list-group-item list-group-item-action {% if category == 'T-Shirts' %}active{% endif %}">T-Shirts</a>
+                        <a href="{{ url_for('caspio.category', category='Polos') }}" class="list-group-item list-group-item-action {% if category == 'Polos' %}active{% endif %}">Polos</a>
+                        <a href="{{ url_for('caspio.category', category='Sweatshirts') }}" class="list-group-item list-group-item-action {% if category == 'Sweatshirts' %}active{% endif %}">Sweatshirts</a>
+                        <a href="{{ url_for('caspio.category', category='Outerwear') }}" class="list-group-item list-group-item-action {% if category == 'Outerwear' %}active{% endif %}">Outerwear</a>
+                        <a href="{{ url_for('caspio.category', category='Woven Shirts') }}" class="list-group-item list-group-item-action {% if category == 'Woven Shirts' %}active{% endif %}">Woven Shirts</a>
+                        <a href="{{ url_for('caspio.category', category='Activewear') }}" class="list-group-item list-group-item-action {% if category == 'Activewear' %}active{% endif %}">Activewear</a>
+                        <a href="{{ url_for('caspio.category', category='Workwear') }}" class="list-group-item list-group-item-action {% if category == 'Workwear' %}active{% endif %}">Workwear</a>
+                        <a href="{{ url_for('caspio.category', category='Headwear') }}" class="list-group-item list-group-item-action {% if category == 'Headwear' %}active{% endif %}">Headwear</a>
+                        <a href="{{ url_for('caspio.category', category='Bags') }}" class="list-group-item list-group-item-action {% if category == 'Bags' %}active{% endif %}">Bags</a>
+                        <a href="{{ url_for('caspio.category', category='Accessories') }}" class="list-group-item list-group-item-action {% if category == 'Accessories' %}active{% endif %}">Accessories</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Options -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2>Filter Options</h2>
+                </div>
+                <div class="card-body">
+                    <!-- These filters will interact with the Caspio DataPage -->
+                    <form id="filter-form">
+                        <div class="mb-3">
+                            <label for="color-filter" class="form-label">Color</label>
+                            <select class="form-select" id="color-filter">
+                                <option value="">All Colors</option>
+                                <option value="Black">Black</option>
+                                <option value="White">White</option>
+                                <option value="Navy">Navy</option>
+                                <option value="Red">Red</option>
+                                <option value="Royal">Royal</option>
+                                <option value="Athletic Heather">Athletic Heather</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="size-filter" class="form-label">Size</label>
+                            <select class="form-select" id="size-filter">
+                                <option value="">All Sizes</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                                <option value="2XL">2XL</option>
+                                <option value="3XL">3XL</option>
+                            </select>
+                        </div>
+                        <button type="button" id="apply-filters" class="btn btn-primary">Apply Filters</button>
+                        <button type="button" id="clear-filters" class="btn btn-secondary">Clear Filters</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <!-- Category Products Caspio DataPage -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2>{{ category }} Products</h2>
+                </div>
+                <div class="card-body">
+                    <!-- Caspio DataPage Embed Code -->
+                    <script type="text/javascript" src="{{ caspio_base_url }}/dp/{{ datapage_id }}/emb?CATEGORY={{ category }}"></script>
+                </div>
+            </div>
+
+            <!-- Category Description -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2>About {{ category }}</h2>
+                </div>
+                <div class="card-body">
+                    {% if category == 'T-Shirts' %}
+                    <p>SanMar offers a wide variety of t-shirts for every need, from basic tees to performance styles. Choose from different fabrics, weights, and styles to find the perfect t-shirt for your project.</p>
+                    <p>Popular brands include Port & Company, District, Sport-Tek, and Nike.</p>
+                    {% elif category == 'Polos' %}
+                    <p>SanMar's polo collection includes classic styles, moisture-wicking performance polos, and luxury options. Available in a variety of colors and sizes to suit any need.</p>
+                    <p>Popular brands include Port Authority, Sport-Tek, Nike, and OGIO.</p>
+                    {% elif category == 'Outerwear' %}
+                    <p>Stay warm and stylish with SanMar's outerwear collection, featuring jackets, vests, and coats for all seasons and conditions.</p>
+                    <p>Popular brands include Port Authority, Eddie Bauer, The North Face, and Columbia.</p>
+                    {% else %}
+                    <p>SanMar offers high-quality {{ category | lower }} for all your apparel needs. Browse our selection to find the perfect items for your project.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for dynamic content loading -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Filter functionality for Caspio DataPage
+        const applyFiltersBtn = document.getElementById('apply-filters');
+        const clearFiltersBtn = document.getElementById('clear-filters');
+        const colorFilter = document.getElementById('color-filter');
+        const sizeFilter = document.getElementById('size-filter');
+        
+        if (applyFiltersBtn && colorFilter && sizeFilter) {
+            applyFiltersBtn.addEventListener('click', function() {
+                // This is a simplified example - in a real implementation,
+                // you would need to interact with the Caspio DataPage's
+                // search functionality using their JavaScript API
+                const color = colorFilter.value;
+                const size = sizeFilter.value;
+                
+                // Example of how you might filter a Caspio DataPage
+                // This would need to be customized based on your specific DataPage
+                if (window.caspioApp) {
+                    if (color) {
+                        window.caspioApp.setFieldValue('DISPLAY_COLOR', color);
+                    }
+                    if (size) {
+                        window.caspioApp.setFieldValue('SIZE', size);
+                    }
+                    window.caspioApp.search();
+                } else {
+                    console.log('Caspio app not found. Filters would apply: Color=' + color + ', Size=' + size);
+                    
+                    // Fallback: reload the page with query parameters
+                    const url = new URL(window.location.href);
+                    if (color) url.searchParams.set('color', color);
+                    if (size) url.searchParams.set('size', size);
+                    window.location.href = url.toString();
+                }
+            });
+            
+            clearFiltersBtn.addEventListener('click', function() {
+                colorFilter.value = '';
+                sizeFilter.value = '';
+                
+                // Clear filters in Caspio DataPage
+                if (window.caspioApp) {
+                    window.caspioApp.clearSearch();
+                } else {
+                    // Fallback: reload the page without query parameters
+                    const url = new URL(window.location.href);
+                    url.search = '';
+                    window.location.href = url.toString();
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

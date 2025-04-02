@@ -1,0 +1,70 @@
+2025-04-02 09:44:58,457 - __main__ - INFO - Starting Caspio Pricing table access test...
+2025-04-02 09:44:58,458 - __main__ - INFO - Testing access to the Pricing table...
+2025-04-02 09:44:58,458 - __main__ - INFO - Using existing access token.
+2025-04-02 09:44:58,459 - __main__ - INFO - Getting Pricing table structure...
+2025-04-02 09:44:59,137 - __main__ - INFO - Successfully retrieved 9 fields from Pricing table.
+2025-04-02 09:44:59,138 - __main__ - INFO - Fields in Pricing table:
+2025-04-02 09:44:59,139 - __main__ - INFO - - PRICING_ID (AUTONUMBER): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:44:59,149 - __main__ - INFO - - STYLE (STRING): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:44:59,150 - __main__ - INFO - - COLOR_NAME (STRING): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:44:59,151 - __main__ - INFO - - SIZE (STRING): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:44:59,152 - __main__ - INFO - - PIECE_PRICE (CURRENCY): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:44:59,152 - __main__ - INFO - - CASE_PRICE (CURRENCY): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:44:59,153 - __main__ - INFO - - CASE_SIZE (NUMBER): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:44:59,154 - __main__ - INFO - - PROGRAM_PRICE (CURRENCY): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:44:59,155 - __main__ - INFO - - LAST_UPDATED (TIMESTAMP): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:44:59,155 - __main__ - INFO - Getting records from Pricing table...
+2025-04-02 09:44:59,777 - __main__ - INFO - Successfully retrieved 1 records from Pricing table.
+2025-04-02 09:44:59,777 - __main__ - INFO - Sample record from Pricing table:
+2025-04-02 09:44:59,777 - __main__ - INFO - - PK_ID: 1
+2025-04-02 09:44:59,779 - __main__ - INFO - - PRICING_ID: 1
+2025-04-02 09:44:59,779 - __main__ - INFO - - STYLE: TEST001
+2025-04-02 09:44:59,779 - __main__ - INFO - - COLOR_NAME: Test Color
+2025-04-02 09:44:59,779 - __main__ - INFO - - SIZE: M
+2025-04-02 09:44:59,779 - __main__ - INFO - - PIECE_PRICE: 19.99
+2025-04-02 09:44:59,779 - __main__ - INFO - - CASE_PRICE: 179.91
+2025-04-02 09:44:59,779 - __main__ - INFO - - CASE_SIZE: 10.0
+2025-04-02 09:44:59,779 - __main__ - INFO - - PROGRAM_PRICE: 17.99
+2025-04-02 09:44:59,779 - __main__ - INFO - - LAST_UPDATED: 2025-04-02T09:24:29
+2025-04-02 09:44:59,784 - __main__ - INFO - Inserting test record into Pricing table...
+2025-04-02 09:45:00,625 - __main__ - INFO - Successfully inserted test record into Pricing table.
+2025-04-02 09:45:00,625 - __main__ - ERROR - Error inserting test record into Pricing table: Expecting value: line 1 column 1 (char 0)
+2025-04-02 09:45:00,625 - __main__ - ERROR - Caspio Pricing table access test failed.
+2025-04-02 09:46:29,275 - __main__ - INFO - Starting Caspio Pricing table access test...
+2025-04-02 09:46:29,276 - __main__ - INFO - Testing access to the Pricing table...
+2025-04-02 09:46:29,276 - __main__ - INFO - Using existing access token.
+2025-04-02 09:46:29,277 - __main__ - INFO - Getting Pricing table structure...
+2025-04-02 09:46:29,930 - __main__ - INFO - Successfully retrieved 9 fields from Pricing table.
+2025-04-02 09:46:29,931 - __main__ - INFO - Fields in Pricing table:
+2025-04-02 09:46:29,931 - __main__ - INFO - - PRICING_ID (AUTONUMBER): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:46:29,931 - __main__ - INFO - - STYLE (STRING): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:46:29,931 - __main__ - INFO - - COLOR_NAME (STRING): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:46:29,931 - __main__ - INFO - - SIZE (STRING): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:46:29,931 - __main__ - INFO - - PIECE_PRICE (CURRENCY): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:46:29,931 - __main__ - INFO - - CASE_PRICE (CURRENCY): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:46:29,931 - __main__ - INFO - - CASE_SIZE (NUMBER): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:46:29,931 - __main__ - INFO - - PROGRAM_PRICE (CURRENCY): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:46:29,931 - __main__ - INFO - - LAST_UPDATED (TIMESTAMP): ReadOnly=False, AutoIncrement=False
+2025-04-02 09:46:29,931 - __main__ - INFO - Getting records from Pricing table...
+2025-04-02 09:46:30,922 - __main__ - INFO - Successfully retrieved 2 records from Pricing table.
+2025-04-02 09:46:30,922 - __main__ - INFO - Sample record from Pricing table:
+2025-04-02 09:46:30,924 - __main__ - INFO - - PK_ID: 1
+2025-04-02 09:46:30,924 - __main__ - INFO - - PRICING_ID: 1
+2025-04-02 09:46:30,924 - __main__ - INFO - - STYLE: TEST001
+2025-04-02 09:46:30,924 - __main__ - INFO - - COLOR_NAME: Test Color
+2025-04-02 09:46:30,924 - __main__ - INFO - - SIZE: M
+2025-04-02 09:46:30,924 - __main__ - INFO - - PIECE_PRICE: 19.99
+2025-04-02 09:46:30,925 - __main__ - INFO - - CASE_PRICE: 179.91
+2025-04-02 09:46:30,925 - __main__ - INFO - - CASE_SIZE: 10.0
+2025-04-02 09:46:30,925 - __main__ - INFO - - PROGRAM_PRICE: 17.99
+2025-04-02 09:46:30,925 - __main__ - INFO - - LAST_UPDATED: 2025-04-02T09:24:29
+2025-04-02 09:46:30,925 - __main__ - INFO - Inserting test record into Pricing table...
+2025-04-02 09:46:30,925 - __main__ - INFO - Request URL: https://c3eku948.caspio.com/rest/v2/tables/Pricing/records
+2025-04-02 09:46:30,925 - __main__ - INFO - Request Headers: {'Authorization': 'Bearer dNe0FZi0oV3WZhd8CyLkLQScqN0-Yi-g6MaEKRqVDjNR6xOk5IQhotYFl8TQfpBfeU3QGFNjyE9frSN9lN9UckevS0sgzT3A1XBxj7qXhvtg1oFhZsZJqwimNNRfvkhl5LkTd-yOot1ALxJ19Gj0Zlj6VdFH-na4sHIIr_JGP2GjF6vt5aJ4uUBj9eyCUH8rAhCGdYHfXopEj4419bMCPhVXhudIfUFLfgQ1hoAumzRfNCUWs4dAr_oNcJDMielT3nmX4q_T-GLsPbwEEADITk5qFiBoei_KCZBmKHPq4zXykMFlGg1A-zjEA55p6-fKPGHLFyFWNMTV7yg7psybFqtYc3XGoeJXKIqySbIdXC_zPwG9jHSGKt2Sod7HoTsH7d2eLG6HmQR141dFunY3dufOxCaKQafu3Qg1yQ-Ifdo', 'Content-Type': 'application/json'}
+2025-04-02 09:46:30,925 - __main__ - INFO - Request Body: {'STYLE': 'TEST002', 'COLOR_NAME': 'Test Color', 'SIZE': 'M', 'PIECE_PRICE': 19.99, 'CASE_PRICE': 179.91, 'CASE_SIZE': 10, 'PROGRAM_PRICE': 17.99}
+2025-04-02 09:46:31,543 - __main__ - INFO - Response Status Code: 201
+2025-04-02 09:46:31,543 - __main__ - INFO - Response Headers: {'Date': 'Wed, 02 Apr 2025 16:46:31 GMT', 'Content-Length': '0', 'Connection': 'keep-alive', 'Set-Cookie': 'AWSALB=5ttTmoe731jGswRJM4LtwEr3kI3KLmRNODpvcoWyiszzzbOOKlyDMR6VYyQGTGpytVkcDKU92Ww4dIhnCYu2b/mpPCN5YF9Hia8MIopbN/Tp05G3GdGmI/CNv2Hs; Expires=Wed, 09 Apr 2025 16:46:31 GMT; Path=/, AWSALBCORS=5ttTmoe731jGswRJM4LtwEr3kI3KLmRNODpvcoWyiszzzbOOKlyDMR6VYyQGTGpytVkcDKU92Ww4dIhnCYu2b/mpPCN5YF9Hia8MIopbN/Tp05G3GdGmI/CNv2Hs; Expires=Wed, 09 Apr 2025 16:46:31 GMT; Path=/; SameSite=None; Secure', 'Server': 'Caspio Bridge', 'X-Caspio-Request-ID': 'F8CC1F61-7ADF-4C39-8892-71538B100E14', 'P3P': 'CP="CAO PSA OUR"', 'X-XSS-Protection': '1', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Access-Control-Allow-Headers': 'Cache-Control, Authorization, Content-Type', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'OPTIONS,GET,POST,PUT,DELETE', 'Strict-Transport-Security': 'max-age=31536000; includeSubDomains'}
+2025-04-02 09:46:31,543 - __main__ - INFO - Response Content: 
+2025-04-02 09:46:31,543 - __main__ - INFO - Successfully inserted test record into Pricing table.
+2025-04-02 09:46:31,546 - __main__ - ERROR - Error parsing JSON response: Expecting value: line 1 column 1 (char 0)
+2025-04-02 09:46:31,546 - __main__ - INFO - Caspio Pricing table access test completed successfully.

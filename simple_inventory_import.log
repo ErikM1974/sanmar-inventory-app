@@ -1,0 +1,229 @@
+2025-04-02 11:22:59,000 - __main__ - INFO - Starting simple SanMar inventory import...
+2025-04-02 11:22:59,528 - __main__ - INFO - Successfully obtained access token.
+2025-04-02 11:23:00,078 - __main__ - INFO - Retrieved 13 unique styles from Caspio Sanmar_Bulk table.
+2025-04-02 11:23:00,081 - __main__ - INFO - No progress file found. Starting from scratch.
+2025-04-02 11:23:06,648 - __main__ - INFO - Clearing existing inventory data from Caspio...
+2025-04-02 11:23:07,157 - __main__ - INFO - Successfully obtained access token.
+2025-04-02 11:23:07,856 - __main__ - INFO - Cleared existing inventory data from Caspio. Response: {"RecordsAffected":0}
+2025-04-02 11:23:07,859 - __main__ - INFO - Processing 13 styles...
+2025-04-02 11:23:07,861 - __main__ - INFO - Processing style 1/13: 108084
+2025-04-02 11:23:08,619 - __main__ - INFO - Retrieved 27 inventory records for style 108084.
+2025-04-02 11:23:09,114 - __main__ - INFO - Successfully obtained access token.
+2025-04-02 11:23:15,400 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:23:23,431 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:23:28,672 - __main__ - INFO - Inserted 7 of 7 records in this batch.
+2025-04-02 11:23:29,677 - __main__ - INFO - Saved progress for style 108084: 27 records inserted. Total: 27
+2025-04-02 11:23:29,678 - __main__ - INFO - Processed style 108084: 27 records inserted. Total: 27
+2025-04-02 11:23:31,679 - __main__ - INFO - Processing style 2/13: 108089
+2025-04-02 11:23:32,428 - __main__ - INFO - Retrieved 27 inventory records for style 108089.
+2025-04-02 11:23:32,936 - __main__ - INFO - Successfully obtained access token.
+2025-04-02 11:23:49,635 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:23:57,562 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:24:03,003 - __main__ - INFO - Inserted 7 of 7 records in this batch.
+2025-04-02 11:24:04,010 - __main__ - INFO - Saved progress for style 108089: 27 records inserted. Total: 54
+2025-04-02 11:24:04,011 - __main__ - INFO - Processed style 108089: 27 records inserted. Total: 54
+2025-04-02 11:24:06,014 - __main__ - INFO - Processing style 3/13: 108090
+2025-04-02 11:24:07,315 - __main__ - INFO - Retrieved 9 inventory records for style 108090.
+2025-04-02 11:24:10,053 - __main__ - INFO - Successfully obtained access token.
+2025-04-02 11:24:15,614 - __main__ - INFO - Inserted 9 of 9 records in this batch.
+2025-04-02 11:24:16,616 - __main__ - INFO - Saved progress for style 108090: 9 records inserted. Total: 63
+2025-04-02 11:24:16,616 - __main__ - INFO - Processed style 108090: 9 records inserted. Total: 63
+2025-04-02 11:24:18,617 - __main__ - INFO - Processing style 4/13: 108105
+2025-04-02 11:24:19,405 - __main__ - INFO - Retrieved 9 inventory records for style 108105.
+2025-04-02 11:24:19,918 - __main__ - INFO - Successfully obtained access token.
+2025-04-02 11:24:25,620 - __main__ - INFO - Inserted 9 of 9 records in this batch.
+2025-04-02 11:24:26,622 - __main__ - INFO - Saved progress for style 108105: 9 records inserted. Total: 72
+2025-04-02 11:24:26,622 - __main__ - INFO - Processed style 108105: 9 records inserted. Total: 72
+2025-04-02 11:24:28,624 - __main__ - INFO - Processing style 5/13: 108087
+2025-04-02 11:24:29,397 - __main__ - INFO - Retrieved 45 inventory records for style 108087.
+2025-04-02 11:24:29,911 - __main__ - INFO - Successfully obtained access token.
+2025-04-02 11:24:38,917 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:24:46,070 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:24:53,774 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:25:01,197 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:25:06,775 - __main__ - INFO - Inserted 5 of 5 records in this batch.
+2025-04-02 11:25:07,780 - __main__ - INFO - Saved progress for style 108087: 45 records inserted. Total: 117
+2025-04-02 11:25:07,781 - __main__ - INFO - Processed style 108087: 45 records inserted. Total: 117
+2025-04-02 11:25:09,782 - __main__ - INFO - Processing style 6/13: 108085
+2025-04-02 11:25:10,622 - __main__ - INFO - Retrieved 36 inventory records for style 108085.
+2025-04-02 11:25:11,118 - __main__ - INFO - Successfully obtained access token.
+2025-04-02 11:25:17,709 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:25:29,789 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:25:36,924 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:25:44,691 - __main__ - INFO - Inserted 6 of 6 records in this batch.
+2025-04-02 11:25:45,697 - __main__ - INFO - Saved progress for style 108085: 36 records inserted. Total: 153
+2025-04-02 11:25:45,697 - __main__ - INFO - Processed style 108085: 36 records inserted. Total: 153
+2025-04-02 11:25:47,699 - __main__ - INFO - Processing style 7/13: 108091
+2025-04-02 11:25:48,960 - __main__ - INFO - Retrieved 18 inventory records for style 108091.
+2025-04-02 11:25:50,000 - __main__ - INFO - Successfully obtained access token.
+2025-04-02 11:26:03,952 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:26:13,597 - __main__ - INFO - Inserted 8 of 8 records in this batch.
+2025-04-02 11:26:14,605 - __main__ - INFO - Saved progress for style 108091: 18 records inserted. Total: 171
+2025-04-02 11:26:14,607 - __main__ - INFO - Processed style 108091: 18 records inserted. Total: 171
+2025-04-02 11:26:16,608 - __main__ - INFO - Processing style 8/13: 108087C
+2025-04-02 11:26:17,974 - __main__ - INFO - Retrieved 9 inventory records for style 108087C.
+2025-04-02 11:26:19,049 - __main__ - INFO - Successfully obtained access token.
+2025-04-02 11:26:29,307 - __main__ - INFO - Inserted 9 of 9 records in this batch.
+2025-04-02 11:26:30,313 - __main__ - INFO - Saved progress for style 108087C: 9 records inserted. Total: 180
+2025-04-02 11:26:30,314 - __main__ - INFO - Processed style 108087C: 9 records inserted. Total: 180
+2025-04-02 11:26:32,316 - __main__ - INFO - Processing style 9/13: 102699
+2025-04-02 11:26:33,416 - __main__ - INFO - Retrieved 126 inventory records for style 102699.
+2025-04-02 11:26:33,979 - __main__ - INFO - Successfully obtained access token.
+2025-04-02 11:26:40,418 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:26:47,966 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:26:55,721 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:27:03,745 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:27:10,705 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:27:18,953 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:27:26,121 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:27:33,555 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:27:40,715 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:27:48,655 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:27:57,311 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:28:04,778 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:28:09,725 - __main__ - INFO - Inserted 6 of 6 records in this batch.
+2025-04-02 11:28:10,728 - __main__ - INFO - Saved progress for style 102699: 126 records inserted. Total: 306
+2025-04-02 11:28:10,728 - __main__ - INFO - Processed style 102699: 126 records inserted. Total: 306
+2025-04-02 11:28:12,730 - __main__ - INFO - Processing style 10/13: 054X
+2025-04-02 11:28:13,705 - __main__ - INFO - Retrieved 648 inventory records for style 054X.
+2025-04-02 11:28:14,195 - __main__ - INFO - Successfully obtained access token.
+2025-04-02 11:28:20,611 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:28:28,387 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:28:35,476 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:28:42,610 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:28:49,730 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:28:56,837 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:29:04,353 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:29:11,591 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:29:18,873 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:29:28,478 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:29:36,862 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:29:44,120 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:29:52,127 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:29:59,243 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:30:06,591 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:30:13,867 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:30:21,436 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:30:30,654 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:30:40,150 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:30:48,360 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:30:58,172 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:31:06,560 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:31:15,413 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:31:23,741 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:31:34,629 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:31:41,814 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:31:48,891 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:31:56,745 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:32:04,067 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:32:11,596 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:32:19,067 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:32:27,023 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:32:33,829 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:32:40,581 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:32:48,417 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:32:55,930 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:33:03,652 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:33:11,991 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:33:19,758 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:33:27,516 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:33:36,280 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:33:44,366 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:33:54,900 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:34:07,478 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:34:14,747 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:34:24,851 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:34:35,005 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:34:41,745 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:34:48,901 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:34:55,527 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:35:02,303 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:35:09,309 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:35:16,189 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:35:23,135 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:35:29,827 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:35:36,878 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:35:44,322 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:35:51,580 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:35:58,679 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:36:05,855 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:36:13,686 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:36:21,849 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:36:28,786 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:36:35,685 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:36:42,548 - __main__ - INFO - Inserted 8 of 8 records in this batch.
+2025-04-02 11:36:43,552 - __main__ - INFO - Saved progress for style 054X: 648 records inserted. Total: 954
+2025-04-02 11:36:43,553 - __main__ - INFO - Processed style 054X: 648 records inserted. Total: 954
+2025-04-02 11:36:45,556 - __main__ - INFO - Processing style 11/13: 110172
+2025-04-02 11:36:47,020 - __main__ - INFO - Retrieved 9 inventory records for style 110172.
+2025-04-02 11:36:47,995 - __main__ - INFO - Successfully obtained access token.
+2025-04-02 11:36:57,615 - __main__ - INFO - Inserted 9 of 9 records in this batch.
+2025-04-02 11:36:58,621 - __main__ - INFO - Saved progress for style 110172: 9 records inserted. Total: 963
+2025-04-02 11:36:58,623 - __main__ - INFO - Processed style 110172: 9 records inserted. Total: 963
+2025-04-02 11:37:00,623 - __main__ - INFO - Processing style 12/13: 12000
+2025-04-02 11:37:02,251 - __main__ - INFO - Retrieved 522 inventory records for style 12000.
+2025-04-02 11:37:03,224 - __main__ - INFO - Successfully obtained access token.
+2025-04-02 11:37:13,778 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:37:25,813 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:37:37,688 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:37:49,422 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:38:01,359 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:38:13,630 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:38:26,388 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:38:38,165 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:38:50,406 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:39:01,921 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:39:13,794 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:39:25,896 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:39:37,996 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:39:50,524 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:40:03,432 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:40:18,307 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:40:30,025 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:40:43,209 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:40:56,213 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:41:08,595 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:41:20,302 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:41:31,978 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:41:43,532 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:41:56,373 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:42:08,702 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:42:20,721 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:42:32,775 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:42:45,164 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:42:57,542 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:43:10,118 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:43:22,727 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:43:34,753 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:43:47,093 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:43:58,664 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:44:10,748 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:44:22,757 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:44:34,687 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:44:46,811 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:44:59,591 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:45:11,668 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:45:23,548 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:45:35,876 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:45:47,457 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:45:59,243 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:46:11,514 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:46:23,595 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:46:37,900 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:46:49,965 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:47:02,995 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:47:15,332 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:47:27,425 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:47:40,538 - __main__ - INFO - Inserted 10 of 10 records in this batch.
+2025-04-02 11:47:43,865 - __main__ - INFO - Inserted 2 of 2 records in this batch.
+2025-04-02 11:47:44,873 - __main__ - INFO - Saved progress for style 12000: 522 records inserted. Total: 1485
+2025-04-02 11:47:44,875 - __main__ - INFO - Processed style 12000: 522 records inserted. Total: 1485
+2025-04-02 11:47:46,877 - __main__ - INFO - Processing style 13/13: 117023
+2025-04-02 11:47:48,233 - __main__ - INFO - Retrieved 9 inventory records for style 117023.
+2025-04-02 11:47:49,234 - __main__ - INFO - Successfully obtained access token.
+2025-04-02 11:47:59,021 - __main__ - INFO - Inserted 9 of 9 records in this batch.
+2025-04-02 11:48:00,027 - __main__ - INFO - Saved progress for style 117023: 9 records inserted. Total: 1494
+2025-04-02 11:48:00,029 - __main__ - INFO - Processed style 117023: 9 records inserted. Total: 1494
+2025-04-02 11:48:02,029 - __main__ - INFO - SanMar inventory import completed successfully.
+2025-04-02 11:48:02,031 - __main__ - INFO - Total styles processed: 13
+2025-04-02 11:48:02,031 - __main__ - INFO - Total records inserted: 1494

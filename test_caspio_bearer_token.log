@@ -1,0 +1,159 @@
+2025-04-02 08:36:31,168 - __main__ - INFO - Starting Caspio API connection test...
+2025-04-02 08:36:31,735 - __main__ - INFO - Successfully connected to Caspio API. Found 86 tables.
+2025-04-02 08:36:31,738 - __main__ - INFO - 
+Available tables:
+2025-04-02 08:36:47,050 - __main__ - INFO - Starting Caspio API connection test...
+2025-04-02 08:36:47,613 - __main__ - INFO - Successfully connected to Caspio API. Found 86 tables.
+2025-04-02 08:36:47,613 - __main__ - INFO - 
+Available tables:
+2025-04-02 08:36:47,613 - __main__ - INFO - - All_Staff
+2025-04-02 08:36:47,613 - __main__ - INFO - - Art_CustomerInfo_2024
+2025-04-02 08:36:47,613 - __main__ - INFO - - ArtRequests
+2025-04-02 08:36:47,613 - __main__ - INFO - - ArtRequests_copy
+2025-04-02 08:36:47,613 - __main__ - INFO - - Awards_XMAS_2024
+2025-04-02 08:36:47,613 - __main__ - INFO - - BD_Admins
+2025-04-02 08:36:47,613 - __main__ - INFO - - Box_Link_Sanmar_Credits_2024
+2025-04-02 08:36:47,613 - __main__ - INFO - - Box_Link_Sanmar_Invoices
+2025-04-02 08:36:47,613 - __main__ - INFO - - C_Files
+2025-04-02 08:36:47,613 - __main__ - INFO - - Categories
+2025-04-02 08:36:47,613 - __main__ - INFO - - Comments
+2025-04-02 08:36:47,613 - __main__ - INFO - - Company_Contacts_Merge_ODBC
+2025-04-02 08:36:47,613 - __main__ - INFO - - CreditCard_NWCA_Erik
+2025-04-02 08:36:47,613 - __main__ - INFO - - CreditCard_NWCA_Erik_copy
+2025-04-02 08:36:47,613 - __main__ - INFO - - Customer
+2025-04-02 08:36:47,613 - __main__ - INFO - - Customers_Orders
+2025-04-02 08:36:47,613 - __main__ - INFO - - DailySalesReport
+2025-04-02 08:36:47,620 - __main__ - INFO - - Designs_ODBC_2025
+2025-04-02 08:36:47,620 - __main__ - INFO - - Dfiles
+2025-04-02 08:36:47,620 - __main__ - INFO - - DrainProXmasBundles
+2025-04-02 08:36:47,620 - __main__ - INFO - - DTG_Garment_Rating
+2025-04-02 08:36:47,620 - __main__ - INFO - - DTGOrderItems
+2025-04-02 08:36:47,620 - __main__ - INFO - - DTGOrderPrintLocations
+2025-04-02 08:36:47,620 - __main__ - INFO - - DTGPricingMultipliers
+2025-04-02 08:36:47,620 - __main__ - INFO - - DTGPrintLocationOptions
+2025-04-02 08:36:47,620 - __main__ - INFO - - DTGPrintLocationPricing
+2025-04-02 08:36:47,620 - __main__ - INFO - - DTGPrintOptionsReference
+2025-04-02 08:36:47,620 - __main__ - INFO - - DTGPrintPricing
+2025-04-02 08:36:47,620 - __main__ - INFO - - Email_to_Parsar_ChatGPT
+2025-04-02 08:36:47,620 - __main__ - INFO - - EmeraldFireXmasBundles
+2025-04-02 08:36:47,622 - __main__ - INFO - - Employee_Reviews
+2025-04-02 08:36:47,622 - __main__ - INFO - - EmployeeDirectoryTEST
+2025-04-02 08:36:47,622 - __main__ - INFO - - Employees
+2025-04-02 08:36:47,623 - __main__ - INFO - - Garment_Details
+2025-04-02 08:36:47,623 - __main__ - INFO - - GiftBox
+2025-04-02 08:36:47,623 - __main__ - INFO - - Image_Uploads_Data_Basae
+2025-04-02 08:36:47,623 - __main__ - INFO - - Inksoft_Deposits
+2025-04-02 08:36:47,623 - __main__ - INFO - - Inventory
+2025-04-02 08:36:47,623 - __main__ - INFO - - jdesigns
+2025-04-02 08:36:47,623 - __main__ - INFO - - Kanha_Nai_Production_Log
+2025-04-02 08:36:47,623 - __main__ - INFO - - LeadTracking
+2025-04-02 08:36:47,624 - __main__ - INFO - - Lfiles
+2025-04-02 08:36:47,624 - __main__ - INFO - - Log_Date_LastOrdered
+2025-04-02 08:36:47,624 - __main__ - INFO - - MasterOrderTable
+2025-04-02 08:36:47,624 - __main__ - INFO - - MasterPricing_April_2023_Final
+2025-04-02 08:36:47,624 - __main__ - INFO - - MaterialsTestingXmasBundle
+2025-04-02 08:36:47,624 - __main__ - INFO - - mdesigns
+2025-04-02 08:36:47,624 - __main__ - INFO - - Mega_File_One
+2025-04-02 08:36:47,624 - __main__ - INFO - - Mega_File_Two
+2025-04-02 08:36:47,624 - __main__ - INFO - - Monogram_Details
+2025-04-02 08:36:47,624 - __main__ - INFO - - Nika_Taylar_4th_QTR
+2025-04-02 08:36:47,624 - __main__ - INFO - - Old_Designs_All
+2025-04-02 08:36:47,625 - __main__ - INFO - - ORDER_ODBC
+2025-04-02 08:36:47,625 - __main__ - INFO - - Orders
+2025-04-02 08:36:47,625 - __main__ - INFO - - Pay_Periods
+2025-04-02 08:36:47,625 - __main__ - INFO - - Payroll_Bradley_2023
+2025-04-02 08:36:47,625 - __main__ - INFO - - Payroll_Bradley_API_2025
+2025-04-02 08:36:47,625 - __main__ - INFO - - pfiles
+2025-04-02 08:36:47,626 - __main__ - INFO - - PO_ODBC
+2025-04-02 08:36:47,626 - __main__ - INFO - - Production_Schedules
+2025-04-02 08:36:47,626 - __main__ - INFO - - Products
+2025-04-02 08:36:47,626 - __main__ - INFO - - Rdesigns
+2025-04-02 08:36:47,626 - __main__ - INFO - - RESPONSES
+2025-04-02 08:36:47,626 - __main__ - INFO - - Richardson_Pricing_23
+2025-04-02 08:36:47,626 - __main__ - INFO - - SafetyStripeOrder
+2025-04-02 08:36:47,626 - __main__ - INFO - - Sanmar_Bulk_251816_Feb2024
+2025-04-02 08:36:47,627 - __main__ - INFO - - Sanmar_Pricing_2024_copy
+2025-04-02 08:36:47,627 - __main__ - INFO - - Sanmar_Pricing_2025
+2025-04-02 08:36:47,627 - __main__ - INFO - - Screenprinting_Costs_6_color
+2025-04-02 08:36:47,627 - __main__ - INFO - - ShopifyOrders
+2025-04-02 08:36:47,627 - __main__ - INFO - - ShowroomInventory
+2025-04-02 08:36:47,627 - __main__ - INFO - - slu_CATEGORY_NAME
+2025-04-02 08:36:47,627 - __main__ - INFO - - Staff
+2025-04-02 08:36:47,627 - __main__ - INFO - - StyleSearche
+2025-04-02 08:36:47,627 - __main__ - INFO - - tbl_B_of_A_Statement
+2025-04-02 08:36:47,627 - __main__ - INFO - - tbl_B_of_A_Statement_copy
+2025-04-02 08:36:47,627 - __main__ - INFO - - tbl_BOX_Invoices_SM
+2025-04-02 08:36:47,628 - __main__ - INFO - - tbl_Invoices_Sanmar
+2025-04-02 08:36:47,628 - __main__ - INFO - - tbl_mailing_zapier
+2025-04-02 08:36:47,628 - __main__ - INFO - - tbl_sanmar_invoices_MASTER
+2025-04-02 08:36:47,629 - __main__ - INFO - - tbl_vendor_basics
+2025-04-02 08:36:47,629 - __main__ - INFO - - tdesigns
+2025-04-02 08:36:47,629 - __main__ - INFO - - ThreadColors
+2025-04-02 08:36:47,629 - __main__ - INFO - - Time_Off_Request
+2025-04-02 08:36:47,629 - __main__ - INFO - - Users
+2025-04-02 08:36:47,630 - __main__ - INFO - - XmasBox_Label
+2025-04-02 08:36:48,204 - __main__ - INFO - Successfully accessed the Sanmar_Bulk_251816_Feb2024 table.
+2025-04-02 08:36:48,204 - __main__ - INFO - Sample record: {
+  "PK_ID": 1,
+  "UNIQUE_KEY": 584042,
+  "PRODUCT_TITLE": "OGIO - Glam Polo. LOG105",
+  "PRODUCT_DESCRIPTION": "Designed to handle the curves  the Glam has a contoured fit and unique open hem cuffs with O debossed metal snaps.     4.6-ounce  100% double knit poly mesh with stay-cool wicking technology     Self-fabric collar     OGIO jacquard neck tape     OGIO heat transfer label for tag-free comfort     3-snap y-placket with O debossed metal snaps     OGIO badge at hem",
+  "STYLE": "LOG105",
+  "AVAILABLE_SIZES": "Ladies Sizes: XS-4XL",
+  "BRAND_LOGO_IMAGE": "https://cdnm.sanmar.com/catalog/images/ogioheader.jpg",
+  "THUMBNAIL_IMAGE": "https://cdnm.sanmar.com/catalog/images/LOG105TN.jpg",
+  "COLOR_SWATCH_IMAGE": "https://cdnm.sanmar.com/catalog/images/LOG105sw.jpg",
+  "PRODUCT_IMAGE": "https://cdnm.sanmar.com/catalog/images/LOG105.jpg",
+  "SPEC_SHEET": "https://www.apparelvideos.com/images/specsheet/pdf/specsheet/LOG105_specsheet.pdf",
+  "PRICE_TEXT": "Price applies to XS-XL",
+  "SUGGESTED_PRICE": 45.0,
+  "CATEGORY_NAME": "Polos/Knits",
+  "SUBCATEGORY_NAME": "Ladies",
+  "COLOR_NAME": "Shock Green",
+  "COLOR_SQUARE_IMAGE": "https://cdnm.sanmar.com/swatch/gifs/ogio_shockgreen.gif",
+  "COLOR_PRODUCT_IMAGE": "https://cdnm.sanmar.com/catalog/images/imglib/catl/2015/f5/LOG105_shockgreen_model_front_022015.jpg",
+  "COLOR_PRODUCT_IMAGE_THUMBNAIL": "https://cdnm.sanmar.com/cache/altview/imglib/catl/2015/f5/LOG105_shockgreen_model_front_022015.jpg",
+  "SIZE": "S",
+  "QTY": 22,
+  "PIECE_WEIGHT": 0.44,
+  "PIECE_PRICE": 21.99,
+  "DOZENS_PRICE": 21.99,
+  "CASE_PRICE": 21.99,
+  "PRICE_GROUP": "BR",
+  "CASE_SIZE": 36,
+  "INVENTORY_KEY": 58404,
+  "SIZE_INDEX": 2,
+  "SANMAR_MAINFRAME_COLOR": "Shock Green",
+  "MILL": "OGIO",
+  "PRODUCT_STATUS": "Discontinued",
+  "COMPANION_STYLES": "LOG105",
+  "MSRP": 43.98,
+  "MAP_PRICING": "39.58",
+  "FRONT_MODEL_IMAGE_URL": "https://cdnm.sanmar.com/imglib/mresjpg/2015/f5/LOG105_shockgreen_model_front_022015.jpg",
+  "BACK_MODEL_IMAGE": "LOG105_shockgreen_model_back_022015.jpg",
+  "FRONT_FLAT_IMAGE": "LOG105_shockgreen_flat_front.jpg",
+  "BACK_FLAT_IMAGE": "LOG105_shockgreen_flat_back.jpg",
+  "PRODUCT_MEASUREMENTS": "LOG105_productmeasurement.pdf",
+  "PMS_COLOR": "382 C",
+  "GTIN": null,
+  "DECORATION_SPEC_SHEET": "https://www.sanmar.com/p/4113/decorationSpecSheet",
+  "FRONT_FLAT": "https://cdnm.sanmar.com/imglib/mresjpg/2015/f5/LOG105_shockgreen_flat_front.jpg",
+  "BACK_FLAT": "https://cdnm.sanmar.com/imglib/mresjpg/2015/f5/LOG105_shockgreen_flat_back.jpg",
+  "FRONT_MODEL": "https://cdnm.sanmar.com/imglib/mresjpg/2015/f5/LOG105_shockgreen_model_front_022015.jpg",
+  "BACK_MODEL": "https://cdnm.sanmar.com/imglib/mresjpg/2015/f5/LOG105_shockgreen_model_back_022015.jpg",
+  "SIDE_MODEL": "https://cdnm.sanmar.com/imglib/mresjpg/2015/f5/LOG105_shockgreen_model_side_022015.jpg",
+  "THREE_Q_MODEL": "https://cdnm.sanmar.com/imglib/mresjpg/2015/f5/LOG105_shockgreen_model_3q_022015.jpg",
+  "DOZEN_PRICE": 21.99,
+  "PIECE_SALE_PRICE": 13.17,
+  "DOZEN_SALE_PRICE": 13.17,
+  "CASE_SALE_PRICE": 13.17,
+  "SALE_START_DATE": "2020-04-30T00:00:00",
+  "SALE_END_DATE": "2050-08-30T00:00:00",
+  "CATALOG_COLOR": "Shock Green",
+  "PRICE_CODE": "A/P",
+  "TITLE_IMAGE": "",
+  "BRAND_NAME": "OGIO",
+  "KEYWORDS": "ladies polos/knits  ogio  glam polo  polo  polos  Short sleeve  short sleeves  short sleeved  shortsleeve  shortsleeves  shortsleeved  short-sleeve  short-sleeves  short-sleeved  ladies  lady  women  women's  100% poly  polyester  double knit  knit  mesh  wick  wicking  wicked  sport  sport shirt  sports  sport-shirt  sport-shirts  sport shirts  active  athletic   tagless  embroidery  embroider  embroidering  screen printing  screenprinting  screen-printing  screenprint  screen-print  screen print  heat transfer  heat transfering  heat-transfering  heat seal  heat sealing  heat-sealing  heattransfer  heatseal  heat-transfer  heat-seal  emboss  deboss  embossing  debossing  laser  laser etching  laser etch  pad print  pad-print  padprint  pad printing  pad-printing  padprinting ",
+  "CATEGORY": "Ladies  Polos/Knits"
+}
+2025-04-02 08:36:48,208 - __main__ - INFO - Caspio API connection test completed successfully.

@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}{{ style }} - Product Details{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('caspio.index') }}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ style }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{{ style }} - Product Details</h1>
+            <p class="lead">View inventory and pricing information for {{ style }}</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Product Details Caspio DataPage -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2>Product Information</h2>
+                </div>
+                <div class="card-body">
+                    <!-- Caspio DataPage Embed Code -->
+                    <script type="text/javascript" src="{{ caspio_base_url }}/dp/{{ datapage_id }}/emb?STYLE={{ style }}&COLOR_NAME={{ color }}&SIZE={{ size }}"></script>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <!-- Inventory by Warehouse Caspio DataPage -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2>Inventory by Warehouse</h2>
+                </div>
+                <div class="card-body">
+                    <!-- Caspio DataPage Embed Code -->
+                    <div id="inventory-by-warehouse">
+                        <script type="text/javascript" src="{{ caspio_base_url }}/dp/{{ inventory_datapage_id }}/emb?STYLE={{ style }}&COLOR_NAME={{ color }}&SIZE={{ size }}"></script>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <!-- Pricing Information Caspio DataPage -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2>Pricing Information</h2>
+                </div>
+                <div class="card-body">
+                    <!-- Caspio DataPage Embed Code -->
+                    <div id="pricing-information">
+                        <script type="text/javascript" src="{{ caspio_base_url }}/dp/{{ pricing_datapage_id }}/emb?STYLE={{ style }}&COLOR_NAME={{ color }}&SIZE={{ size }}"></script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2>Product Images</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img src="https://www.sanmar.com/resources/images/{{ style }}/{{ style }}_{{ color }}_flat_front.jpg" 
+                                 alt="{{ style }} {{ color }} Front" class="img-fluid mb-3">
+                            <p class="text-center">Front View</p>
+                        </div>
+                        <div class="col-md-4">
+                            <img src="https://www.sanmar.com/resources/images/{{ style }}/{{ style }}_{{ color }}_flat_back.jpg" 
+                                 alt="{{ style }} {{ color }} Back" class="img-fluid mb-3">
+                            <p class="text-center">Back View</p>
+                        </div>
+                        <div class="col-md-4">
+                            <img src="https://www.sanmar.com/resources/images/{{ style }}/{{ style }}_{{ color }}_model_front.jpg" 
+                                 alt="{{ style }} {{ color }} Model" class="img-fluid mb-3">
+                            <p class="text-center">Model View</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <a href="{{ url_for('caspio.index') }}" class="btn btn-primary mb-4">Back to Product Listing</a>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for dynamic content loading -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // You can add JavaScript here to enhance the Caspio DataPages
+        // For example, you might want to add event listeners to Caspio elements
+        
+        // Example: Add a click event to highlight rows in the inventory table
+        setTimeout(function() {
+            const inventoryRows = document.querySelectorAll('#inventory-by-warehouse table tbody tr');
+            inventoryRows.forEach(row => {
+                row.addEventListener('click', function() {
+                    this.classList.toggle('table-primary');
+                });
+            });
+        }, 1000); // Wait for Caspio DataPage to load
+    });
+</script>
+{% endblock %}

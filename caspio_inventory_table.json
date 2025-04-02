@@ -1,0 +1,92 @@
+{
+  "Name": "Inventory",
+  "Columns": [
+    {
+      "Name": "INVENTORY_ID",
+      "Type": "AutoNumber",
+      "Unique": true,
+      "UniqueAllowNulls": false,
+      "Label": "Inventory ID",
+      "Description": "Primary key for inventory record",
+      "DisplayOrder": 1,
+      "OnInsert": true,
+      "OnUpdate": false
+    },
+    {
+      "Name": "STYLE",
+      "Type": "Text",
+      "Length": 50,
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Style",
+      "Description": "SanMar style number",
+      "DisplayOrder": 2,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    },
+    {
+      "Name": "COLOR_NAME",
+      "Type": "Text",
+      "Length": 100,
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Color Name",
+      "Description": "Color name",
+      "DisplayOrder": 3,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    },
+    {
+      "Name": "SIZE",
+      "Type": "Text",
+      "Length": 20,
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Size",
+      "Description": "Size name",
+      "DisplayOrder": 4,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    },
+    {
+      "Name": "WAREHOUSE_ID",
+      "Type": "Text",
+      "Length": 20,
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Warehouse ID",
+      "Description": "Warehouse ID",
+      "DisplayOrder": 5,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    },
+    {
+      "Name": "QUANTITY",
+      "Type": "Number",
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Quantity",
+      "Description": "Quantity available",
+      "DisplayOrder": 6,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    },
+    {
+      "Name": "LAST_UPDATED",
+      "Type": "DateTime",
+      "Unique": false,
+      "UniqueAllowNulls": false,
+      "Label": "Last Updated",
+      "Description": "Last update timestamp",
+      "DisplayOrder": 7,
+      "OnInsert": true,
+      "OnUpdate": true,
+      "Required": true
+    }
+  ]
+}

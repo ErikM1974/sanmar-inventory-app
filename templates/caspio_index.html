@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}SanMar Inventory - Caspio Integration{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>SanMar Inventory</h1>
+            <p class="lead">Browse and search SanMar products with inventory and pricing information</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Categories Sidebar -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2>Categories</h2>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <a href="{{ url_for('caspio.category', category='T-Shirts') }}" class="list-group-item list-group-item-action">T-Shirts</a>
+                        <a href="{{ url_for('caspio.category', category='Polos') }}" class="list-group-item list-group-item-action">Polos</a>
+                        <a href="{{ url_for('caspio.category', category='Sweatshirts') }}" class="list-group-item list-group-item-action">Sweatshirts</a>
+                        <a href="{{ url_for('caspio.category', category='Outerwear') }}" class="list-group-item list-group-item-action">Outerwear</a>
+                        <a href="{{ url_for('caspio.category', category='Woven Shirts') }}" class="list-group-item list-group-item-action">Woven Shirts</a>
+                        <a href="{{ url_for('caspio.category', category='Activewear') }}" class="list-group-item list-group-item-action">Activewear</a>
+                        <a href="{{ url_for('caspio.category', category='Workwear') }}" class="list-group-item list-group-item-action">Workwear</a>
+                        <a href="{{ url_for('caspio.category', category='Headwear') }}" class="list-group-item list-group-item-action">Headwear</a>
+                        <a href="{{ url_for('caspio.category', category='Bags') }}" class="list-group-item list-group-item-action">Bags</a>
+                        <a href="{{ url_for('caspio.category', category='Accessories') }}" class="list-group-item list-group-item-action">Accessories</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Popular Styles -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2>Popular Styles</h2>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <a href="{{ url_for('caspio.product_detail', style='PC61') }}" class="list-group-item list-group-item-action">PC61 - Port & Company Essential T-Shirt</a>
+                        <a href="{{ url_for('caspio.product_detail', style='K500') }}" class="list-group-item list-group-item-action">K500 - Port Authority Silk Touch Polo</a>
+                        <a href="{{ url_for('caspio.product_detail', style='PC78H') }}" class="list-group-item list-group-item-action">PC78H - Port & Company Core Fleece Hooded Sweatshirt</a>
+                        <a href="{{ url_for('caspio.product_detail', style='J317') }}" class="list-group-item list-group-item-action">J317 - Port Authority Core Soft Shell Jacket</a>
+                        <a href="{{ url_for('caspio.product_detail', style='NKDC1001') }}" class="list-group-item list-group-item-action">NKDC1001 - Nike Dri-FIT Micro Pique Polo</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <!-- Search and Results Caspio DataPage -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2>Product Search</h2>
+                </div>
+                <div class="card-body">
+                    <!-- Caspio DataPage Embed Code -->
+                    <script type="text/javascript" src="{{ caspio_base_url }}/dp/{{ datapage_id }}/emb"></script>
+                </div>
+            </div>
+
+            <!-- Featured Products -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2>Featured Products</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                <img src="https://www.sanmar.com/resources/images/PC61/PC61_White_flat_front.jpg" class="card-img-top" alt="PC61 White">
+                                <div class="card-body">
+                                    <h5 class="card-title">PC61 - Essential T-Shirt</h5>
+                                    <p class="card-text">Port & Company's bestselling tee with a classic look.</p>
+                                    <a href="{{ url_for('caspio.product_detail', style='PC61') }}" class="btn btn-primary">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                <img src="https://www.sanmar.com/resources/images/K500/K500_Red_flat_front.jpg" class="card-img-top" alt="K500 Red">
+                                <div class="card-body">
+                                    <h5 class="card-title">K500 - Silk Touch Polo</h5>
+                                    <p class="card-text">Port Authority's popular polo with a silky smooth hand.</p>
+                                    <a href="{{ url_for('caspio.product_detail', style='K500') }}" class="btn btn-primary">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                <img src="https://www.sanmar.com/resources/images/J317/J317_Black_flat_front.jpg" class="card-img-top" alt="J317 Black">
+                                <div class="card-body">
+                                    <h5 class="card-title">J317 - Core Soft Shell Jacket</h5>
+                                    <p class="card-text">Port Authority's versatile soft shell jacket.</p>
+                                    <a href="{{ url_for('caspio.product_detail', style='J317') }}" class="btn btn-primary">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for dynamic content loading -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // You can add JavaScript here to enhance the Caspio DataPages
+        // For example, you might want to add event listeners to Caspio elements
+        
+        // Example: Add a click event to highlight rows in the search results table
+        setTimeout(function() {
+            const resultRows = document.querySelectorAll('.cbResultSetTable tbody tr');
+            resultRows.forEach(row => {
+                row.addEventListener('click', function() {
+                    this.classList.toggle('table-primary');
+                });
+            });
+        }, 1000); // Wait for Caspio DataPage to load
+    });
+</script>
+{% endblock %}

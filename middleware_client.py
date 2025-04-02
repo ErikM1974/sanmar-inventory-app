@@ -1,323 +1,100 @@
-import requests
+#!/usr/bin/env python
+"""
+Middleware client for interacting with SanMar SOAP APIs.
+"""
+
 import logging
 import time
+import requests
 from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
-import os
-from dotenv import load_dotenv
+from urllib3.util.retry import Retry
 
-# Load environment variables
-load_dotenv()
+# Import zeep for SOAP client
+try:
+    from zeep import Client
+    from zeep.transports import Transport
+    ZEEP_AVAILABLE = True
+except ImportError:
+    ZEEP_AVAILABLE = False
+    logging.warning("Zeep library not available. SOAP API functionality will be limited.")
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger("middleware_client")
+logger = logging.getLogger(__name__)
 
-# Middleware API configuration
-MIDDLEWARE_API_BASE_URL = "https://api-mini-server-919227e25714.herokuapp.com"
-API_TIMEOUT = 15  # seconds
-
-# SanMar API credentials
-USERNAME = os.getenv("SANMAR_USERNAME")
-PASSWORD = os.getenv("SANMAR_PASSWORD")
-CUSTOMER_NUMBER = os.getenv("SANMAR_CUSTOMER_NUMBER")
-
-def create_session_with_retries():
-    """
-    Create a requests session with retry logic for transient failures
-    """
+def create_session_with_retries(retries=3, backoff_factor=0.3, status_forcelist=(500, 502, 504)):
+    """Create a requests session with retry capabilities."""
     session = requests.Session()
-    retry_strategy = Retry(
-        total=3,  # Maximum number of retries
-        backoff_factor=0.5,  # Exponential backoff
-        status_forcelist=[500, 502, 503, 504],  # Retry on these HTTP status codes
-        allowed_methods=["GET", "POST"]  # Retry for these methods
+    retry = Retry(
+        total=retries,
+        read=retries,
+        connect=retries,
+        backoff_factor=backoff_factor,
+        status_forcelist=status_forcelist,
     )
-    adapter = HTTPAdapter(max_retries=retry_strategy)
-    session.mount("https://", adapter)
-    session.mount("http://", adapter)
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
     return session
 
+def create_soap_client(wsdl_url, retries=3, backoff_factor=0.3, status_forcelist=(500, 502, 504)):
+    """Create a SOAP client with retry capabilities."""
+    if not ZEEP_AVAILABLE:
+        raise ImportError("Zeep library is required for SOAP API functionality.")
+    
+    session = create_session_with_retries(retries, backoff_factor, status_forcelist)
+    transport = Transport(session=session)
+    client = Client(wsdl_url, transport=transport)
+    return client
+
 def categorize_error(exception):
-    """
-    Categorize request exceptions for better error handling and logging
-    """
-    if isinstance(exception, requests.ConnectionError):
-        return "NETWORK_ERROR"
-    elif isinstance(exception, requests.Timeout):
-        return "TIMEOUT_ERROR"
-    elif isinstance(exception, requests.HTTPError):
-        if hasattr(exception, 'response') and exception.response:
-            if exception.response.status_code in [401, 403]:
-                return "AUTH_ERROR"
-            elif exception.response.status_code == 404:
-                return "NOT_FOUND_ERROR"
+    """Categorize an exception into a more user-friendly error type and message."""
+    # Check if it's a requests exception
+    if isinstance(exception, requests.exceptions.RequestException):
+        if isinstance(exception, requests.exceptions.ConnectionError):
+            return "Connection Error", "Failed to connect to the API server. Please check your internet connection."
+        elif isinstance(exception, requests.exceptions.Timeout):
+            return "Timeout Error", "The API request timed out. Please try again later."
+        elif isinstance(exception, requests.exceptions.HTTPError):
+            status_code = exception.response.status_code
+            if status_code == 401:
+                return "Authentication Error", "Invalid credentials. Please check your username and password."
+            elif status_code == 403:
+                return "Authorization Error", "You don't have permission to access this resource."
+            elif status_code == 404:
+                return "Not Found Error", "The requested resource was not found."
+            elif status_code == 429:
+                return "Rate Limit Error", "You've exceeded the API rate limit. Please try again later."
+            elif 500 <= status_code < 600:
+                return "Server Error", f"The API server encountered an error (status code: {status_code})."
             else:
-                return f"HTTP_ERROR_{exception.response.status_code}"
-        return "HTTP_ERROR"
-    elif isinstance(exception, requests.RequestException):
-        return "REQUEST_ERROR"
-    else:
-        return "UNKNOWN_ERROR"
+                return "HTTP Error", f"HTTP error occurred (status code: {status_code})."
+        else:
+            return "Request Error", str(exception)
+    
+    # Check if it's a zeep exception
+    if str(exception.__class__).find('zeep') != -1:
+        if str(exception).find('authentication') != -1 or str(exception).find('Authentication') != -1:
+            return "Authentication Error", "Invalid credentials. Please check your username and password."
+        elif str(exception).find('timeout') != -1 or str(exception).find('Timeout') != -1:
+            return "Timeout Error", "The SOAP request timed out. Please try again later."
+        elif str(exception).find('schema') != -1 or str(exception).find('Schema') != -1:
+            return "Schema Error", "The SOAP request does not match the expected schema."
+        else:
+            return "SOAP Error", str(exception)
+    
+    # Generic error handling
+    return "Error", str(exception)
 
-def fetch_combined_data(style, color=None):
-    """
-    Fetch combined product, inventory, and pricing data from the middleware API
-    
-    Args:
-        style (str): The product style number
-        color (str, optional): The color code or name
-        
-    Returns:
-        dict: The combined data or None if an error occurred
-    """
-    log_context = {"style": style, "color": color, "source": "middleware"}
-    
-    # Construct the URL
-    url = f"{MIDDLEWARE_API_BASE_URL}/sanmar/combined/{style}"
-    if color:
-        url += f"/{color}"
-    
-    session = create_session_with_retries()
-    start_time = time.time()
-    
-    try:
-        logger.info(f"Fetching data from middleware: {url}", extra=log_context)
-        response = session.get(url, timeout=API_TIMEOUT)
-        response.raise_for_status()
-        
-        duration = time.time() - start_time
-        logger.info(f"Successfully fetched data in {duration:.2f}s", 
-                   extra={**log_context, "duration": duration})
-        
-        data = response.json()
-        if not data.get('success') or not data.get('data'):
-            logger.warning("Middleware returned success=false or no data", 
-                         extra=log_context)
-            return None
-            
-        return data.get('data')
-        
-    except requests.RequestException as e:
-        duration = time.time() - start_time
-        error_type = categorize_error(e)
-        logger.error(f"Failed to fetch data: {e}", 
-                    extra={**log_context, "error_type": error_type, "duration": duration})
-        return None
-    except Exception as e:
-        duration = time.time() - start_time
-        logger.error(f"Unexpected error fetching data: {e}", 
-                    extra={**log_context, "error_type": "UNEXPECTED_ERROR", "duration": duration})
-        return None
-
-def check_middleware_health():
-    """
-    Check if the middleware API is available
-    
-    Returns:
-        dict: Health status information
-    """
-    start_time = time.time()
-    try:
-        # Simple health check endpoint or use the base URL
-        response = requests.get(f"{MIDDLEWARE_API_BASE_URL}/health", timeout=5)
-        response.raise_for_status()
-        
-        duration = time.time() - start_time
-        return {
-            "status": "Connected",
-            "latency": f"{duration:.2f}s",
-            "timestamp": time.time()
-        }
-    except Exception as e:
-        duration = time.time() - start_time
-        error_type = categorize_error(e) if isinstance(e, requests.RequestException) else "UNKNOWN_ERROR"
-        return {
-            "status": "Error",
-            "error": str(e),
-            "error_type": error_type,
-            "latency": f"{duration:.2f}s",
-            "timestamp": time.time()
-        }
-
-# Enhanced autocomplete with improved caching
-AUTOCOMPLETE_CACHE = {}
-CACHE_EXPIRY = 24 * 3600  # 24 hours - increased from 1 hour
-MAX_RESULTS = 15  # Increased from 10 to provide more options
-
-def get_cache_key(query):
-    """
-    Get a cache key for the query
-    
-    Args:
-        query (str): The search query
-        
-    Returns:
-        str: Cache key for the query
-    """
-    # For shorter queries, use the full query as key
-    if len(query) <= 3:
-        return query.upper()
-    
-    # For longer queries, use prefix plus pattern
-    return f"{query[:3].upper()}_{len(query)}"
-
-def preload_common_searches():
-    """Preload common search prefixes into cache"""
-    common_prefixes = ["PC", "K5", "J7", "ST", "NE", "L2", "G2", "BC", "DM", "DT", "CS"]
-    logger.info(f"Preloading {len(common_prefixes)} common search prefixes")
-    
-    for prefix in common_prefixes:
+def retry_on_failure(func, max_retries=3, retry_delay=1, *args, **kwargs):
+    """Retry a function on failure with exponential backoff."""
+    for attempt in range(max_retries):
         try:
-            # Don't log during preloading to avoid cluttering logs
-            fetch_autocomplete(prefix, log_enabled=False)
+            return func(*args, **kwargs)
         except Exception as e:
-            logger.warning(f"Failed to preload '{prefix}': {e}")
-    
-    logger.info(f"Preloading complete. Cache contains {len(AUTOCOMPLETE_CACHE)} entries")
-
-def fetch_autocomplete(query, log_enabled=True):
-    """
-    Fetch autocomplete suggestions for a product style number
-    with enhanced caching and performance
-    
-    Args:
-        query (str): The search query (style number prefix)
-        log_enabled (bool): Whether to log cache hits/misses
-        
-    Returns:
-        list: List of matching style numbers
-    """
-    if not query or len(query) < 2:
-        return []
-        
-    # Normalize query for cache lookup
-    query_upper = query.upper()
-    cache_key = get_cache_key(query_upper)
-    current_time = time.time()
-    
-    # Check cache first
-    if cache_key in AUTOCOMPLETE_CACHE and (current_time - AUTOCOMPLETE_CACHE[cache_key]['timestamp'] < CACHE_EXPIRY):
-        all_results = AUTOCOMPLETE_CACHE[cache_key]['data']
-        
-        # Filter the cached results to match the current query
-        cached_results = [s for s in all_results if s.startswith(query_upper)]
-        
-        if log_enabled:
-            logger.info(f"Autocomplete cache hit for '{query}'",
-                       extra={"query": query, "cache_key": cache_key, "results_count": len(cached_results)})
-        
-        return cached_results[:MAX_RESULTS]
-    
-    # Try to get partial matches from cache for prefixes
-    if len(query) >= 3:
-        prefix_key = query_upper[:2]
-        if prefix_key in AUTOCOMPLETE_CACHE and (current_time - AUTOCOMPLETE_CACHE[prefix_key]['timestamp'] < CACHE_EXPIRY):
-            all_results = AUTOCOMPLETE_CACHE[prefix_key]['data']
-            prefix_matches = [s for s in all_results if s.startswith(query_upper)]
-            
-            if prefix_matches and log_enabled:
-                logger.info(f"Autocomplete partial cache hit for '{query}'",
-                           extra={"query": query, "partial_key": prefix_key, "results_count": len(prefix_matches)})
-                
-                return prefix_matches[:MAX_RESULTS]
-    
-    # Check local mock data first for exact match
-    from mock_data import get_mock_autocomplete, COMMON_STYLES
-    
-    # If the entire query exactly matches a known style, return it immediately
-    if query_upper in COMMON_STYLES:
-        results = [query_upper]
-        if log_enabled:
-            logger.info(f"Exact style match for '{query}' in local data",
-                       extra={"query": query, "results_count": 1})
-        return results
-    
-    # Get local matches based on our enhanced mock data
-    local_results = get_mock_autocomplete(query)
-    
-    # If we have good local results, return them immediately
-    if len(local_results) >= 3:
-        if log_enabled:
-            logger.info(f"Using local data matches for '{query}'",
-                       extra={"query": query, "results_count": len(local_results)})
-        
-        # Also cache these results
-        AUTOCOMPLETE_CACHE[cache_key] = {
-            "data": local_results,
-            "timestamp": current_time
-        }
-        
-        return local_results[:MAX_RESULTS]
-    
-    # Cache miss, fetch from middleware
-    log_context = {"query": query, "source": "middleware"}
-    start_time = time.time()
-    
-    try:
-        if log_enabled:
-            logger.info(f"Fetching autocomplete data for '{query}'", extra=log_context)
-            
-        url = f"{MIDDLEWARE_API_BASE_URL}/sanmar/autocomplete?q={query}"
-        session = create_session_with_retries()
-        response = session.get(url, timeout=API_TIMEOUT)
-        response.raise_for_status()
-        
-        results = response.json()
-        duration = time.time() - start_time
-        
-        # If API returned no results but we have local results, use those
-        if not results and local_results:
-            if log_enabled:
-                logger.info(f"API returned no results, using local results for '{query}'",
-                          extra={**log_context, "results_count": len(local_results)})
-            results = local_results
-        
-        # Add the exact query if it's valid and not already in results
-        if len(query) >= 4 and query_upper not in results:
-            results.append(query_upper)
-            if log_enabled:
-                logger.info(f"Added exact query '{query}' to results",
-                          extra={**log_context})
-        
-        # Update cache - store all results
-        AUTOCOMPLETE_CACHE[cache_key] = {
-            "data": results,
-            "timestamp": current_time
-        }
-        
-        # Also store in a prefix cache if appropriate
-        if len(query) >= 3 and query_upper[:2] not in AUTOCOMPLETE_CACHE:
-            AUTOCOMPLETE_CACHE[query_upper[:2]] = {
-                "data": results,
-                "timestamp": current_time
-            }
-        
-        if log_enabled:
-            logger.info(f"Autocomplete request completed in {duration:.2f}s",
-                       extra={**log_context, "duration": duration, "results_count": len(results)})
-        
-        return results[:MAX_RESULTS]
-        
-    except Exception as e:
-        duration = time.time() - start_time
-        error_type = categorize_error(e) if isinstance(e, requests.RequestException) else "UNEXPECTED_ERROR"
-        
-        if log_enabled:
-            logger.error(f"Autocomplete error: {e}",
-                        extra={**log_context, "error_type": error_type, "duration": duration})
-        
-        # We already checked local_results above, but return them here as fallback
-        if local_results:
-            return local_results[:MAX_RESULTS]
-            
-        # If we have no local results, try to generate some based on what we know
-        if len(query) >= 4:
-            # For longer queries, assume it might be a valid style number and include it
-            return [query_upper]
-            
-        # Final fallback to empty list
-        return []
+            error_type, error_message = categorize_error(e)
+            if attempt < max_retries - 1:
+                wait_time = retry_delay * (2 ** attempt)
+                logger.warning(f"{error_type} on attempt {attempt + 1}/{max_retries}: {error_message}. Retrying in {wait_time} seconds...")
+                time.sleep(wait_time)
+            else:
+                logger.error(f"{error_type} on final attempt: {error_message}")
+                raise

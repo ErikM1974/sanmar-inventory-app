@@ -1,0 +1,248 @@
+/**
+ * Custom styles for Caspio DataPages integration
+ * These styles help make the Caspio DataPages match the look and feel of the main application
+ */
+
+/* Override Caspio default styles */
+.cbResultSetTable {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin-bottom: 1rem !important;
+    border: 1px solid #dee2e6 !important;
+}
+
+.cbResultSetTable th {
+    background-color: #f8f9fa !important;
+    color: #212529 !important;
+    border-bottom: 2px solid #dee2e6 !important;
+    padding: 0.75rem !important;
+    text-align: left !important;
+    font-weight: bold !important;
+}
+
+.cbResultSetTable td {
+    padding: 0.75rem !important;
+    border-top: 1px solid #dee2e6 !important;
+    vertical-align: middle !important;
+}
+
+.cbResultSetTable tr:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.cbResultSetTable tr:hover {
+    background-color: rgba(0, 0, 0, 0.075) !important;
+}
+
+/* Caspio pagination controls */
+.cbPagination {
+    display: flex !important;
+    justify-content: center !important;
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+}
+
+.cbPagination a {
+    padding: 0.5rem 0.75rem !important;
+    margin: 0 0.25rem !important;
+    border: 1px solid #dee2e6 !important;
+    color: #007bff !important;
+    text-decoration: none !important;
+    background-color: #fff !important;
+}
+
+.cbPagination a:hover {
+    background-color: #e9ecef !important;
+    border-color: #dee2e6 !important;
+    color: #0056b3 !important;
+}
+
+.cbPagination a.cbCurrentPage {
+    background-color: #007bff !important;
+    border-color: #007bff !important;
+    color: #fff !important;
+}
+
+/* Caspio search form */
+.cbSearchForm {
+    margin-bottom: 1.5rem !important;
+    padding: 1rem !important;
+    background-color: #f8f9fa !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 0.25rem !important;
+}
+
+.cbSearchForm label {
+    font-weight: bold !important;
+    margin-bottom: 0.5rem !important;
+    display: block !important;
+}
+
+.cbSearchForm input[type="text"],
+.cbSearchForm select {
+    width: 100% !important;
+    padding: 0.375rem 0.75rem !important;
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+    color: #495057 !important;
+    background-color: #fff !important;
+    background-clip: padding-box !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 0.25rem !important;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+    margin-bottom: 1rem !important;
+}
+
+.cbSearchForm input[type="text"]:focus,
+.cbSearchForm select:focus {
+    color: #495057 !important;
+    background-color: #fff !important;
+    border-color: #80bdff !important;
+    outline: 0 !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+}
+
+.cbSearchForm button,
+.cbSearchForm input[type="submit"],
+.cbSearchForm input[type="button"] {
+    display: inline-block !important;
+    font-weight: 400 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    vertical-align: middle !important;
+    user-select: none !important;
+    border: 1px solid transparent !important;
+    padding: 0.375rem 0.75rem !important;
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+    border-radius: 0.25rem !important;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+    color: #fff !important;
+    background-color: #007bff !important;
+    border-color: #007bff !important;
+    margin-right: 0.5rem !important;
+}
+
+.cbSearchForm button:hover,
+.cbSearchForm input[type="submit"]:hover,
+.cbSearchForm input[type="button"]:hover {
+    color: #fff !important;
+    background-color: #0069d9 !important;
+    border-color: #0062cc !important;
+}
+
+/* Caspio detail view */
+.cbDetailView {
+    margin-bottom: 1.5rem !important;
+}
+
+.cbDetailView table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+}
+
+.cbDetailView th {
+    width: 30% !important;
+    text-align: right !important;
+    padding: 0.75rem !important;
+    background-color: #f8f9fa !important;
+    border: 1px solid #dee2e6 !important;
+    font-weight: bold !important;
+}
+
+.cbDetailView td {
+    width: 70% !important;
+    padding: 0.75rem !important;
+    border: 1px solid #dee2e6 !important;
+}
+
+/* Caspio loading spinner */
+.cbLoadingSpinner {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 100px !important;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+    .cbResultSetTable {
+        display: block !important;
+        width: 100% !important;
+        overflow-x: auto !important;
+    }
+    
+    .cbSearchForm input[type="text"],
+    .cbSearchForm select {
+        width: 100% !important;
+    }
+    
+    .cbDetailView th,
+    .cbDetailView td {
+        display: block !important;
+        width: 100% !important;
+        text-align: left !important;
+    }
+}
+
+/* Custom styles for our application */
+.caspio-container {
+    background-color: #fff;
+    border-radius: 0.25rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.caspio-header {
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+}
+
+.caspio-footer {
+    border-top: 1px solid #dee2e6;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+/* Highlight for inventory levels */
+.inventory-high {
+    background-color: #d4edda !important;
+    color: #155724 !important;
+}
+
+.inventory-medium {
+    background-color: #fff3cd !important;
+    color: #856404 !important;
+}
+
+.inventory-low {
+    background-color: #f8d7da !important;
+    color: #721c24 !important;
+}
+
+/* Spinner for loading states */
+.caspio-spinner-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+
+.caspio-spinner {
+    width: 3rem;
+    height: 3rem;
+    border: 0.25rem solid #f3f3f3;
+    border-top: 0.25rem solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

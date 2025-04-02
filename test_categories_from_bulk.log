@@ -1,0 +1,15 @@
+2025-04-02 08:53:21,400 - __main__ - INFO - Starting test to extract category and subcategory information from Sanmar_Bulk_251816_Feb2024 table...
+2025-04-02 08:53:21,403 - __main__ - INFO - Testing getting distinct categories from Sanmar_Bulk_251816_Feb2024 table...
+2025-04-02 08:53:22,074 - __main__ - INFO - Successfully retrieved 100 distinct categories from Sanmar_Bulk_251816_Feb2024 table.
+2025-04-02 08:53:22,077 - __main__ - INFO - Categories: , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , 
+2025-04-02 08:53:22,654 - __main__ - INFO - Testing getting distinct subcategories for category '' from Sanmar_Bulk_251816_Feb2024 table...
+2025-04-02 08:53:23,250 - __main__ - INFO - Successfully retrieved 100 distinct subcategories for category '' from Sanmar_Bulk_251816_Feb2024 table.
+2025-04-02 08:53:23,250 - __main__ - INFO - Subcategories: , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , 
+2025-04-02 08:53:23,862 - __main__ - INFO - Testing getting products for category '' and subcategory '' from Sanmar_Bulk_251816_Feb2024 table...
+2025-04-02 08:53:24,414 - __main__ - INFO - Successfully retrieved 10 products for category '' and subcategory '' from Sanmar_Bulk_251816_Feb2024 table.
+2025-04-02 08:53:24,420 - __main__ - INFO - Product 1: Port Authority Short Sleeve Twill Shirt. S500T (Style: S500T, Brand: Port Authority)
+2025-04-02 08:53:24,420 - __main__ - INFO - Product 2: Port Authority Short Sleeve Twill Shirt. S500T (Style: S500T, Brand: Port Authority)
+2025-04-02 08:53:24,420 - __main__ - INFO - Product 3: Port Authority Short Sleeve Twill Shirt. S500T (Style: S500T, Brand: Port Authority)
+2025-04-02 08:53:24,420 - __main__ - INFO - Product 4: Port Authority Short Sleeve Twill Shirt. S500T (Style: S500T, Brand: Port Authority)
+2025-04-02 08:53:24,420 - __main__ - INFO - Product 5: Port Authority Short Sleeve Twill Shirt. S500T (Style: S500T, Brand: Port Authority)
+2025-04-02 08:53:24,420 - __main__ - INFO - All tests completed successfully.

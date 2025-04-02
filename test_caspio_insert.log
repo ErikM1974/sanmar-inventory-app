@@ -1,0 +1,106 @@
+2025-04-02 10:46:48,095 - __main__ - INFO - Starting Caspio API test...
+2025-04-02 10:46:48,613 - __main__ - INFO - Successfully obtained access token.
+2025-04-02 10:46:49,214 - __main__ - INFO - Successfully retrieved fields for table Inventory.
+2025-04-02 10:46:49,216 - __main__ - INFO - Inventory table fields: [
+  {
+    "Name": "INVENTORY_ID",
+    "Type": "AUTONUMBER",
+    "Unique": true,
+    "Description": "Primary key for inventory record",
+    "DisplayOrder": 1,
+    "Label": "",
+    "UniqueAllowNulls": false,
+    "IsFormula": false
+  },
+  {
+    "Name": "STYLE",
+    "Type": "STRING",
+    "Unique": false,
+    "Description": "SanMar style number",
+    "DisplayOrder": 2,
+    "Label": "",
+    "UniqueAllowNulls": false,
+    "IsFormula": false
+  },
+  {
+    "Name": "COLOR_NAME",
+    "Type": "STRING",
+    "Unique": false,
+    "Description": "Color name",
+    "DisplayOrder": 3,
+    "Label": "This will store the mainframe color name",
+    "UniqueAllowNulls": false,
+    "IsFormula": false
+  },
+  {
+    "Name": "DISPLAY_COLOR",
+    "Type": "STRING",
+    "Unique": false,
+    "Description": "",
+    "DisplayOrder": 4,
+    "Label": "UI-friendly color name",
+    "UniqueAllowNulls": false,
+    "IsFormula": false
+  },
+  {
+    "Name": "SIZE",
+    "Type": "STRING",
+    "Unique": false,
+    "Description": "Size name",
+    "DisplayOrder": 5,
+    "Label": "",
+    "UniqueAllowNulls": false,
+    "IsFormula": false
+  },
+  {
+    "Name": "WAREHOUSE_ID",
+    "Type": "STRING",
+    "Unique": false,
+    "Description": "Warehouse ID",
+    "DisplayOrder": 6,
+    "Label": "",
+    "UniqueAllowNulls": false,
+    "IsFormula": false
+  },
+  {
+    "Name": "QUANTITY",
+    "Type": "NUMBER",
+    "Unique": false,
+    "Description": "Quantity available",
+    "DisplayOrder": 7,
+    "Label": "",
+    "UniqueAllowNulls": false,
+    "IsFormula": false
+  },
+  {
+    "Name": "LAST_UPDATED",
+    "Type": "DATE/TIME",
+    "Unique": false,
+    "Description": "Last update timestamp",
+    "DisplayOrder": 8,
+    "Label": "",
+    "UniqueAllowNulls": false,
+    "IsFormula": false
+  }
+]
+2025-04-02 10:46:49,225 - __main__ - INFO - Inserting record into Inventory: {
+  "STYLE": "TEST001",
+  "COLOR_NAME": "TEST",
+  "DISPLAY_COLOR": "Test Color",
+  "SIZE": "M",
+  "WAREHOUSE_ID": "1",
+  "QUANTITY": 100,
+  "LAST_UPDATED": "2025-04-02 10:46:49"
+}
+2025-04-02 10:46:49,843 - __main__ - INFO - Response status code: 201
+2025-04-02 10:46:49,844 - __main__ - INFO - Response headers: {'Date': 'Wed, 02 Apr 2025 17:46:50 GMT', 'Content-Length': '0', 'Connection': 'keep-alive', 'Set-Cookie': 'AWSALB=BaFw/KC3DIFjmXeV3hixP3uU//sZdIk1cGyr7S9ebv9OtC99CWtJOdqSw+1cPg5+Z/TT3e6SxOJArWoCIiFUqgmCfWqtu6LV1VohrNxv/+ZSqjF+xsaZxYs79lwB; Expires=Wed, 09 Apr 2025 17:46:49 GMT; Path=/, AWSALBCORS=BaFw/KC3DIFjmXeV3hixP3uU//sZdIk1cGyr7S9ebv9OtC99CWtJOdqSw+1cPg5+Z/TT3e6SxOJArWoCIiFUqgmCfWqtu6LV1VohrNxv/+ZSqjF+xsaZxYs79lwB; Expires=Wed, 09 Apr 2025 17:46:49 GMT; Path=/; SameSite=None; Secure', 'Server': 'Caspio Bridge', 'X-Caspio-Request-ID': '8BF6F2BE-8379-47D7-A977-F5D6987DA4AE', 'P3P': 'CP="CAO PSA OUR"', 'X-XSS-Protection': '1', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Access-Control-Allow-Headers': 'Cache-Control, Authorization, Content-Type', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'OPTIONS,GET,POST,PUT,DELETE', 'Strict-Transport-Security': 'max-age=31536000; includeSubDomains'}
+2025-04-02 10:46:49,844 - __main__ - INFO - Response content: 
+2025-04-02 10:46:49,844 - __main__ - INFO - Record inserted, but no response content returned.
+2025-04-02 10:46:49,845 - __main__ - INFO - Test record inserted successfully!
+2025-04-02 10:46:49,845 - __main__ - INFO - Deleting all records from Inventory with params: {'q.where': '1=1'}
+2025-04-02 10:46:50,448 - __main__ - INFO - Response status code: 200
+2025-04-02 10:46:50,448 - __main__ - INFO - Response headers: {'Date': 'Wed, 02 Apr 2025 17:46:50 GMT', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '21', 'Connection': 'keep-alive', 'Set-Cookie': 'AWSALB=IbeC6JnBV+RoN7uLpT5NrzPrbtSPWNTN4e2JkAUniomdzRVbV9lJuCsH3av90dQBmVonzVuC/vzLg7QFsZkc0tvuFwxhRrEKFmkNLjXoo8rQ0BK4tdIKEZb5mFJI; Expires=Wed, 09 Apr 2025 17:46:50 GMT; Path=/, AWSALBCORS=IbeC6JnBV+RoN7uLpT5NrzPrbtSPWNTN4e2JkAUniomdzRVbV9lJuCsH3av90dQBmVonzVuC/vzLg7QFsZkc0tvuFwxhRrEKFmkNLjXoo8rQ0BK4tdIKEZb5mFJI; Expires=Wed, 09 Apr 2025 17:46:50 GMT; Path=/; SameSite=None; Secure', 'Cache-Control': 'private', 'Server': 'Caspio Bridge', 'X-Caspio-Request-ID': 'BB9258AC-DBB6-493C-AE04-2811844E9D56', 'P3P': 'CP="CAO PSA OUR"', 'X-XSS-Protection': '1', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'SAMEORIGIN', 'Access-Control-Allow-Headers': 'Cache-Control, Authorization, Content-Type', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'OPTIONS,GET,POST,PUT,DELETE', 'Strict-Transport-Security': 'max-age=31536000; includeSubDomains'}
+2025-04-02 10:46:50,449 - __main__ - INFO - Response content: {"RecordsAffected":2}
+2025-04-02 10:46:50,449 - __main__ - INFO - Successfully deleted all records from Inventory.
+2025-04-02 10:46:50,450 - __main__ - INFO - Successfully deleted all records from Inventory table.
+2025-04-02 10:46:50,450 - __main__ - INFO - Caspio API test completed.

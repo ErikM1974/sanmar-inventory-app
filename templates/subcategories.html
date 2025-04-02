@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('caspio_direct.categories') }}">Categories</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ category }}</li>
+        </ol>
+    </nav>
+
+    <h1>{{ category }} Subcategories</h1>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="list-group">
+                <a href="{{ url_for('caspio_direct.category_detail', category_name=category) }}" class="list-group-item list-group-item-action">
+                    <strong>All {{ category }} Products</strong>
+                </a>
+                {% for subcategory in subcategories %}
+                <a href="{{ url_for('caspio_direct.category_detail', category_name=category, subcategory_name=subcategory) }}" class="list-group-item list-group-item-action">
+                    {{ subcategory }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

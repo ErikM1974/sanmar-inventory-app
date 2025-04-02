@@ -1,0 +1,6 @@
+2025-04-02 08:15:41,473 - __main__ - INFO - Starting Caspio API connection test...
+2025-04-02 08:15:42,245 - __main__ - INFO - Successfully connected to Caspio API. Found 86 tables.
+2025-04-02 08:15:42,258 - __main__ - INFO - Caspio API connection test completed successfully.
+2025-04-02 09:15:57,102 - __main__ - INFO - Starting Caspio API connection test...
+2025-04-02 09:15:57,692 - __main__ - INFO - Successfully connected to Caspio API. Found 85 tables.
+2025-04-02 09:15:57,699 - __main__ - INFO - Caspio API connection test completed successfully.

@@ -36,8 +36,39 @@ class ColorMapper:
             "1X": "XL"
         }
 
-        # Initialize color mapping dictionary (can be expanded as needed)
-        self.color_mapping = {}
+        # Initialize color mapping dictionary with common SanMar color mappings
+        # This is a fallback for when we can't get mappings from Caspio
+        self.color_mapping = {
+            # Basic colors
+            "BLK": "Black",
+            "WHT": "White",
+            "NVY": "Navy",
+            "RED": "Red",
+            "ROY": "Royal",
+            "ATHL HTH": "Athletic Heather",
+            "ATHHTHR": "Athletic Heather",
+            "DKGRN": "Dark Green",
+            "DKGRY": "Dark Grey",
+            "LTGRY": "Light Grey",
+            "MAROON": "Maroon",
+            "PURPLE": "Purple",
+            "SANGRIA": "Sangria",
+            "TRBLUE": "True Blue",
+            "TRROYAL": "True Royal",
+            "WASABE": "Wasabe",
+            
+            # Color codes with slashes
+            "BLK/WHT": "Black/White",
+            "NVY/WHT": "Navy/White",
+            "RED/WHT": "Red/White",
+            "ROY/WHT": "Royal/White",
+            
+            # Color codes with hyphens
+            "BLK-WHT": "Black/White",
+            "NVY-WHT": "Navy/White",
+            "RED-WHT": "Red/White",
+            "ROY-WHT": "Royal/White"
+        }
 
     def normalize_size(self, size):
         """

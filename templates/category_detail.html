@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('caspio_direct.categories') }}">Categories</a></li>
+            {% if subcategory %}
+            <li class="breadcrumb-item"><a href="{{ url_for('caspio_direct.subcategories', category_name=category) }}">{{ category }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ subcategory }}</li>
+            {% else %}
+            <li class="breadcrumb-item active" aria-current="page">{{ category }}</li>
+            {% endif %}
+        </ol>
+    </nav>
+
+    <h1>
+        {{ category }}
+        {% if subcategory %}
+        - {{ subcategory }}
+        {% endif %}
+    </h1>
+
+    {% if subcategory %}
+    <p>
+        <a href="{{ url_for('caspio_direct.category_detail', category_name=category) }}" class="btn btn-outline-secondary">
+            View All {{ category }} Products
+        </a>
+    </p>
+    {% else %}
+    <p>
+        <a href="{{ url_for('caspio_direct.subcategories', category_name=category) }}" class="btn btn-outline-secondary">
+            Browse by Subcategory
+        </a>
+    </p>
+    {% endif %}
+
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="{{ product.PRODUCT_IMAGE_URL }}" class="card-img-top" alt="{{ product.PRODUCT_TITLE }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.PRODUCT_TITLE }}</h5>
+                    <p class="card-text">
+                        <strong>Style:</strong> {{ product.STYLE }}<br>
+                        <strong>Brand:</strong> {{ product.BRAND_NAME }}
+                        {% if product.SUBCATEGORY_NAME %}
+                        <br><strong>Subcategory:</strong> {{ product.SUBCATEGORY_NAME }}
+                        {% endif %}
+                    </p>
+                    <a href="{{ url_for('caspio_direct.product_detail', style=product.STYLE) }}" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if not products %}
+    <div class="alert alert-info">
+        No products found for this category{% if subcategory %} and subcategory{% endif %}.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
