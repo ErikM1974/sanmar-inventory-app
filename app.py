@@ -81,9 +81,12 @@ def initialize_app():
 # This is executed when this module is imported (at app startup)
 initialize_app()
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+# Import customer-facing routes
+from app_customer_routes import register_customer_routes
+# Register customer-facing routes
+register_customer_routes(app)
+
+# The /mockup and / routes are now handled by app_customer_routes.py
 
 @app.route('/autocomplete')
 def autocomplete():

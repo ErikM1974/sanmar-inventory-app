@@ -1,0 +1,13 @@
+This directory contains placeholder images for the Northwest Custom Apparel website:
+
+1. nwca-logo.png - Company logo for the navigation bar
+2. hero-image.jpg - Main hero banner image
+3. banner-bg.jpg - Banner background image
+4. category-tshirts.jpg - T-shirts category image
+5. category-polos.jpg - Polos category image
+6. category-outerwear.jpg - Outerwear category image
+7. testimonial1.jpg - Testimonial author image 1
+8. testimonial2.jpg - Testimonial author image 2
+9. favicon.png - Website favicon
+
+These files would normally be actual image files. For a real deployment, replace these with proper image assets.

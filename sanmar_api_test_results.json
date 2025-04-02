@@ -1,0 +1,123 @@
+{
+  "images_tested": 4,
+  "images_accessible": 0,
+  "images_failed": 4,
+  "product_data_tested": 4,
+  "product_data_success": 0,
+  "product_data_failed": 4,
+  "inventory_tested": 0,
+  "inventory_success": 0,
+  "inventory_failed": 0,
+  "pricing_tested": 0,
+  "pricing_success": 0,
+  "pricing_failed": 0,
+  "failed_styles": [
+    "J790",
+    "PC61",
+    "K500",
+    "L500"
+  ],
+  "style_results": {
+    "J790": {
+      "style": "J790",
+      "image_results": {
+        "main": {
+          "success": false,
+          "url": "https://cdni.sanmar.com/catalog/images/J790p110.jpg",
+          "status_code": null,
+          "size": null
+        }
+      },
+      "product_data": {
+        "success": false,
+        "data": "API modules not available"
+      },
+      "inventory": {
+        "success": false,
+        "data": null
+      },
+      "pricing": {
+        "success": false,
+        "data": null
+      }
+    },
+    "PC61": {
+      "style": "PC61",
+      "image_results": {
+        "main": {
+          "success": false,
+          "url": "https://cdni.sanmar.com/catalog/images/PC61p110.jpg",
+          "status_code": null,
+          "size": null
+        }
+      },
+      "product_data": {
+        "success": false,
+        "data": "API modules not available"
+      },
+      "inventory": {
+        "success": false,
+        "data": null
+      },
+      "pricing": {
+        "success": false,
+        "data": null
+      }
+    },
+    "K500": {
+      "style": "K500",
+      "image_results": {
+        "main": {
+          "success": false,
+          "url": "https://cdni.sanmar.com/catalog/images/K500p110.jpg",
+          "status_code": null,
+          "size": null
+        }
+      },
+      "product_data": {
+        "success": false,
+        "data": "API modules not available"
+      },
+      "inventory": {
+        "success": false,
+        "data": null
+      },
+      "pricing": {
+        "success": false,
+        "data": null
+      }
+    },
+    "L500": {
+      "style": "L500",
+      "image_results": {
+        "main": {
+          "success": false,
+          "url": "https://cdni.sanmar.com/catalog/images/L500p110.jpg",
+          "status_code": null,
+          "size": null
+        }
+      },
+      "product_data": {
+        "success": false,
+        "data": "API modules not available"
+      },
+      "inventory": {
+        "success": false,
+        "data": null
+      },
+      "pricing": {
+        "success": false,
+        "data": null
+      }
+    }
+  },
+  "image_success_rate": 0.0,
+  "product_data_success_rate": 0.0,
+  "inventory_success_rate": 0,
+  "pricing_success_rate": 0,
+  "total_styles_tested": 4,
+  "total_styles_failed": 4,
+  "total_styles_passed": 0,
+  "overall_success_rate": 0.0,
+  "duration_seconds": 0.061174869537353516
+}

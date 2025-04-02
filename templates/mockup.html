@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Studio - Northwest Custom Apparel</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='home-style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='product-styles.css') }}" rel="stylesheet">
+    
+    <style>
+        .mockup-canvas {
+            border: 1px solid #dee2e6;
+            background-color: #fff;
+            width: 100%;
+            height: 500px;
+            position: relative;
+        }
+        
+        .mockup-sidebar {
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            height: 100%;
+        }
+        
+        .product-preview {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        
+        .product-preview img {
+            max-height: 90%;
+            max-width: 90%;
+            object-fit: contain;
+        }
+        
+        .tool-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .tool-section h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        
+        .color-picker {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .color-option {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 1px solid #dee2e6;
+        }
+        
+        .color-option.active {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+        
+        .mockup-logo {
+            position: absolute;
+            cursor: grab;
+            user-select: none;
+        }
+        
+        .mockup-logo img {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .mockup-logo.dragging {
+            cursor: grabbing;
+        }
+        
+        .mockup-text {
+            position: absolute;
+            cursor: grab;
+            user-select: none;
+            padding: 5px;
+            font-family: Arial, sans-serif;
+        }
+        
+        .mockup-text.dragging {
+            cursor: grabbing;
+        }
+    </style>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="main-header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <img src="{{ url_for('static', filename='images/nwca-logo.png') }}" alt="Northwest Custom Apparel" class="logo">
+                    Northwest Custom Apparel
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Home</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarProducts" role="button" data-bs-toggle="dropdown">
+                                Products
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarProducts">
+                                <li><a class="dropdown-item" href="/customer/category/T-Shirts">T-Shirts</a></li>
+                                <li><a class="dropdown-item" href="/customer/category/Polos">Polos</a></li>
+                                <li><a class="dropdown-item" href="/customer/category/Sweatshirts">Sweatshirts & Fleece</a></li>
+                                <li><a class="dropdown-item" href="/customer/category/Jackets">Jackets & Outerwear</a></li>
+                                <li><a class="dropdown-item" href="/customer/category/Workwear">Workwear</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/customer/category/Ladies">Ladies</a></li>
+                                <li><a class="dropdown-item" href="/customer/category/Youth">Youth</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/customer/category/Bags">Bags</a></li>
+                                <li><a class="dropdown-item" href="/customer/category/Hats">Hats & Caps</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/mockup">Design Studio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/quote">Quote Cart</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/#contact">Contact Us</a>
+                        </li>
+                    </ul>
+                    
+                    <!-- Search Form -->
+                    <form class="d-flex" id="product-search-form" action="/search" method="get">
+                        <div class="input-group">
+                            <input class="form-control" type="search" name="q" placeholder="Search by style or keyword" aria-label="Search">
+                            <button class="btn btn-outline-light" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <!-- Quote Cart Icon -->
+                    <div class="quote-cart-icon ms-3">
+                        <a href="/quote" class="btn btn-light position-relative">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span id="quote-cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                0
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Mockup Banner -->
+    <section class="page-banner bg-light">
+        <div class="container py-4">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Design Studio</li>
+                </ol>
+            </nav>
+            <div class="row align-items-center mt-2">
+                <div class="col">
+                    <h1>Interactive Design Studio</h1>
+                    <p class="lead">Create custom mockups for your apparel and promotional products</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container py-5">
+        <div class="row">
+            <!-- Product Selection -->
+            <div class="col-lg-3 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-white">
+                        <h3 class="mb-0 fs-5">Select Product</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <label for="product-category" class="form-label">Category</label>
+                            <select class="form-select" id="product-category">
+                                <option value="">Select Category</option>
+                                <option value="tshirts">T-Shirts</option>
+                                <option value="polos">Polos</option>
+                                <option value="sweatshirts">Sweatshirts</option>
+                                <option value="jackets">Jackets</option>
+                                <option value="hats">Hats & Caps</option>
+                                <option value="bags">Bags</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="product-style" class="form-label">Product Style</label>
+                            <select class="form-select" id="product-style">
+                                <option value="">Select Style</option>
+                                <option value="PC61" selected>PC61 - Essential Tee</option>
+                                <option value="K500">K500 - Silk Touch Polo</option>
+                                <option value="J790">J790 - Glacier Soft Shell Jacket</option>
+                                <option value="L500">L500 - Ladies Silk Touch Polo</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="product-color" class="form-label">Color</label>
+                            <select class="form-select" id="product-color">
+                                <option value="black" selected>Black</option>
+                                <option value="white">White</option>
+                                <option value="navy">Navy</option>
+                                <option value="royal">Royal</option>
+                                <option value="red">Red</option>
+                                <option value="athletic-heather">Athletic Heather</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mockup Canvas -->
+            <div class="col-lg-6 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0 fs-5">Design Canvas</h3>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-outline-secondary" id="zoom-in">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary" id="zoom-out">
+                                <i class="fas fa-search-minus"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary" id="reset-view">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="mockup-canvas" id="mockup-canvas">
+                            <div class="product-preview">
+                                <img src="{{ url_for('static', filename='images/product-pc61.jpg') }}" alt="Product Preview" id="product-image">
+                            </div>
+                            
+                            <!-- Draggable elements will be added here by JavaScript -->
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <button class="btn btn-outline-secondary" id="undo-btn">
+                                    <i class="fas fa-undo"></i> Undo
+                                </button>
+                                <button class="btn btn-outline-secondary" id="redo-btn">
+                                    <i class="fas fa-redo"></i> Redo
+                                </button>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary" id="save-design">
+                                    <i class="fas fa-save"></i> Save Design
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Design Tools -->
+            <div class="col-lg-3 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-white">
+                        <h3 class="mb-0 fs-5">Design Tools</h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="mockup-sidebar">
+                            <!-- Add Logo Section -->
+                            <div class="tool-section">
+                                <h4>Add Logo</h4>
+                                <div class="mb-3">
+                                    <input type="file" class="form-control" id="logo-upload" accept="image/*">
+                                </div>
+                                <button class="btn btn-primary btn-sm w-100" id="add-logo-btn">
+                                    <i class="fas fa-plus-circle"></i> Add Logo
+                                </button>
+                            </div>
+                            
+                            <!-- Add Text Section -->
+                            <div class="tool-section">
+                                <h4>Add Text</h4>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="text-content" placeholder="Your text here">
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-6">
+                                        <select class="form-select form-select-sm" id="text-font">
+                                            <option value="Arial">Arial</option>
+                                            <option value="Verdana">Verdana</option>
+                                            <option value="Georgia">Georgia</option>
+                                            <option value="Times New Roman">Times New Roman</option>
+                                            <option value="Impact">Impact</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <select class="form-select form-select-sm" id="text-size">
+                                            <option value="12">12px</option>
+                                            <option value="14">14px</option>
+                                            <option value="18" selected>18px</option>
+                                            <option value="24">24px</option>
+                                            <option value="36">36px</option>
+                                            <option value="48">48px</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="color-picker mb-2">
+                                    <div class="color-option active" style="background-color: #000000;" data-color="#000000"></div>
+                                    <div class="color-option" style="background-color: #ffffff;" data-color="#ffffff"></div>
+                                    <div class="color-option" style="background-color: #ff0000;" data-color="#ff0000"></div>
+                                    <div class="color-option" style="background-color: #0000ff;" data-color="#0000ff"></div>
+                                    <div class="color-option" style="background-color: #008000;" data-color="#008000"></div>
+                                    <div class="color-option" style="background-color: #ffa500;" data-color="#ffa500"></div>
+                                </div>
+                                <button class="btn btn-primary btn-sm w-100" id="add-text-btn">
+                                    <i class="fas fa-plus-circle"></i> Add Text
+                                </button>
+                            </div>
+                            
+                            <!-- Mockup Options -->
+                            <div class="tool-section">
+                                <h4>Mockup Options</h4>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="show-front" checked>
+                                    <label class="form-check-label" for="show-front">
+                                        Front View
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="show-back">
+                                    <label class="form-check-label" for="show-back">
+                                        Back View
+                                    </label>
+                                </div>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="show-sleeve">
+                                    <label class="form-check-label" for="show-sleeve">
+                                        Sleeve View
+                                    </label>
+                                </div>
+                                <button class="btn btn-primary w-100" id="request-quote-btn">
+                                    <i class="fas fa-shopping-cart"></i> Add to Quote
+                                </button>
+                            </div>
+                            
+                            <!-- Help Tips -->
+                            <div class="alert alert-info mt-4" role="alert">
+                                <h5 class="alert-heading fs-6">Design Tips</h5>
+                                <ul class="mb-0 small ps-3">
+                                    <li>Drag elements to position them</li>
+                                    <li>Use the corner handles to resize elements</li>
+                                    <li>Right-click elements to delete or bring to front</li>
+                                    <li>For best results, use high-resolution images</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recently Saved Designs -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                        <h3 class="mb-0">Your Saved Designs</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body text-center">
+                                        <p class="text-muted">You don't have any saved designs yet.</p>
+                                        <p>Your designs will appear here when you save them.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5>Northwest Custom Apparel</h5>
+                    <p>Your trusted partner for quality custom apparel and promotional products since 2005.</p>
+                </div>
+                
+                <div class="col-md-2 mb-4 mb-md-0">
+                    <h5>Quick Links</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a href="/" class="nav-link text-light p-0 mb-1">Home</a></li>
+                        <li class="nav-item"><a href="/customer/category/All" class="nav-link text-light p-0 mb-1">Products</a></li>
+                        <li class="nav-item"><a href="/mockup" class="nav-link text-light p-0 mb-1">Design Studio</a></li>
+                        <li class="nav-item"><a href="/quote" class="nav-link text-light p-0 mb-1">Quote Cart</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <h5>Popular Categories</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a href="/customer/category/T-Shirts" class="nav-link text-light p-0 mb-1">T-Shirts</a></li>
+                        <li class="nav-item"><a href="/customer/category/Polos" class="nav-link text-light p-0 mb-1">Polos</a></li>
+                        <li class="nav-item"><a href="/customer/category/Jackets" class="nav-link text-light p-0 mb-1">Jackets</a></li>
+                        <li class="nav-item"><a href="/customer/category/Hats" class="nav-link text-light p-0 mb-1">Hats & Caps</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-3">
+                    <h5>Newsletter</h5>
+                    <p>Subscribe to get the latest product updates and offers.</p>
+                    <form id="footer-newsletter-form">
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control" placeholder="Your email" required>
+                            <button class="btn btn-primary" type="submit">Subscribe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <hr class="my-4 bg-light">
+            
+            <div class="d-flex flex-column flex-md-row justify-content-between">
+                <p class="mb-2 mb-md-0">&copy; 2025 Northwest Custom Apparel. All rights reserved.</p>
+                <div>
+                    <a href="#" class="text-light me-3">Privacy Policy</a>
+                    <a href="#" class="text-light me-3">Terms of Service</a>
+                    <a href="#" class="text-light">Shipping Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification Container -->
+    <div id="notification-container"></div>
+
+    <!-- Bootstrap and Required JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="{{ url_for('static', filename='quote-cart.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const mockupCanvas = document.getElementById('mockup-canvas');
+            const productImage = document.getElementById('product-image');
+            const productStyle = document.getElementById('product-style');
+            const productColor = document.getElementById('product-color');
+            
+            // Logo upload
+            const logoUpload = document.getElementById('logo-upload');
+            const addLogoBtn = document.getElementById('add-logo-btn');
+            
+            // Text tools
+            const textContent = document.getElementById('text-content');
+            const textFont = document.getElementById('text-font');
+            const textSize = document.getElementById('text-size');
+            const addTextBtn = document.getElementById('add-text-btn');
+            const colorOptions = document.querySelectorAll('.color-option');
+            
+            // Buttons
+            const saveDesignBtn = document.getElementById('save-design');
+            const requestQuoteBtn = document.getElementById('request-quote-btn');
+            
+            // Current selected color
+            let currentColor = '#000000';
+            
+            // Select color
+            colorOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove active class from all options
+                    colorOptions.forEach(opt => opt.classList.remove('active'));
+                    
+                    // Add active class to clicked option
+                    this.classList.add('active');
+                    
+                    // Update current color
+                    currentColor = this.dataset.color;
+                });
+            });
+            
+            // Change product
+            productStyle.addEventListener('change', function() {
+                // In a real app, we would load the correct product image
+                // For now, just notify the user
+                showNotification('Product Changed', `Selected ${this.value}. The product image would update in a real implementation.`);
+            });
+            
+            // Change product color
+            productColor.addEventListener('change', function() {
+                // In a real app, we would load the correct product color
+                // For now, just notify the user
+                showNotification('Color Changed', `Selected ${this.options[this.selectedIndex].text}. The product color would update in a real implementation.`);
+            });
+            
+            // Add logo
+            addLogoBtn.addEventListener('click', function() {
+                if (logoUpload.files.length > 0) {
+                    const file = logoUpload.files[0];
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        // Create logo element
+                        const logo = document.createElement('div');
+                        logo.className = 'mockup-logo';
+                        logo.style.width = '100px';
+                        logo.style.height = 'auto';
+                        logo.style.left = '50%';
+                        logo.style.top = '50%';
+                        logo.style.transform = 'translate(-50%, -50%)';
+                        
+                        // Add image
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        logo.appendChild(img);
+                        
+                        // Add to canvas
+                        mockupCanvas.appendChild(logo);
+                        
+                        // Make it draggable
+                        makeDraggable(logo);
+                        
+                        // Show notification
+                        showNotification('Logo Added', 'Your logo has been added to the design. Drag to position it.');
+                    };
+                    
+                    reader.readAsDataURL(file);
+                } else {
+                    showNotification('No Logo Selected', 'Please select a logo file to upload.');
+                }
+            });
+            
+            // Add text
+            addTextBtn.addEventListener('click', function() {
+                if (textContent.value.trim() !== '') {
+                    // Create text element
+                    const text = document.createElement('div');
+                    text.className = 'mockup-text';
+                    text.style.left = '50%';
+                    text.style.top = '50%';
+                    text.style.transform = 'translate(-50%, -50%)';
+                    text.style.color = currentColor;
+                    text.style.fontSize = `${textSize.value}px`;
+                    text.style.fontFamily = textFont.value;
+                    text.textContent = textContent.value;
+                    
+                    // Add to canvas
+                    mockupCanvas.appendChild(text);
+                    
+                    // Make it draggable
+                    makeDraggable(text);
+                    
+                    // Show notification
+                    showNotification('Text Added', 'Your text has been added to the design. Drag to position it.');
+                } else {
+                    showNotification('No Text Entered', 'Please enter text to add to the design.');
+                }
+            });
+            
+            // Save design
+            saveDesignBtn.addEventListener('click', function() {
+                showNotification('Design Saved', 'Your design has been saved successfully.');
+            });
+            
+            // Request quote
+            requestQuoteBtn.addEventListener('click', function() {
+                showNotification('Added to Quote', 'Your custom design has been added to your quote cart.');
+                
+                // Update badge (assuming QuoteCart exists from quote-cart.js)
+                if (typeof QuoteCart !== 'undefined' && QuoteCart.updateCartBadge) {
+                    // Add item to cart
+                    QuoteCart.addItem({
+                        style: productStyle.value,
+                        name: `Custom Design - ${productStyle.options[productStyle.selectedIndex].text}`,
+                        color: productColor.options[productColor.selectedIndex].text,
+                        size: 'L', // Default size
+                        price: 19.99, // Default price
+                        quantity: 1
+                    });
+                }
+            });
+            
+            // Make an element draggable
+            function makeDraggable(element) {
+                let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+                
+                element.onmousedown = dragMouseDown;
+                
+                function dragMouseDown(e) {
+                    e.preventDefault();
+                    // Get the mouse cursor position at startup
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    
+                    element.classList.add('dragging');
+                    
+                    // Bring element to front
+                    element.style.zIndex = 1000;
+                    
+                    document.onmouseup = closeDragElement;
+                    // Call a function whenever the cursor moves
+                    document.onmousemove = elementDrag;
+                }
+                
+                function elementDrag(e) {
+                    e.preventDefault();
+                    // Calculate the new cursor position
+                    pos1 = pos3 - e.clientX;
+                    pos2 = pos4 - e.clientY;
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    
+                    // Set the element's new position
+                    const rect = mockupCanvas.getBoundingClientRect();
+                    const canvasX = e.clientX - rect.left;
+                    const canvasY = e.clientY - rect.top;
+                    
+                    element.style.left = `${canvasX}px`;
+                    element.style.top = `${canvasY}px`;
+                    element.style.transform = 'none';
+                }
+                
+                function closeDragElement() {
+                    // Stop moving when mouse button is released
+                    document.onmouseup = null;
+                    document.onmousemove = null;
+                    
+                    element.classList.remove('dragging');
+                }
+            }
+            
+            // Show notification
+            function showNotification(title, message) {
+                // Check if notification container exists
+                let notificationContainer = document.getElementById('notification-container');
+                
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.innerHTML = `
+                    <div class="notification-header">
+                        <h4>${title}</h4>
+                        <button class="notification-close">&times;</button>
+                    </div>
+                    <div class="notification-body">${message}</div>
+                `;
+                
+                // Add to container
+                notificationContainer.appendChild(notification);
+                
+                // Add event listener for close button
+                notification.querySelector('.notification-close').addEventListener('click', () => {
+                    notification.classList.add('notification-hiding');
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 300);
+                });
+                
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    notification.classList.add('notification-hiding');
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 300);
+                }, 5000);
+                
+                // Show notification with animation
+                setTimeout(() => {
+                    notification.classList.add('notification-visible');
+                }, 10);
+            }
+            
+            // Initialize newsletter form
+            document.getElementById('footer-newsletter-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Thank you for subscribing to our newsletter!');
+                e.target.reset();
+            });
+        });
+    </script>
+</body>
+</html>

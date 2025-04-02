@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote Cart - Northwest Custom Apparel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/home-style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .quote-section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .quote-heading {
+            color: #0e5395;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .cart-item {
+            display: flex;
+            padding: 15px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .cart-item-image {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-right: 20px;
+        }
+        
+        .cart-item-details {
+            flex-grow: 1;
+        }
+        
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+        
+        .quantity-control button {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ced4da;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .quantity-control input {
+            width: 40px;
+            height: 30px;
+            border: 1px solid #ced4da;
+            text-align: center;
+            margin: 0 5px;
+        }
+        
+        .remove-item {
+            color: #dc3545;
+            cursor: pointer;
+        }
+        
+        .option-section {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .option-group {
+            margin-bottom: 10px;
+        }
+        
+        .option-label {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .method-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .method-option {
+            flex: 1;
+            min-width: 120px;
+            background: white;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .method-option:hover {
+            border-color: #0e5395;
+        }
+        
+        .method-option.selected {
+            background-color: #e9f0f7;
+            border-color: #0e5395;
+            color: #0e5395;
+            font-weight: bold;
+        }
+        
+        .price-breakdown {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+        
+        .price-total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-top: 1px solid #dee2e6;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+        
+        .customer-form .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .empty-cart-message {
+            text-align: center;
+            padding: 30px;
+            color: #6c757d;
+        }
+        
+        .btn-continue-shopping {
+            margin-top: 15px;
+        }
+        
+        .btn-submit-quote {
+            background-color: #0e5395;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-submit-quote:hover {
+            background-color: #0a3f72;
+        }
+        
+        .confirmation-message {
+            text-align: center;
+            padding: 30px;
+            display: none;
+        }
+        
+        .confirmation-message h2 {
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Spinner Overlay (same as in homepage-mockup.html) -->
+    <div id="loading-spinner">
+        <div class="spinner-container">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="spinner-message">Processing your quote...</div>
+        </div>
+    </div>
+
+    <!-- Header (same as in homepage-mockup.html) -->
+    <header>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-3">
+                    <!-- Company logo -->
+                    <div class="logo">
+                        <a href="/">
+                            <img src="https://cdn.caspio.com/A0E15000/Safety%20Stripes/web%20northwest%20custom%20apparel%20logo.png?ver=1"
+                                 alt="Northwest Custom Apparel"
+                                 style="max-width: 200px; height: auto;">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <h1 class="text-center">Quote Cart</h1>
+                </div>
+                <div class="col-md-2">
+                    <div class="header-actions">
+                        <div class="cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Navigation -->
+            <div class="site-nav">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/mockup">Products</a></li>
+                    <li><a href="#">New Arrivals</a></li>
+                    <li><a href="#">Top Sellers</a></li>
+                    <li><a href="/quote" class="active">Quote Cart</a></li>
+                    <li><a href="#">Resources</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container my-4">
+        <!-- Quote Cart Content -->
+        <div id="quote-cart-content">
+            <!-- This section will be populated by JavaScript -->
+            
+            <!-- Cart Items -->
+            <div class="quote-section" id="cart-items-section">
+                <h2 class="quote-heading">Products in Your Quote</h2>
+                <div id="cart-items-container">
+                    <!-- Cart items will be populated here by JavaScript -->
+                    <div class="empty-cart-message">
+                        <i class="fas fa-shopping-cart fa-3x mb-3"></i>
+                        <h3>Your quote cart is empty</h3>
+                        <p>Start adding products to get a custom quote.</p>
+                        <a href="/mockup" class="btn btn-primary btn-continue-shopping">Browse Products</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Decoration Options -->
+            <div class="quote-section" id="decoration-options-section">
+                <h2 class="quote-heading">Decoration Options</h2>
+                
+                <!-- Decoration Method Selection -->
+                <div class="option-section">
+                    <h3>Select Decoration Method</h3>
+                    <div class="method-selector" id="decoration-method-selector">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                    
+                    <!-- Method-specific options -->
+                    <div id="decoration-options-container">
+                        <!-- Will be populated by JavaScript based on selected method -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Customer Information -->
+            <div class="quote-section" id="customer-info-section">
+                <h2 class="quote-heading">Customer Information</h2>
+                <form class="customer-form" id="customer-info-form">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="customer-name">Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="customer-name" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="customer-email">Email <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="customer-email" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="customer-phone">Phone</label>
+                                <input type="tel" class="form-control" id="customer-phone">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="customer-company">Company</label>
+                                <input type="text" class="form-control" id="customer-company">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customer-notes">Notes</label>
+                        <textarea class="form-control" id="customer-notes" rows="3" placeholder="Any special requirements or questions about your order?"></textarea>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Quote Summary -->
+            <div class="quote-section" id="quote-summary-section">
+                <h2 class="quote-heading">Quote Summary</h2>
+                
+                <div class="price-breakdown">
+                    <div class="price-row">
+                        <span>Products Subtotal:</span>
+                        <span id="products-subtotal">$0.00</span>
+                    </div>
+                    
+                    <div id="decoration-pricing-breakdown">
+                        <!-- Will be populated by JavaScript based on selected decoration method -->
+                    </div>
+                    
+                    <div class="price-row price-total">
+                        <span>Total Quote Amount:</span>
+                        <span id="quote-total">$0.00</span>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="/mockup" class="btn btn-secondary">Continue Shopping</a>
+                    <button type="button" class="btn-submit-quote" id="submit-quote-btn">Submit Quote Request</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quote Confirmation (initially hidden) -->
+        <div class="confirmation-message" id="quote-confirmation">
+            <i class="fas fa-check-circle fa-4x text-success mb-3"></i>
+            <h2>Quote Request Submitted!</h2>
+            <p class="lead">Your quote number is: <span id="quote-number">Q12345</span></p>
+            <p>We've received your quote request and will get back to you within 1 business day.</p>
+            <p>A confirmation email has been sent to <span id="confirmation-email">your-email@example.com</span>.</p>
+            <a href="/mockup" class="btn btn-primary mt-3">Return to Homepage</a>
+        </div>
+    </div>
+    
+    <!-- Footer (same as in homepage-mockup.html) -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Northwest Custom Apparel</h3>
+                    <p>Your premier source for SanMar inventory and custom apparel solutions.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p>Email: info@nwcustomapparel.com</p>
+                    <p>Phone: (555) 123-4567</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/mockup">Products</a></li>
+                        <li><a href="/quote">Request Quote</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Northwest Custom Apparel. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Decoration Pricing Module -->
+    <script src="/static/decoration-pricing.js"></script>
+    <!-- Quote Cart Module -->
+    <script src="/static/quote-cart.js"></script>
+    
+    <!-- Quote Page Specific Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize the quote page UI
+            initializeQuotePage();
+            
+            function initializeQuotePage() {
+                const cart = window.QuoteCart;
+                const cartData = cart.getCartData();
+                
+                // Update cart count
+                document.querySelector('.cart-count').textContent = cartData.totalItems.toString();
+                
+                // Show/hide empty cart message
+                const emptyCartMessage = document.querySelector('.empty-cart-message');
+                const cartItemsContainer = document.getElementById('cart-items-container');
+                
+                if (cartData.items.length === 0) {
+                    // Show empty cart message
+                    if (emptyCartMessage) emptyCartMessage.style.display = 'block';
+                    
+                    // Hide other sections
+                    document.getElementById('decoration-options-section').style.display = 'none';
+                    document.getElementById('customer-info-section').style.display = 'none';
+                    document.getElementById('quote-summary-section').style.display = 'none';
+                } else {
+                    // Hide empty cart message
+                    if (emptyCartMessage) emptyCartMessage.style.display = 'none';
+                    
+                    // Show other sections
+                    document.getElementById('decoration-options-section').style.display = 'block';
+                    document.getElementById('customer-info-section').style.display = 'block';
+                    document.getElementById('quote-summary-section').style.display = 'block';
+                    
+                    // Render cart items
+                    renderCartItems(cartData.items);
+                    
+                    // Render decoration methods
+                    renderDecorationMethods(cartData.decorationMethods, cartData.decorationMethod);
+                    
+                    // If decoration method is selected, render options
+                    if (cartData.decorationMethod) {
+                        renderDecorationOptions(cartData.decorationMethod, cartData.decorationOptions);
+                    }
+                    
+                    // Render price breakdown
+                    renderPriceBreakdown(cartData);
+                    
+                    // Populate customer info if available
+                    populateCustomerInfo(cartData.customerInfo);
+                }
+                
+                // Set up event listeners
+                setupEventListeners();
+            }
+            
+            function renderCartItems(items) {
+                const container = document.getElementById('cart-items-container');
+                container.innerHTML = '';
+                
+                items.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'cart-item';
+                    itemElement.dataset.itemId = item.id;
+                    
+                    itemElement.innerHTML = `
+                        <img src="${item.image || 'https://via.placeholder.com/100'}" alt="${item.name}" class="cart-item-image">
+                        <div class="cart-item-details">
+                            <h4>${item.name}</h4>
+                            <p>Style: ${item.styleNumber}, Color: ${item.color}, Size: ${item.size}</p>
+                            <p>Price: $${item.price.toFixed(2)}</p>
+                        </div>
+                        <div class="cart-item-actions">
+                            <div class="quantity-control">
+                                <button type="button" class="quantity-decrease">-</button>
+                                <input type="text" value="${item.quantity}" class="quantity-input" min="1">
+                                <button type="button" class="quantity-increase">+</button>
+                            </div>
+                            <span class="remove-item"><i class="fas fa-trash-alt"></i></span>
+                        </div>
+                    `;
+                    
+                    container.appendChild(itemElement);
+                });
+            }
+            
+            function renderDecorationMethods(methods, selectedMethod) {
+                const container = document.getElementById('decoration-method-selector');
+                container.innerHTML = '';
+                
+                methods.forEach(method => {
+                    const methodElement = document.createElement('div');
+                    methodElement.className = `method-option${method.id === selectedMethod ? ' selected' : ''}`;
+                    methodElement.dataset.methodId = method.id;
+                    methodElement.textContent = method.name;
+                    
+                    container.appendChild(methodElement);
+                });
+            }
+            
+            function renderDecorationOptions(methodId, selectedOptions) {
+                const container = document.getElementById('decoration-options-container');
+                container.innerHTML = '';
+                
+                if (!window.DecorationPricing) {
+                    container.innerHTML = '<p>Decoration options loading...</p>';
+                    return;
+                }
+                
+                // Get options specific to the selected method
+                const availableOptions = window.DecorationPricing.getOptionsForMethod(methodId);
+                
+                // Create basic options (locations, colors)
+                const basicOptions = document.createElement('div');
+                basicOptions.className = 'option-group';
+                
+                // Locations selector
+                const locationLabel = document.createElement('label');
+                locationLabel.className = 'option-label';
+                locationLabel.textContent = 'Number of Locations';
+                
+                const locationSelect = document.createElement('select');
+                locationSelect.className = 'form-select location-select';
+                locationSelect.id = 'location-count';
+                
+                for (let i = 1; i <= 4; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = `${i} location${i > 1 ? 's' : ''}`;
+                    if (selectedOptions.locations === i) {
+                        option.selected = true;
+                    }
+                    locationSelect.appendChild(option);
+                }
+                
+                basicOptions.appendChild(locationLabel);
+                basicOptions.appendChild(locationSelect);
+                
+                // Colors selector for screen print
+                if (methodId === 'screenPrint') {
+                    const colorLabel = document.createElement('label');
+                    colorLabel.className = 'option-label mt-3';
+                    colorLabel.textContent = 'Number of Colors';
+                    
+                    const colorSelect = document.createElement('select');
+                    colorSelect.className = 'form-select color-select';
+                    colorSelect.id = 'color-count';
+                    
+                    for (let i = 1; i <= 4; i++) {
+                        const option = document.createElement('option');
+                        option.value = i;
+                        option.textContent = `${i} color${i > 1 ? 's' : ''}`;
+                        if (selectedOptions.colors === i) {
+                            option.selected = true;
+                        }
+                        colorSelect.appendChild(option);
+                    }
+                    
+                    basicOptions.appendChild(colorLabel);
+                    basicOptions.appendChild(colorSelect);
+                }
+                
+                container.appendChild(basicOptions);
+                
+                // Additional options
+                if (availableOptions.length > 0) {
+                    const additionalOptions = document.createElement('div');
+                    additionalOptions.className = 'option-group mt-4';
+                    
+                    const optionsLabel = document.createElement('h4');
+                    optionsLabel.textContent = 'Additional Options';
+                    additionalOptions.appendChild(optionsLabel);
+                    
+                    availableOptions.forEach(option => {
+                        const optionWrapper = document.createElement('div');
+                        optionWrapper.className = 'form-check mb-2';
+                        
+                        const optionInput = document.createElement('input');
+                        optionInput.type = 'checkbox';
+                        optionInput.className = 'form-check-input option-checkbox';
+                        optionInput.id = `option-${option.id}`;
+                        optionInput.dataset.optionId = option.id;
+                        optionInput.checked = selectedOptions[option.id] || false;
+                        
+                        const optionLabel = document.createElement('label');
+                        optionLabel.className = 'form-check-label';
+                        optionLabel.htmlFor = `option-${option.id}`;
+                        optionLabel.textContent = `${option.name} (+$${option.price.toFixed(2)})`;
+                        
+                        optionWrapper.appendChild(optionInput);
+                        optionWrapper.appendChild(optionLabel);
+                        additionalOptions.appendChild(optionWrapper);
+                    });
+                    
+                    container.appendChild(additionalOptions);
+                }
+            }
+            
+            function renderPriceBreakdown(cartData) {
+                // Update products subtotal
+                document.getElementById('products-subtotal').textContent = `$${cartData.productTotal.toFixed(2)}`;
+                
+                // Update decoration breakdown
+                const decorationBreakdown = document.getElementById('decoration-pricing-breakdown');
+                decorationBreakdown.innerHTML = '';
+                
+                if (cartData.decorationPrice) {
+                    // First add setup fee
+                    const setupRow = document.createElement('div');
+                    setupRow.className = 'price-row';
+                    setupRow.innerHTML = `
+                        <span>Setup Fee:</span>
+                        <span>$${cartData.decorationPrice.breakdown.setup.toFixed(2)}</span>
+                    `;
+                    decorationBreakdown.appendChild(setupRow);
+                    
+                    // Add first location
+                    const firstLocationRow = document.createElement('div');
+                    firstLocationRow.className = 'price-row';
+                    firstLocationRow.innerHTML = `
+                        <span>First Location Decoration:</span>
+                        <span>$${cartData.decorationPrice.breakdown.firstLocation.toFixed(2)}</span>
+                    `;
+                    decorationBreakdown.appendChild(firstLocationRow);
+                    
+                    // Add additional locations if any
+                    if (cartData.decorationPrice.breakdown.additionalLocations > 0) {
+                        const additionalLocationsRow = document.createElement('div');
+                        additionalLocationsRow.className = 'price-row';
+                        additionalLocationsRow.innerHTML = `
+                            <span>Additional Locations:</span>
+                            <span>$${cartData.decorationPrice.breakdown.additionalLocations.toFixed(2)}</span>
+                        `;
+                        decorationBreakdown.appendChild(additionalLocationsRow);
+                    }
+                    
+                    // Add options if any
+                    if (cartData.decorationPrice.breakdown.options > 0) {
+                        const optionsRow = document.createElement('div');
+                        optionsRow.className = 'price-row';
+                        optionsRow.innerHTML = `
+                            <span>Additional Options:</span>
+                            <span>$${cartData.decorationPrice.breakdown.options.toFixed(2)}</span>
+                        `;
+                        decorationBreakdown.appendChild(optionsRow);
+                    }
+                    
+                    // Add decoration subtotal
+                    const decorationTotalRow = document.createElement('div');
+                    decorationTotalRow.className = 'price-row';
+                    decorationTotalRow.innerHTML = `
+                        <span>Decoration Subtotal:</span>
+                        <span>$${cartData.decorationPrice.total.toFixed(2)}</span>
+                    `;
+                    decorationBreakdown.appendChild(decorationTotalRow);
+                } else {
+                    // No decoration method selected
+                    const noDecorationRow = document.createElement('div');
+                    noDecorationRow.className = 'price-row';
+                    noDecorationRow.innerHTML = `
+                        <span>Decoration:</span>
+                        <span>No decoration method selected</span>
+                    `;
+                    decorationBreakdown.appendChild(noDecorationRow);
+                }
+                
+                // Update quote total
+                document.getElementById('quote-total').textContent = `$${cartData.quoteTotal.total.toFixed(2)}`;
+            }
+            
+            function populateCustomerInfo(customerInfo) {
+                document.getElementById('customer-name').value = customerInfo.name || '';
+                document.getElementById('customer-email').value = customerInfo.email || '';
+                document.getElementById('customer-phone').value = customerInfo.phone || '';
+                document.getElementById('customer-company').value = customerInfo.company || '';
+                document.getElementById('customer-notes').value = customerInfo.notes || '';
+            }
+            
+            function setupEventListeners() {
+                const cart = window.QuoteCart;
+                
+                // Quantity control buttons
+                document.querySelectorAll('.quantity-decrease, .quantity-increase').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const itemElement = this.closest('.cart-item');
+                        const itemId = itemElement.dataset.itemId;
+                        const quantityInput = itemElement.querySelector('.quantity-input');
+                        let quantity = parseInt(quantityInput.value, 10);
+                        
+                        if (this.classList.contains('quantity-decrease')) {
+                            quantity = Math.max(1, quantity - 1);
+                        } else {
+                            quantity += 1;
+                        }
+                        
+                        quantityInput.value = quantity;
+                        cart.updateItemQuantity(itemId, quantity);
+                        
+                        // Refresh UI
+                        initializeQuotePage();
+                    });
+                });
+                
+                // Quantity input change
+                document.querySelectorAll('.quantity-input').forEach(input => {
+                    input.addEventListener('change', function() {
+                        const itemElement = this.closest('.cart-item');
+                        const itemId = itemElement.dataset.itemId;
+                        let quantity = parseInt(this.value, 10);
+                        
+                        // Ensure quantity is at least 1
+                        quantity = Math.max(1, quantity);
+                        this.value = quantity;
+                        
+                        cart.updateItemQuantity(itemId, quantity);
+                        
+                        // Refresh UI
+                        initializeQuotePage();
+                    });
+                });
+                
+                // Remove item buttons
+                document.querySelectorAll('.remove-item').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const itemElement = this.closest('.cart-item');
+                        const itemId = itemElement.dataset.itemId;
+                        
+                        cart.removeItem(itemId);
+                        
+                        // Refresh UI
+                        initializeQuotePage();
+                    });
+                });
+                
+                // Decoration method selection
+                document.querySelectorAll('.method-option').forEach(methodOption => {
+                    methodOption.addEventListener('click', function() {
+                        const methodId = this.dataset.methodId;
+                        
+                        cart.setDecorationMethod(methodId);
+                        
+                        // Refresh UI
+                        initializeQuotePage();
+                    });
+                });
+                
+                // Location count change
+                const locationSelect = document.getElementById('location-count');
+                if (locationSelect) {
+                    locationSelect.addEventListener('change', function() {
+                        const locations = parseInt(this.value, 10);
+                        
+                        cart.updateDecorationOptions({ locations });
+                        
+                        // Refresh UI
+                        initializeQuotePage();
+                    });
+                }
+                
+                // Color count change (for screen print)
+                const colorSelect = document.getElementById('color-count');
+                if (colorSelect) {
+                    colorSelect.addEventListener('change', function() {
+                        const colors = parseInt(this.value, 10);
+                        
+                        cart.updateDecorationOptions({ colors });
+                        
+                        // Refresh UI
+                        initializeQuotePage();
+                    });
+                }
+                
+                // Option checkboxes
+                document.querySelectorAll('.option-checkbox').forEach(checkbox => {
+                    checkbox.addEventListener('change', function() {
+                        const optionId = this.dataset.optionId;
+                        const optionValue = this.checked;
+                        
+                        const optionUpdate = {};
+                        optionUpdate[optionId] = optionValue;
+                        
+                        cart.updateDecorationOptions(optionUpdate);
+                        
+                        // Refresh UI
+                        initializeQuotePage();
+                    });
+                });
+                
+                // Customer info inputs
+                const customerInfoInputs = [
+                    'customer-name',
+                    'customer-email',
+                    'customer-phone',
+                    'customer-company',
+                    'customer-notes'
+                ];
+                
+                customerInfoInputs.forEach(inputId => {
+                    const input = document.getElementById(inputId);
+                    if (input) {
+                        input.addEventListener('change', function() {
+                            const fieldName = inputId.replace('customer-', '');
+                            const fieldValue = this.value;
+                            
+                            const customerUpdate = {};
+                            customerUpdate[fieldName] = fieldValue;
+                            
+                            cart.setCustomerInfo(customerUpdate);
+                        });
+                    }
+                });
+                
+                // Submit quote button
+                const submitButton = document.getElementById('submit-quote-btn');
+                if (submitButton) {
+                    submitButton.addEventListener('click', async function() {
+                        // Validate form
+                        const nameInput = document.getElementById('customer-name');
+                        const emailInput = document.getElementById('customer-email');
+                        
+                        if (!nameInput.value.trim()) {
+                            alert('Please enter your name');
+                            nameInput.focus();
+                            return;
+                        }
+                        
+                        if (!emailInput.value.trim()) {
+                            alert('Please enter your email');
+                            emailInput.focus();
+                            return;
+                        }
+                        
+                        if (!cart.selectedDecorationMethod) {
+                            alert('Please select a decoration method');
+                            return;
+                        }
+                        
+                        // Show loading spinner
+                        document.getElementById('loading-spinner').style.display = 'flex';
+                        
+                        try {
+                            // Submit quote
+                            const result = await cart.submitQuote();
+                            
+                            // Hide loading spinner
+                            document.getElementById('loading-spinner').style.display = 'none';
+                            
+                            if (result.success) {
+                                // Show confirmation
+                                document.getElementById('quote-cart-content').style.display = 'none';
+                                
+                                const confirmationElement = document.getElementById('quote-confirmation');
+                                confirmationElement.style.display = 'block';
+                                
+                                document.getElementById('quote-number').textContent = result.quoteNumber;
+                                document.getElementById('confirmation-email').textContent = emailInput.value;
+                            } else {
+                                // Show error
+                                alert(result.error || 'Failed to submit quote. Please try again.');
+                            }
+                        } catch (error) {
+                            console.error('Error submitting quote:', error);
+                            
+                            // Hide loading spinner
+                            document.getElementById('loading-spinner').style.display = 'none';
+                            
+                            // Show error
+                            alert('An unexpected error occurred. Please try again.');
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

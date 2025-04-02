@@ -1,0 +1,14 @@
+2025-04-01 16:12:49,654 - INFO - Successfully initialized SOAP client
+2025-04-01 16:12:50,026 - INFO - Successfully initialized Product Info SOAP client
+2025-04-01 16:12:50,026 - WARNING - Could not import SanMar API modules: cannot import name 'get_product_data' from 'app_product_info' (C:\Users\erik\OneDrive - Northwest Custom Apparel\2025\sanmar-inventory-app\app_product_info.py)
+2025-04-01 16:12:50,028 - WARNING - Will run in limited mode without direct API access
+2025-04-01 16:12:50,030 - INFO - Starting SanMar API integration tests with 4 workers
+2025-04-01 16:12:50,030 - INFO - Testing style: J790
+2025-04-01 16:12:50,030 - INFO - Testing style: PC61
+2025-04-01 16:12:50,033 - INFO - Testing style: K500
+2025-04-01 16:12:50,033 - INFO - Testing style: L500
+2025-04-01 16:12:50,089 - WARNING - Error accessing https://cdni.sanmar.com/catalog/images/J790p110.jpg: HTTPSConnectionPool(host='cdni.sanmar.com', port=443): Max retries exceeded with url: /catalog/images/J790p110.jpg (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000002507F826E10>: Failed to resolve 'cdni.sanmar.com' ([Errno 11001] getaddrinfo failed)"))
+2025-04-01 16:12:50,089 - WARNING - Error accessing https://cdni.sanmar.com/catalog/images/PC61p110.jpg: HTTPSConnectionPool(host='cdni.sanmar.com', port=443): Max retries exceeded with url: /catalog/images/PC61p110.jpg (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000002507F830AD0>: Failed to resolve 'cdni.sanmar.com' ([Errno 11001] getaddrinfo failed)"))
+2025-04-01 16:12:50,089 - WARNING - Error accessing https://cdni.sanmar.com/catalog/images/K500p110.jpg: HTTPSConnectionPool(host='cdni.sanmar.com', port=443): Max retries exceeded with url: /catalog/images/K500p110.jpg (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000002507F8313D0>: Failed to resolve 'cdni.sanmar.com' ([Errno 11001] getaddrinfo failed)"))
+2025-04-01 16:12:50,089 - WARNING - Error accessing https://cdni.sanmar.com/catalog/images/L500p110.jpg: HTTPSConnectionPool(host='cdni.sanmar.com', port=443): Max retries exceeded with url: /catalog/images/L500p110.jpg (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000002507F830F10>: Failed to resolve 'cdni.sanmar.com' ([Errno 11001] getaddrinfo failed)"))
+2025-04-01 16:12:50,094 - INFO - Detailed results saved to sanmar_api_test_results.json

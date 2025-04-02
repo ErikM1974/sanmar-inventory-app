@@ -3,594 +3,428 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SanMar Inventory Lookup</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/home-style.css" rel="stylesheet">
-    <style>
-        /* Loading spinner overlay */
-        #loading-spinner {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-        
-        .spinner-container {
-            text-align: center;
-        }
-        
-        .spinner-border {
-            width: 3rem;
-            height: 3rem;
-        }
-        
-        .spinner-message {
-            margin-top: 1rem;
-            font-weight: bold;
-        }
-    </style>
+    <title>{{ page_title }}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='home-style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='product-styles.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='product-placeholder.css') }}" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}" onerror="this.style.display='none'">
 </head>
 <body>
-    <!-- Loading Spinner Overlay -->
-    <div id="loading-spinner">
-        <div class="spinner-container">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
+    <!-- Header Navigation -->
+    <header class="main-header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <img src="{{ url_for('static', filename='images/nwca-logo.png') }}" alt="Northwest Custom Apparel" class="logo" onerror="this.outerHTML='<div class=\'logo-placeholder\'>NW</div>'">
+                    Northwest Custom Apparel
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/">Home</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarProducts" role="button" data-bs-toggle="dropdown">
+                                Products
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarProducts">
+                                <li><a class="dropdown-item" href="/customer/category/T-Shirts">T-Shirts</a></li>
+                                <li><a class="dropdown-item" href="/customer/category/Polos">Polos</a></li>
+                                <li><a class="dropdown-item" href="/customer/category/Sweatshirts">Sweatshirts & Fleece</a></li>
+                                <li><a class="dropdown-item" href="/customer/category/Jackets">Jackets & Outerwear</a></li>
+                                <li><a class="dropdown-item" href="/customer/category/Workwear">Workwear</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/customer/category/Ladies">Ladies</a></li>
+                                <li><a class="dropdown-item" href="/customer/category/Youth">Youth</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/customer/category/Bags">Bags</a></li>
+                                <li><a class="dropdown-item" href="/customer/category/Hats">Hats & Caps</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/mockup">Design Studio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/quote">Quote Cart</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#contact">Contact Us</a>
+                        </li>
+                    </ul>
+                    
+                    <!-- Search Form -->
+                    <form class="d-flex" id="product-search-form" action="/search" method="get">
+                        <div class="input-group">
+                            <input class="form-control" type="search" name="q" placeholder="Search by style or keyword" aria-label="Search">
+                            <button class="btn btn-outline-light" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <!-- Quote Cart Icon -->
+                    <div class="quote-cart-icon ms-3">
+                        <a href="/quote" class="btn btn-light position-relative">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span id="quote-cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                0
+                            </span>
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="spinner-message">Loading product data...</div>
-        </div>
-    </div>
+        </nav>
+    </header>
 
-    <div class="container">
-        <h1 class="text-center mb-4">SanMar Inventory Lookup</h1>
-        
-        <!-- Tab Navigation -->
-        <ul class="nav nav-tabs" id="searchTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="style-search-tab" data-bs-toggle="tab"
-                        data-bs-target="#style-search" type="button" role="tab"
-                        aria-controls="style-search" aria-selected="true">
-                    Style Search
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="category-search-tab" data-bs-toggle="tab"
-                        data-bs-target="#category-search" type="button" role="tab"
-                        aria-controls="category-search" aria-selected="false">
-                    Browse by Category
-                </button>
-            </li>
-        </ul>
-        
-        <!-- Tab Content -->
-        <div class="tab-content" id="searchTabsContent">
-            <!-- Style Number Search Tab -->
-            <div class="tab-pane fade show active" id="style-search" role="tabpanel" aria-labelledby="style-search-tab">
-                <div id="caspio-search">
-                    <script type="text/javascript" src="https://c3eku948.caspio.com/dp/a0e15000e3632c747ef34c07afea/emb"></script>
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1>Custom Apparel Solutions</h1>
+                    <p class="lead">Quality products, exceptional service, and competitive pricing for your promotional needs</p>
+                    <div class="hero-buttons">
+                        <a href="/customer/category/All" class="btn btn-primary">Browse Products</a>
+                        <a href="/mockup" class="btn btn-outline-primary">Design Your Apparel</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <img src="{{ url_for('static', filename='images/hero-image.jpg') }}" alt="Custom Apparel" class="img-fluid" onerror="this.outerHTML='<div class=\'placeholder-image placeholder-hero\'>Custom Apparel</div>'">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="container py-5">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 mb-4">
+                <!-- Categories Sidebar -->
+                <div class="sidebar-container mb-4">
+                    <div class="sidebar-header">
+                        <h3>Product Categories</h3>
+                    </div>
+                    <div class="sidebar-content" id="category-sidebar">
+                        <div class="text-center py-3">
+                            <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mb-0 mt-2">Loading categories...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Style Search -->
+                <div class="sidebar-container">
+                    <div class="sidebar-header">
+                        <h3>Quick Style Search</h3>
+                    </div>
+                    <div class="sidebar-content">
+                        <form id="style-search-form" class="mb-3">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Enter style #" id="style-search-input">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </form>
+                        <p class="text-muted small">
+                            <i class="fas fa-info-circle"></i>
+                            Enter a style number (e.g., PC61, K500) to go directly to a product.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Caspio Search Widget -->
+                <div class="sidebar-container mt-4">
+                    <div class="sidebar-header">
+                        <h3>Advanced Search</h3>
+                    </div>
+                    <div class="sidebar-content">
+                        <div class="caspio-placeholder">
+                            <i class="fas fa-table mb-2 fa-2x"></i>
+                            <p class="mb-1">Caspio Advanced Search</p>
+                            <small class="text-muted">Embed your Caspio search datapage here</small>
+                        </div>
+                    </div>
                 </div>
             </div>
             
-            <!-- Category Search Tab -->
-            <div class="tab-pane fade" id="category-search" role="tabpanel" aria-labelledby="category-search-tab">
-                <div id="category-browser">
-                    <!-- We need to modify the HTML to insert our JavaScript after the Caspio embed -->
-                    <script type="text/javascript" src="https://c3eku948.caspio.com/dp/a0e15000033ab36e846e42e998d9/emb"></script>
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <!-- Category Highlights -->
+                <section class="mb-5 section-animate" id="category-slider">
+                    <div class="section-header">
+                        <h2>Browse by Category</h2>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="category-card">
+                                <img src="{{ url_for('static', filename='images/category-tshirts.jpg') }}" alt="T-Shirts" onerror="this.outerHTML='<div class=\'placeholder-image placeholder-category\' data-category=\'tshirts\'></div>'">
+                                <div class="category-card-body">
+                                    <h3>T-Shirts</h3>
+                                    <p>Quality tees for every occasion</p>
+                                    <a href="/customer/category/T-Shirts" class="btn btn-outline-primary btn-sm">Browse T-Shirts</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="category-card">
+                                <img src="{{ url_for('static', filename='images/category-polos.jpg') }}" alt="Polos" onerror="this.outerHTML='<div class=\'placeholder-image placeholder-category\' data-category=\'polos\'></div>'">
+                                <div class="category-card-body">
+                                    <h3>Polos</h3>
+                                    <p>Professional and comfortable</p>
+                                    <a href="/customer/category/Polos" class="btn btn-outline-primary btn-sm">Browse Polos</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="category-card">
+                                <img src="{{ url_for('static', filename='images/category-outerwear.jpg') }}" alt="Outerwear" onerror="this.outerHTML='<div class=\'placeholder-image placeholder-category\' data-category=\'outerwear\'></div>'">
+                                <div class="category-card-body">
+                                    <h3>Outerwear</h3>
+                                    <p>Jackets, fleece, and more</p>
+                                    <a href="/customer/category/Jackets" class="btn btn-outline-primary btn-sm">Browse Outerwear</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Featured Products -->
+                <section class="mb-5 section-animate">
+                    <div class="section-header d-flex justify-content-between align-items-center">
+                        <h2>Featured Products</h2>
+                        <a href="/customer/category/All" class="btn btn-sm btn-outline-primary">View All</a>
+                    </div>
+                    <div id="featured-products">
+                        <!-- Products loaded via JavaScript -->
+                    </div>
+                </section>
+                
+                <!-- Caspio Product Showcase -->
+                <section class="mb-5 section-animate">
+                    <div class="section-header">
+                        <h2>Top Selling Products</h2>
+                    </div>
+                    <div class="caspio-container">
+                        <div class="caspio-placeholder p-5">
+                            <i class="fas fa-table mb-3 fa-3x"></i>
+                            <h4>Caspio Top Selling Products Gallery</h4>
+                            <p>Embed your Caspio gallery datapage here to showcase your most popular products.</p>
+                            <p class="text-muted small">
+                                <i class="fas fa-info-circle"></i>
+                                This section can be customized with a Caspio DataPage to display your top-selling products with real-time data.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Special Offers -->
+                <section class="mb-5 section-animate">
+                    <div class="section-header">
+                        <h2>Special Offers</h2>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-7">
+                                    <h3>Bulk Order Discount</h3>
+                                    <p>Get up to 20% off on bulk orders of 100+ items. Perfect for events, corporate teams, and large organizations.</p>
+                                    <a href="/quote" class="btn btn-primary">Request a Quote</a>
+                                </div>
+                                <div class="col-md-5 text-center">
+                                    <div class="display-4 text-primary fw-bold">20% OFF</div>
+                                    <p class="text-muted mb-0">on orders of 100+ items</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Testimonials -->
+                <section class="mb-5 section-animate" id="testimonials">
+                    <div class="section-header">
+                        <h2>What Our Customers Say</h2>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="testimonial-card h-100">
+                                <div class="testimonial-content">
+                                    Northwest Custom Apparel provided excellent service for our company event. The shirts were high quality and delivered on time. We'll definitely use them again!
+                                </div>
+                                <div class="testimonial-author">
+                                    <img src="{{ url_for('static', filename='images/testimonial1.jpg') }}" alt="John D." onerror="this.outerHTML='<div class=\'placeholder-image placeholder-testimonial\'></div>'">
+                                    <div>
+                                        <h5>John D.</h5>
+                                        <p>Marketing Director</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="testimonial-card h-100">
+                                <div class="testimonial-content">
+                                    I was impressed with the quality of embroidery on our company polos. The attention to detail and customer service was outstanding. Highly recommend!
+                                </div>
+                                <div class="testimonial-author">
+                                    <img src="{{ url_for('static', filename='images/testimonial2.jpg') }}" alt="Sarah M." onerror="this.outerHTML='<div class=\'placeholder-image placeholder-testimonial\'></div>'">
+                                    <div>
+                                        <h5>Sarah M.</h5>
+                                        <p>Small Business Owner</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Contact Section -->
+    <section class="bg-light py-5" id="contact">
+        <div class="container">
+            <div class="row justify-content-center mb-4">
+                <div class="col-md-8 text-center">
+                    <h2 class="mb-4">Contact Us</h2>
+                    <p class="lead">Have questions about our products or services? Get in touch with our team.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-4 mb-md-0">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title">Send us a message</h3>
+                            <form>
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="name" placeholder="Your name">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" placeholder="Your email">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="message" class="form-label">Message</label>
+                                    <textarea class="form-control" id="message" rows="4" placeholder="How can we help you?"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Send Message</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title">Contact Information</h3>
+                            <p class="card-text">We're here to help with all your custom apparel needs. Reach out to us via phone, email, or visit our location.</p>
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                                    123 Apparel Way, Seattle, WA 98001
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-phone text-primary me-2"></i>
+                                    (206) 555-7890
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-envelope text-primary me-2"></i>
+                                    info@nwcustomapparel.com
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-clock text-primary me-2"></i>
+                                    Monday-Friday: 9AM-5PM
+                                </li>
+                            </ul>
+                            <div class="social-icons">
+                                <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                                <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- Bootstrap JS for tabs -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        
-        <!-- Enhanced JavaScript for making gallery images clickable -->
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-            // Function to show the loading spinner
-            function showLoadingSpinner(message = 'Loading product data...') {
-                const spinner = document.getElementById('loading-spinner');
-                if (spinner) {
-                    // Update the spinner message
-                    const messageElement = spinner.querySelector('.spinner-message');
-                    if (messageElement) {
-                        messageElement.textContent = message;
-                    }
-                    spinner.style.display = 'flex';
-                    
-                    // Auto-hide spinner after 10 seconds as a safety measure
-                    // This is a fallback in case navigation or other issues prevent proper hiding
-                    setTimeout(() => {
-                        const spinnerElement = document.getElementById('loading-spinner');
-                        if (spinnerElement) {
-                            spinnerElement.style.display = 'none';
-                        }
-                    }, 10000);
-                }
-            }
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5>Northwest Custom Apparel</h5>
+                    <p>Your trusted partner for quality custom apparel and promotional products since 2005.</p>
+                </div>
+                
+                <div class="col-md-2 mb-4 mb-md-0">
+                    <h5>Quick Links</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a href="/" class="nav-link text-light p-0 mb-1">Home</a></li>
+                        <li class="nav-item"><a href="/customer/category/All" class="nav-link text-light p-0 mb-1">Products</a></li>
+                        <li class="nav-item"><a href="/mockup" class="nav-link text-light p-0 mb-1">Design Studio</a></li>
+                        <li class="nav-item"><a href="/quote" class="nav-link text-light p-0 mb-1">Quote Cart</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <h5>Popular Categories</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a href="/customer/category/T-Shirts" class="nav-link text-light p-0 mb-1">T-Shirts</a></li>
+                        <li class="nav-item"><a href="/customer/category/Polos" class="nav-link text-light p-0 mb-1">Polos</a></li>
+                        <li class="nav-item"><a href="/customer/category/Jackets" class="nav-link text-light p-0 mb-1">Jackets</a></li>
+                        <li class="nav-item"><a href="/customer/category/Hats" class="nav-link text-light p-0 mb-1">Hats & Caps</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-3">
+                    <h5>Newsletter</h5>
+                    <p>Subscribe to get the latest product updates and offers.</p>
+                    <form id="footer-newsletter-form">
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control" placeholder="Your email" required>
+                            <button class="btn btn-primary" type="submit">Subscribe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
             
-            // Set a global safety timeout to ensure all spinners eventually hide
-            // This helps with transitions between pages
-            setTimeout(function() {
-                const spinner = document.getElementById('loading-spinner');
-                if (spinner && spinner.style.display === 'flex') {
-                    spinner.style.display = 'none';
-                }
-            }, 5000);
+            <hr class="my-4 bg-light">
             
-            // Function to hide the loading spinner
-            function hideLoadingSpinner() {
-                const spinner = document.getElementById('loading-spinner');
-                if (spinner) {
-                    spinner.style.display = 'none';
-                }
-            }
-            
-            // Add event listeners to the search button on the home page
-            const searchButton = document.querySelector('#style-search .btn-primary');
-            if (searchButton) {
-                searchButton.addEventListener('click', function() {
-                    showLoadingSpinner('Searching inventory...');
-                    // Force immediate display via stylesheet modification
-                    var style = document.createElement('style');
-                    style.textContent = '#loading-spinner{display:flex !important;}';
-                    document.head.appendChild(style);
-                });
-            }
-            
-            // Add event listeners to the style input field for Enter key press
-            const styleInput = document.querySelector('#style-search input[type="text"]');
-            if (styleInput) {
-                styleInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        showLoadingSpinner('Searching inventory...');
-                        // Force immediate display via stylesheet modification
-                        var style = document.createElement('style');
-                        style.textContent = '#loading-spinner{display:flex !important;}';
-                        document.head.appendChild(style);
-                    }
-                });
-            }
-            
-            // Override the default form submission to show spinner immediately
-            const styleForm = document.querySelector('#style-search form');
-            if (styleForm) {
-                styleForm.addEventListener('submit', function() {
-                    // Force immediate display via stylesheet modification
-                    var style = document.createElement('style');
-                    style.textContent = '#loading-spinner{display:flex !important;}';
-                    document.head.appendChild(style);
-                    return true;
-                });
-            }
-            
-            // Show spinner when "Browse by Category" tab is clicked
-            const categoryTab = document.querySelector('#category-search-tab');
-            if (categoryTab) {
-                categoryTab.addEventListener('click', function() {
-                    showLoadingSpinner('Loading categories...');
-                    
-                    // Hide spinner after Caspio loads (3 second delay as fallback)
-                    setTimeout(function() {
-                        hideLoadingSpinner();
-                    }, 3000);
-                });
-            }
-            
-            // Handle clicks on the SEARCH INVENTORY button
-            document.addEventListener('click', function(e) {
-                if (e.target && (
-                    e.target.id === 'search-inventory-button' ||
-                    e.target.value === 'SEARCH INVENTORY' ||
-                    (e.target.tagName === 'BUTTON' && e.target.textContent.includes('SEARCH INVENTORY'))
-                )) {
-                    showLoadingSpinner('Searching styles...');
-                }
-            });
-            
-            // Function to initialize Caspio iframe monitoring
-            function setupCaspioMonitoring() {
-                // Monitor for Caspio iframe loads
-                const observer = new MutationObserver(function(mutations) {
-                    mutations.forEach(function(mutation) {
-                        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-                            mutation.addedNodes.forEach(function(node) {
-                                // Check for new iframes
-                                if (node.tagName === 'IFRAME' || (node.querySelectorAll && node.querySelectorAll('iframe').length > 0)) {
-                                    let iframes = node.tagName === 'IFRAME' ? [node] : Array.from(node.querySelectorAll('iframe'));
-                                    
-                                    iframes.forEach(function(iframe) {
-                                        // Wait for iframe to load
-                                        if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
-                                            setupCaspioIframeEvents(iframe);
-                                        } else {
-                                            iframe.addEventListener('load', function() {
-                                                setupCaspioIframeEvents(iframe);
-                                            });
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
-                });
-                
-                // Start observing the document body for Caspio containers
-                observer.observe(document.body, { childList: true, subtree: true });
-                
-                // Also check for any existing iframes
-                document.querySelectorAll('iframe').forEach(function(iframe) {
-                    if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
-                        setupCaspioIframeEvents(iframe);
-                    } else {
-                        iframe.addEventListener('load', function() {
-                            setupCaspioIframeEvents(iframe);
-                        });
-                    }
-                });
-                
-                // Direct monitoring for Caspio search form
-                // Watch for search button in the main page as fallback
-                const searchInterval = setInterval(() => {
-                    // Find submit inputs with the value "SEARCH INVENTORY"
-                    const searchInputs = document.querySelectorAll('input[type="submit"][value="SEARCH INVENTORY"]');
-                    
-                    // Find buttons that have text "SEARCH INVENTORY" (using standard JS)
-                    const allButtons = document.querySelectorAll('button');
-                    const searchButtons = Array.from(allButtons).filter(button =>
-                        button.textContent.trim() === 'SEARCH INVENTORY');
-                    
-                    // Combine both result sets
-                    const allSearchElements = [...searchInputs, ...searchButtons];
-                    
-                    if (allSearchElements.length > 0) {
-                        clearInterval(searchInterval);
-                        allSearchElements.forEach(button => {
-                            button.addEventListener('click', function() {
-                                showLoadingSpinner('Searching styles...');
-                            });
-                        });
-                    }
-                }, 1000);
-                
-                // Monitor URL changes which indicate navigation
-                let lastUrl = location.href;
-                new MutationObserver(() => {
-                    const url = location.href;
-                    if (url !== lastUrl) {
-                        lastUrl = url;
-                        hideLoadingSpinner(); // Hide any existing spinner
-                        // If navigated to a product page, show spinner
-                        if (url.includes('/product/')) {
-                            showLoadingSpinner('Loading product details...');
-                        }
-                    }
-                }).observe(document, {subtree: true, childList: true});
-            }
-            
-            // Function to set up event listeners for Caspio iframe
-            function setupCaspioIframeEvents(iframe) {
-                try {
-                    // Try to access iframe content (may fail due to cross-origin restrictions)
-                    const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-                    
-                    // Listen for form submissions in the Caspio iframe
-                    const forms = iframeDocument.querySelectorAll('form');
-                    forms.forEach(function(form) {
-                        form.addEventListener('submit', function() {
-                            showLoadingSpinner('Searching styles...');
-                        });
-                    });
-                    
-                    // Listen for button clicks in the Caspio iframe
-                    const buttons = iframeDocument.querySelectorAll('input[type="submit"], button[type="submit"]');
-                    buttons.forEach(function(button) {
-                        button.addEventListener('click', function() {
-                            showLoadingSpinner('Searching styles...');
-                        });
-                    });
-                    
-                    // Set up click event delegation for the iframe document
-                    iframeDocument.addEventListener('click', function(e) {
-                        // Check if clicked element is an image or contained in a link
-                        if (e.target.tagName === 'IMG' || e.target.closest('a')) {
-                            showLoadingSpinner('Loading product details...');
-                        }
-                    });
-                    
-                    console.log('Successfully set up Caspio iframe monitoring');
-                } catch (err) {
-                    console.log('Unable to directly access iframe due to cross-origin policy, using fallback method');
-                    
-                    // Fallback method: add event listeners to the parent document that can capture events
-                    // that bubble up from the iframe
-                    
-                    // Monitor the parent document for clicks that might be coming from the iframe
-                    document.addEventListener('click', function(e) {
-                        // Check if the click is within the iframe container
-                        if (iframe.parentElement && iframe.parentElement.contains(e.target)) {
-                            // If we're clicking inside the iframe container, it might be a product selection
-                            showLoadingSpinner('Loading product details...');
-                        }
-                    });
-                    
-                    // Also monitor for iframe load events
-                    iframe.addEventListener('load', function() {
-                        // Hide the spinner after iframe loads (may indicate navigation completed)
-                        hideLoadingSpinner();
-                    });
-                    
-                    // Add a special listener for the Caspio form within the parent document
-                    document.querySelectorAll('form').forEach(function(form) {
-                        if (form.closest('#caspio-search') || form.closest('#category-browser')) {
-                            form.addEventListener('submit', function() {
-                                showLoadingSpinner('Searching styles...');
-                            });
-                        }
-                    });
-                }
-            }
-            
-            // Call the setup function
-            setupCaspioMonitoring();
-                
-                // Function for style search form submission
-                setTimeout(function() {
-                    const caspioForm = document.querySelector('#caspio-search form');
-                    if (caspioForm) {
-                        caspioForm.addEventListener('submit', function(e) {
-                            e.preventDefault();
-                            const styleInput = caspioForm.querySelector('input[type="text"]');
-                            if (styleInput && styleInput.value.trim()) {
-                                showLoadingSpinner();
-                                window.location.href = '/product/' + styleInput.value.trim();
-                            }
-                        });
-                    }
-                }, 1000);
-                
-                // Function to extract style numbers from text
-                function findStyleNumber(text) {
-                    if (!text) return null;
-                    const match = text.match(/STYLE#?\s*([A-Z0-9]+)/i);
-                    return match ? match[1].trim() : null;
-                }
-                
-                // Function to make gallery images clickable
-                function makeImagesClickable() {
-                    console.log("Processing gallery images...");
-                    
-                    // Direct selector for images in document
-                    document.querySelectorAll('img').forEach(img => {
-                        // Skip small images (icons)
-                        if (img.width < 50 || img.height < 50) return;
-                        
-                        // Find parent element that might contain style info
-                        const row = img.closest('tr') || img.closest('td') || img.parentElement;
-                        if (!row) return;
-                        
-                        // Look for style number in text content
-                        let styleNumber = null;
-                        
-                        // First check if already tagged
-                        styleNumber = img.getAttribute('data-style');
-                        
-                        if (!styleNumber) {
-                            // Try all elements in row
-                            const cells = row.querySelectorAll('td');
-                            for (const cell of cells) {
-                                if (cell.textContent) {
-                                    styleNumber = findStyleNumber(cell.textContent);
-                                    if (styleNumber) break;
-                                }
-                            }
-                            
-                            // If still not found, check overall row text
-                            if (!styleNumber && row.textContent) {
-                                styleNumber = findStyleNumber(row.textContent);
-                            }
-                            
-                            // Last attempt: look for text starting with "STYLE#"
-                            if (!styleNumber) {
-                                const allTexts = row.innerText || row.textContent;
-                                const styleMatch = allTexts && allTexts.match(/STYLE#?\s*([A-Z0-9]+)/i);
-                                styleNumber = styleMatch ? styleMatch[1].trim() : null;
-                            }
-                        }
-                        
-                        // If we found a style number, make image clickable
-                        if (styleNumber) {
-                            console.log(`Found style ${styleNumber} for image`);
-                            
-                            // Save style number to data attribute
-                            img.setAttribute('data-style', styleNumber);
-                            img.title = `View inventory for ${styleNumber}`;
-                            
-                            // Add style and click handler
-                            img.style.cursor = 'pointer';
-                            img.classList.add('product-image');
-                            
-                            // Add click handler
-                            img.onclick = function(e) {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                console.log(`Navigating to: /product/${styleNumber}`);
-                                // Show loading spinner before navigating
-                                const spinner = document.getElementById('loading-spinner');
-                                if (spinner) {
-                                    spinner.style.display = 'flex';
-                                }
-                                window.location.href = `/product/${styleNumber}`;
-                                return false;
-                            };
-                        }
-                    });
-                    
-                    // Process all iframe contents
-                    try {
-                        document.querySelectorAll('iframe').forEach(iframe => {
-                            try {
-                                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                                const iframeImages = iframeDoc.querySelectorAll('img');
-                                
-                                iframeImages.forEach(img => {
-                                    // Skip small images
-                                    if (img.width < 50 || img.height < 50) return;
-                                    
-                                    // Find parent row or cell
-                                    const row = img.closest('tr');
-                                    if (!row) return;
-                                    
-                                    // Look for style number
-                                    let styleNumber = null;
-                                    const cells = row.querySelectorAll('td');
-                                    
-                                    for (const cell of cells) {
-                                        if (cell.textContent) {
-                                            styleNumber = findStyleNumber(cell.textContent);
-                                            if (styleNumber) break;
-                                        }
-                                    }
-                                    
-                                    if (styleNumber) {
-                                        // Make image clickable
-                                        img.setAttribute('data-style', styleNumber);
-                                        img.title = `View inventory for ${styleNumber}`;
-                                        img.style.cursor = 'pointer';
-                                        img.style.transition = 'transform 0.2s, box-shadow 0.2s';
-                                        
-                                        // Add click handler
-                                        img.onclick = function(e) {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                            // Show loading spinner before navigating
-                                            const spinner = window.top.document.getElementById('loading-spinner');
-                                            if (spinner) {
-                                                spinner.style.display = 'flex';
-                                            }
-                                            window.top.location.href = `/product/${styleNumber}`;
-                                            return false;
-                                        };
-                                    }
-                                });
-                            } catch (err) {
-                                console.log('Cannot access iframe content due to security restrictions');
-                            }
-                        });
-                    } catch (err) {
-                        console.log('Error processing iframes:', err);
-                    }
-                }
-                
-                // Process existing images
-                makeImagesClickable();
-                
-                // Watch for changes in the DOM
-                const observer = new MutationObserver(function(mutations) {
-                    let hasNewContent = false;
-                    
-                    mutations.forEach(function(mutation) {
-                        if (mutation.addedNodes.length > 0) {
-                            hasNewContent = true;
-                        }
-                    });
-                    
-                    if (hasNewContent) {
-                        setTimeout(makeImagesClickable, 500);
-                    }
-                });
-                
-                // Start observing the document
-                observer.observe(document.body, {
-                    childList: true,
-                    subtree: true
-                });
-                
-                // Also attach to category-search-tab click
-                document.getElementById('category-search-tab').addEventListener('click', function() {
-                    setTimeout(makeImagesClickable, 500);
-                    setTimeout(makeImagesClickable, 1500);
-                });
-                
-                // Click handler for document
-                document.addEventListener('click', function(e) {
-                    if (e.target.tagName === 'IMG' && e.target.dataset.style) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        // Show loading spinner before navigating
-                        const spinner = document.getElementById('loading-spinner');
-                        if (spinner) {
-                            spinner.style.display = 'flex';
-                        }
-                        window.location.href = `/product/${e.target.dataset.style}`;
-                    }
-                });
-                
-                // Run periodically
-                setInterval(makeImagesClickable, 3000);
-            });
-            
-            // Apply custom styling for Caspio content
-            window.addEventListener('load', function() {
-                const style = document.createElement('style');
-                style.textContent = `
-                    /* Caspio table styling */
-                    .cbResultSetTable {
-                        width: 100% !important;
-                        max-width: 1100px !important;
-                        margin: 0 auto !important;
-                        border-collapse: separate !important;
-                        border-spacing: 15px !important;
-                    }
-                    
-                    /* Product display styling */
-                    .cbResultSetTable td {
-                        vertical-align: top !important;
-                        text-align: center !important;
-                        padding: 10px !important;
-                        background-color: white !important;
-                        border-radius: 8px !important;
-                        box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-                        transition: transform 0.2s, box-shadow 0.2s !important;
-                    }
-                    
-                    .cbResultSetTable td:hover {
-                        transform: translateY(-5px) !important;
-                        box-shadow: 0 5px 15px rgba(0,0,0,0.15) !important;
-                    }
-                    
-                    /* Image styling */
-                    .cbResultSetTable img {
-                        max-width: 100% !important;
-                        height: auto !important;
-                        max-height: 250px !important;
-                        object-fit: contain !important;
-                        margin-bottom: 10px !important;
-                        cursor: pointer !important;
-                        transition: transform 0.2s, box-shadow 0.2s !important;
-                    }
-                    
-                    .cbResultSetTable img:hover {
-                        transform: scale(1.05) !important;
-                        box-shadow: 0 0 10px rgba(14, 83, 149, 0.5) !important;
-                    }
-                    
-                    /* Center pagination and search form */
-                    .cbSearchForm, .cbResultSetNavigationCell {
-                        text-align: center !important;
-                        width: 100% !important;
-                        max-width: 800px !important;
-                        margin: 0 auto 20px !important;
-                    }
-                `;
-                document.head.appendChild(style);
-            });
-        </script>
-    </div>
+            <div class="d-flex flex-column flex-md-row justify-content-between">
+                <p class="mb-2 mb-md-0">&copy; 2025 Northwest Custom Apparel. All rights reserved.</p>
+                <div>
+                    <a href="#" class="text-light me-3">Privacy Policy</a>
+                    <a href="#" class="text-light me-3">Terms of Service</a>
+                    <a href="#" class="text-light">Shipping Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification Container -->
+    <div id="notification-container"></div>
+
+    <!-- Bootstrap and Required JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="{{ url_for('static', filename='quote-cart.js') }}"></script>
+    <script src="{{ url_for('static', filename='homepage-enhancements.js') }}"></script>
 </body>
 </html>

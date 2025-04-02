@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.title }} | Northwest Custom Apparel</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/home-style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <header>
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center py-3">
+                <div>
+                    <a href="/">
+                        <img src="https://www.northwestcustomapparel.com/wp-content/uploads/2023/10/NW-Custom-Apparel-Logo.png" 
+                            alt="Northwest Custom Apparel" class="logo">
+                    </a>
+                </div>
+                <div class="fs-2 text-primary fw-bold text-center flex-grow-1">
+                    SanMar Inventory
+                </div>
+                <div>
+                    <a href="/quote" class="position-relative me-3">
+                        <i class="bi bi-cart3 fs-4"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/customer/products">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/customer/new-arrivals">New Arrivals</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/customer/top-sellers">Top Sellers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/quote">Quote Cart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/customer/resources">Resources</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                {% if product.category %}
+                <li class="breadcrumb-item"><a href="/customer/category/{{ product.category }}">{{ product.category }}</a></li>
+                {% endif %}
+                <li class="breadcrumb-item active">{{ product.style }}</li>
+            </ol>
+        </nav>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="product-title">{{ product.title }}</h1>
+                <p class="text-muted">Style: {{ product.style }}</p>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <!-- Product Images -->
+            <div class="col-md-5">
+                {% if selected_color and product.colors[selected_color] and product.colors[selected_color].frontModel %}
+                <img src="{{ product.colors[selected_color].frontModel }}" class="img-fluid mb-3 main-product-image" alt="{{ product.title }}">
+                
+                <div class="row">
+                    {% if product.colors[selected_color].frontModel %}
+                    <div class="col-3">
+                        <img src="{{ product.colors[selected_color].frontModel }}" class="img-fluid thumbnail-image" 
+                            onclick="changeMainImage('{{ product.colors[selected_color].frontModel }}')">
+                    </div>
+                    {% endif %}
+                    
+                    {% if product.colors[selected_color].backModel %}
+                    <div class="col-3">
+                        <img src="{{ product.colors[selected_color].backModel }}" class="img-fluid thumbnail-image" 
+                            onclick="changeMainImage('{{ product.colors[selected_color].backModel }}')">
+                    </div>
+                    {% endif %}
+                    
+                    {% if product.colors[selected_color].sideModel %}
+                    <div class="col-3">
+                        <img src="{{ product.colors[selected_color].sideModel }}" class="img-fluid thumbnail-image" 
+                            onclick="changeMainImage('{{ product.colors[selected_color].sideModel }}')">
+                    </div>
+                    {% endif %}
+                    
+                    {% if product.colors[selected_color].threeQModel %}
+                    <div class="col-3">
+                        <img src="{{ product.colors[selected_color].threeQModel }}" class="img-fluid thumbnail-image" 
+                            onclick="changeMainImage('{{ product.colors[selected_color].threeQModel }}')">
+                    </div>
+                    {% endif %}
+                </div>
+                {% else %}
+                <img src="{{ product.image }}" class="img-fluid" alt="{{ product.title }}">
+                {% endif %}
+            </div>
+            
+            <!-- Product Details -->
+            <div class="col-md-7">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3>Product Details</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="product-description">{{ product.description }}</p>
+                        
+                        <!-- Color Selection -->
+                        <h4 class="mt-4">Available Colors:</h4>
+                        <div class="color-swatches">
+                            {% for color_name, color in product.colors.items() %}
+                            <a href="/customer/product/{{ product.style }}?color={{ color_name }}" 
+                               class="color-swatch {% if selected_color == color_name %}active{% endif %}"
+                               title="{{ color_name }}">
+                                <img src="{{ color.colorSquareImage }}" alt="{{ color_name }}">
+                            </a>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="selected-color mt-2">
+                            {% if selected_color %}
+                            <span class="badge bg-secondary">Selected Color: {{ selected_color }}</span>
+                            {% endif %}
+                        </div>
+
+                        <!-- Add to Quote Section -->
+                        <div class="add-to-quote-section mt-4">
+                            <h4>Add to Quote</h4>
+                            
+                            <!-- Size Selection -->
+                            <div class="mb-3">
+                                <label for="size-select" class="form-label">Size:</label>
+                                <select id="size-select" class="form-select">
+                                    {% for size in product.sizes %}
+                                    <option value="{{ size }}">{{ size }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <!-- Quantity Selection -->
+                            <div class="mb-3">
+                                <label for="quantity-input" class="form-label">Quantity:</label>
+                                <input type="number" id="quantity-input" class="form-control" value="1" min="1">
+                            </div>
+                            
+                            <!-- Price Display -->
+                            <div class="mb-3 retail-price-display">
+                                <h5>Price: <span id="retail-price-display">$0.00</span></h5>
+                                <small class="text-muted">Per piece price in your quantity</small>
+                            </div>
+                            
+                            <!-- Inventory Availability -->
+                            <div class="mb-3">
+                                <h5>Inventory Availability:</h5>
+                                <div id="inventory-availability" class="inventory-status">
+                                    <!-- Will be populated by JavaScript -->
+                                </div>
+                            </div>
+                            
+                            <!-- Add to Quote Button -->
+                            <button id="add-to-quote-btn" class="btn btn-primary btn-lg w-100">
+                                Add to Quote
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product Features -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3>Features</h3>
+                    </div>
+                    <div class="card-body">
+                        {% if product.features %}
+                        <ul>
+                            {% for feature in product.features %}
+                            <li>{{ feature }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p>{{ product.description }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Inventory Availability Table -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h3>Inventory Availability</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Check current inventory levels for {{ product.title }}</p>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Warehouse</th>
+                                        {% for size in product.sizes %}
+                                        <th>{{ size }}</th>
+                                        {% endfor %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for warehouse, inventory in product.inventory.items() %}
+                                    <tr>
+                                        <td>{{ warehouse }}</td>
+                                        {% for size in product.sizes %}
+                                        <td class="inventory-cell">
+                                            {% if inventory[size] is defined %}
+                                            {% if inventory[size] > 20 %}
+                                            <span class="badge bg-success">{{ inventory[size] }}</span>
+                                            {% elif inventory[size] > 5 %}
+                                            <span class="badge bg-warning text-dark">{{ inventory[size] }}</span>
+                                            {% elif inventory[size] > 0 %}
+                                            <span class="badge bg-danger">{{ inventory[size] }}</span>
+                                            {% else %}
+                                            <span class="badge bg-secondary">0</span>
+                                            {% endif %}
+                                            {% else %}
+                                            <span class="badge bg-secondary">0</span>
+                                            {% endif %}
+                                        </td>
+                                        {% endfor %}
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white mt-5 py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Northwest Custom Apparel</h5>
+                    <p>Your trusted source for quality apparel and decoration services.</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/customer/products" class="text-white">Products</a></li>
+                        <li><a href="/quote" class="text-white">Quote Cart</a></li>
+                        <li><a href="/customer/contact" class="text-white">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Contact</h5>
+                    <address>
+                        <p><i class="bi bi-geo-alt"></i> Northwest Custom Apparel</p>
+                        <p><i class="bi bi-envelope"></i> sales@nwcustomapparel.com</p>
+                        <p><i class="bi bi-telephone"></i> (123) 456-7890</p>
+                    </address>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 text-center">
+                    <p class="mb-0">&copy; {{ current_year }} Northwest Custom Apparel. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Retail Pricing Module -->
+    <script src="/static/retail-pricing.js"></script>
+    
+    <!-- Decoration Pricing Module -->
+    <script src="/static/decoration-pricing.js"></script>
+    
+    <!-- Quote Cart Module -->
+    <script src="/static/quote-cart.js"></script>
+    
+    <script>
+        // Product data for JavaScript use
+        const productData = {
+            style: "{{ product.style }}",
+            title: "{{ product.title }}",
+            selectedColor: "{{ selected_color }}",
+            style: "{{ product.style }}",
+            title: "{{ product.title }}",
+            selectedColor: "{{ selected_color }}",
+            sizes: JSON.parse("{{ product.sizes|tojson }}"),
+            casePrices: JSON.parse("{{ product.pricing.case_price|tojson if product.pricing and product.pricing.case_price else '{}' }}"),
+            inventory: JSON.parse("{{ product.inventory|tojson }}")
+        };
+        
+        // Change main product image
+        function changeMainImage(imageUrl) {
+            document.querySelector('.main-product-image').src = imageUrl;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const sizeSelect = document.getElementById('size-select');
+            const quantityInput = document.getElementById('quantity-input');
+            const retailPriceDisplay = document.getElementById('retail-price-display');
+            const addToQuoteBtn = document.getElementById('add-to-quote-btn');
+            const inventoryAvailability = document.getElementById('inventory-availability');
+            
+            // Function to update retail price display
+            function updateRetailPrice() {
+                const selectedSize = sizeSelect.value;
+                const casePrice = productData.casePrices[selectedSize] || 0;
+                
+                // Calculate retail price with 40% margin
+                const retailPrice = retailPricing.calculateRetailPrice(casePrice, selectedSize);
+                
+                retailPriceDisplay.textContent = retailPricing.formatPrice(retailPrice);
+            }
+            
+            // Function to update inventory availability display
+            function updateInventoryAvailability() {
+                const selectedSize = sizeSelect.value;
+                let totalInventory = 0;
+                let inventoryHtml = '';
+                
+                // Calculate total inventory across warehouses
+                for (const warehouse in productData.inventory) {
+                    if (productData.inventory[warehouse][selectedSize]) {
+                        totalInventory += productData.inventory[warehouse][selectedSize];
+                    }
+                }
+                
+                // Display inventory status
+                if (totalInventory > 20) {
+                    inventoryHtml = `<span class="badge bg-success">In Stock (${totalInventory})</span>`;
+                } else if (totalInventory > 5) {
+                    inventoryHtml = `<span class="badge bg-warning text-dark">Limited Stock (${totalInventory})</span>`;
+                } else if (totalInventory > 0) {
+                    inventoryHtml = `<span class="badge bg-danger">Low Stock (${totalInventory})</span>`;
+                } else {
+                    inventoryHtml = '<span class="badge bg-secondary">Out of Stock</span>';
+                }
+                
+                inventoryAvailability.innerHTML = inventoryHtml;
+            }
+            
+            // Add event listeners
+            sizeSelect.addEventListener('change', function() {
+                updateRetailPrice();
+                updateInventoryAvailability();
+            });
+            
+            // Handle Add to Quote button
+            addToQuoteBtn.addEventListener('click', function() {
+                const selectedSize = sizeSelect.value;
+                const quantity = parseInt(quantityInput.value) || 1;
+                const casePrice = productData.casePrices[selectedSize] || 0;
+                
+                // Get the main product image URL
+                const imageUrl = document.querySelector('.main-product-image').src;
+                
+                // Add to quote cart
+                addProductToQuote(
+                    productData.style,
+                    productData.title,
+                    productData.selectedColor,
+                    selectedSize,
+                    casePrice,
+                    imageUrl
+                );
+            });
+            
+            // Initialize
+            updateRetailPrice();
+            updateInventoryAvailability();
+        });
+    </script>
+</body>
+</html>

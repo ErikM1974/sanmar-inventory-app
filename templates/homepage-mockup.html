@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Northwest Custom Apparel - SanMar Inventory</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/home-style.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Loading spinner overlay - included inline for mockup */
+        #loading-spinner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        
+        .spinner-container {
+            text-align: center;
+        }
+        
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+        
+        .spinner-message {
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+
+        /* Mock styles for demonstration */
+        .placeholder {
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            min-height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+
+        .caspio-embed {
+            background-color: #e9f0f7;
+            border: 1px dashed #0e5395;
+        }
+
+        /* Specific style for product categories in sidebar */
+        .sidebar-nav .category-item {
+            padding: 8px 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .sidebar-nav .category-item:hover {
+            background-color: #e9f0f7;
+        }
+
+        .sidebar-nav .category-item a {
+            color: #333;
+            text-decoration: none;
+            display: block;
+        }
+        
+        .sidebar-nav .category-new {
+            color: #0e5395;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            padding: 10px;
+            background-color: #e9ecef;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Spinner Overlay -->
+    <div id="loading-spinner">
+        <div class="spinner-container">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="spinner-message">Loading product data...</div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-3">
+                    <!-- Company logo -->
+                    <div class="logo">
+                        <a href="/">
+                            <img src="https://cdn.caspio.com/A0E15000/Safety%20Stripes/web%20northwest%20custom%20apparel%20logo.png?ver=1"
+                                 alt="Northwest Custom Apparel"
+                                 style="max-width: 200px; height: auto;">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <h1 class="text-center">SanMar Inventory</h1>
+                </div>
+                <div class="col-md-2">
+                    <div class="header-actions">
+                        <div class="cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Navigation -->
+            <div class="site-nav">
+                <ul>
+                    <li><a href="#" class="active">Home</a></li>
+                    <li><a href="#">Products</a></li>
+                    <li><a href="#">New Arrivals</a></li>
+                    <li><a href="#">Top Sellers</a></li>
+                    <li><a href="#">Quote Cart</a></li>
+                    <li><a href="#">Resources</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-grid">
+            <!-- Left Sidebar - Categories -->
+            <div class="sidebar">
+                <h3>Product Categories</h3>
+                <div class="sidebar-nav">
+                    <div class="category-new">NEW</div>
+                    <div class="category-item"><a href="#">Brands</a></div>
+                    <div class="category-item"><a href="#">T-Shirts</a></div>
+                    <div class="category-item"><a href="#">Polos/Knits</a></div>
+                    <div class="category-item"><a href="#">Sweatshirts/Fleece</a></div>
+                    <div class="category-item"><a href="#">Caps</a></div>
+                    <div class="category-item"><a href="#">Activewear</a></div>
+                    <div class="category-item"><a href="#">Outerwear</a></div>
+                    <div class="category-item"><a href="#">Woven/Dress Shirts</a></div>
+                    <div class="category-item"><a href="#">Bottoms</a></div>
+                    <div class="category-item"><a href="#">Workwear</a></div>
+                    <div class="category-item"><a href="#">Bags</a></div>
+                    <div class="category-item"><a href="#">Accessories</a></div>
+                    <div class="category-item"><a href="#">Personal Protection</a></div>
+                    <div class="category-item"><a href="#">Women's</a></div>
+                    <div class="category-item"><a href="#">Youth</a></div>
+                    <div class="category-item"><a href="#">Outlet</a></div>
+                </div>
+                <!-- Caspio Category Datapage would replace the above static list -->
+                <div class="placeholder caspio-embed mt-4 d-none">
+                    [Caspio Category Navigation Datapage]
+                </div>
+            </div>
+            
+            <!-- Main Content Area -->
+            <div class="main-content">
+                <!-- Quick Search Section -->
+                <div class="quick-search">
+                    <h2>Quick Search</h2>
+                    <div class="placeholder caspio-embed">
+                        [Caspio Search Datapage]
+                        <!-- Current search form would go here -->
+                    </div>
+                </div>
+                
+                <!-- Featured Products Section -->
+                <div class="featured-products">
+                    <h2>Featured Products</h2>
+                    <div class="featured-grid">
+                        <!-- Sample product cards -->
+                        <div class="product-card">
+                            <span class="badge badge-new">New</span>
+                            <img src="https://cdn.caspio.com/A0E15000/Safety%20Stripes/jULIE%20WATTS%20AND%20TSHIRT%20FIFE%20FAMILY%20AFFAIR.png?ver=1" alt="Port & Company PC61 T-Shirt" class="product-image">
+                            <h3 class="product-title">Port & Company PC61</h3>
+                            <p class="product-style">Essential T-Shirt</p>
+                            <p class="product-price">From $3.29</p>
+                            <button class="btn-add-quote">Add to Quote</button>
+                        </div>
+                        <div class="product-card">
+                            <img src="https://via.placeholder.com/150" alt="Product" class="product-image">
+                            <h3 class="product-title">Sport-Tek ST850</h3>
+                            <p class="product-style">PosiCharge Jacket</p>
+                            <p class="product-price">From $24.99</p>
+                            <button class="btn-add-quote">Add to Quote</button>
+                        </div>
+                        <div class="product-card">
+                            <span class="badge badge-sale">Sale</span>
+                            <img src="https://via.placeholder.com/150" alt="Product" class="product-image">
+                            <h3 class="product-title">Port Authority K500</h3>
+                            <p class="product-style">Silk Touch Polo</p>
+                            <p class="product-price">From $18.99</p>
+                            <button class="btn-add-quote">Add to Quote</button>
+                        </div>
+                        <!-- Caspio Featured Products Datapage would replace the above sample cards -->
+                        <div class="placeholder caspio-embed d-none">
+                            [Caspio Featured Products Datapage]
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- New Arrivals Section -->
+                <div class="new-arrivals">
+                    <h2>New Arrivals</h2>
+                    <div class="placeholder caspio-embed">
+                        [Caspio New Arrivals Datapage]
+                    </div>
+                </div>
+                
+                <!-- Top Sellers Section -->
+                <div class="new-arrivals">
+                    <h2>Top Sellers</h2>
+                    <div class="placeholder caspio-embed">
+                        [Caspio Top Sellers Datapage]
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Northwest Custom Apparel</h3>
+                    <p>Your premier source for SanMar inventory and custom apparel solutions.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p>Email: info@nwcustomapparel.com</p>
+                    <p>Phone: (555) 123-4567</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Products</a></li>
+                        <li><a href="#">Request Quote</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Northwest Custom Apparel. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Quote Cart system -->
+    <script src="/static/decoration-pricing.js"></script>
+    <script src="/static/quote-cart.js"></script>
+    <script>
+        // Toggle loading spinner (for demo purposes)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show loading spinner for 1 second when clicking on category links
+            document.querySelectorAll('.category-item a').forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const spinner = document.getElementById('loading-spinner');
+                    spinner.style.display = 'flex';
+                    setTimeout(function() {
+                        spinner.style.display = 'none';
+                    }, 1000);
+                });
+            });
+            
+            // Show loading spinner for 1 second when clicking on product cards
+            document.querySelectorAll('.product-card').forEach(function(card) {
+                card.addEventListener('click', function(e) {
+                    if (e.target.tagName !== 'BUTTON') {
+                        const spinner = document.getElementById('loading-spinner');
+                        spinner.style.display = 'flex';
+                        setTimeout(function() {
+                            spinner.style.display = 'none';
+                        }, 1000);
+                    }
+                });
+            });
+            
+            // Add to quote functionality
+            document.querySelectorAll('.btn-add-quote').forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    // Update cart count
+                    const cartCount = document.querySelector('.cart-count');
+                    cartCount.textContent = parseInt(cartCount.textContent) + 1;
+                    
+                    // Show added to cart feedback
+                    const originalText = this.textContent;
+                    this.textContent = 'Added!';
+                    this.style.backgroundColor = '#28a745';
+                    
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                        this.style.backgroundColor = '';
+                    }, 1500);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
